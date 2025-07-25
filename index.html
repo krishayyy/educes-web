@@ -1,50 +1,44 @@
-// File: pages/index.jsx
-import React from "react";
-import Link from "next/link";
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDUCES - Empowering Youth</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-800 font-sans">
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-center py-10 shadow-md">
+      <h1 class="text-5xl font-bold">EDUCES</h1>
+      <p class="text-xl mt-2">Empowering Youth Through Modern Education</p>
+    </header>
 
-export default function Home() {
-  return (
-    <div className="min-h-screen bg-white text-gray-800">
-      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-10 px-6 text-center shadow-xl">
-        <h1 className="text-5xl font-extrabold tracking-tight">EDUCES</h1>
-        <p className="text-xl mt-3 font-light">Empowering Youth Through Modern Education</p>
-        <nav className="mt-6 flex justify-center gap-6 text-lg font-medium">
-          <Link href="/login" className="hover:underline">Login</Link>
-          <Link href="/dashboard" className="hover:underline">Dashboard</Link>
-          <Link href="/chat" className="hover:underline">AI Chat</Link>
-          <Link href="/courses" className="hover:underline">Courses</Link>
-        </nav>
-      </header>
+    <main class="max-w-5xl mx-auto px-4 py-16 text-center">
+      <h2 class="text-3xl font-semibold mb-12">What would you like to do?</h2>
 
-      <main className="py-16 px-6 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-semibold text-center mb-12">What would you like to do?</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Link href="/courses" className="block bg-gradient-to-tr from-green-400 to-green-600 text-white rounded-2xl shadow-md p-8 hover:scale-105 transform transition duration-300 ease-in-out">
-            <h3 className="text-2xl font-bold mb-2">📚 Join a Class</h3>
-            <p className="text-sm">Explore and register for weekly live tutoring courses.</p>
-          </Link>
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <a href="/courses" class="bg-green-500 hover:bg-green-600 text-white p-8 rounded-xl shadow-lg transition transform hover:scale-105">
+          <h3 class="text-2xl font-bold mb-2">📚 Join a Class</h3>
+          <p>Explore and register for weekly live tutoring courses.</p>
+        </a>
 
-          <Link href="/chat" className="block bg-gradient-to-tr from-purple-500 to-purple-700 text-white rounded-2xl shadow-md p-8 hover:scale-105 transform transition duration-300 ease-in-out">
-            <h3 className="text-2xl font-bold mb-2">🤖 AI Help 24/7</h3>
-            <p className="text-sm">Ask questions and get answers instantly from our AI assistant.</p>
-          </Link>
+        <a href="/chat" class="bg-purple-500 hover:bg-purple-600 text-white p-8 rounded-xl shadow-lg transition transform hover:scale-105">
+          <h3 class="text-2xl font-bold mb-2">🤖 AI Help 24/7</h3>
+          <p>Ask questions and get instant answers from our AI assistant.</p>
+        </a>
 
-          <Link href="/dashboard" className="block bg-gradient-to-tr from-blue-500 to-blue-700 text-white rounded-2xl shadow-md p-8 hover:scale-105 transform transition duration-300 ease-in-out">
-            <h3 className="text-2xl font-bold mb-2">🧑‍🎓 Student Dashboard</h3>
-            <p className="text-sm">Manage your enrolled courses and upcoming sessions.</p>
-          </Link>
-        </div>
+        <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white p-8 rounded-xl shadow-lg transition transform hover:scale-105">
+          <h3 class="text-2xl font-bold mb-2">🧑‍🎓 Dashboard</h3>
+          <p>Manage your enrolled classes and activity.</p>
+        </a>
+      </div>
 
-        <div className="mt-16 text-center">
-          <p className="text-lg">Still have questions or want to partner with us?</p>
-          <button
-            onClick={() => alert("Thanks for your interest! Contact us at contact@educes.org")}
-            className="mt-4 bg-black hover:bg-gray-900 text-white py-3 px-6 rounded-xl text-md"
-          >
-            Get Involved
-          </button>
-        </div>
-      </main>
-    </div>
-  );
-}
+      <div class="mt-12">
+        <p class="text-lg">Want to get involved or partner with us?</p>
+        <button onclick="alert('Email us at contact@educes.org')"
+          class="mt-4 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition">
+          Contact Us
+        </button>
+      </div>
+    </main>
+  </body>
+</html>

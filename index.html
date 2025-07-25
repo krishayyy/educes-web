@@ -86,16 +86,36 @@
   <h2>where education meets technology</h2>
   <p>Unlock your potential today</p>
 
-  <!-- Google Sign-In Button -->
-  <div id="g_id_signin"
-       data-client_id="441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com"
-       data-type="standard"
-       data-shape="rectangular"
-       data-theme="outline"
-       data-text="signin_with"
-       data-size="large"
-       data-logo_alignment="left">
-  </div>
+  <!-- Google Sign-In Button Container -->
+  <div id="g_id_signin"></div>
+
+  <script>
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById("g_id_signin"),
+        {
+          theme: "outline",
+          size: "large",
+          type: "standard",
+          shape: "rectangular",
+          text: "signin_with",
+          logo_alignment: "left"
+        }
+      );
+
+      google.accounts.id.prompt(); // Show One Tap prompt if possible
+    };
+
+    function handleCredentialResponse(response) {
+      alert("Encoded JWT ID token: " + response.credential);
+      // TODO: Send this token to your backend for verification and user login
+    }
+  </script>
 
 </body>
 </html>

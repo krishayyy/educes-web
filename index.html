@@ -3,142 +3,167 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDUCES</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <title>EDUCES - Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
+      padding: 0;
+      background-color: #ffffff;
+      color: #111111;
+    }
+    header {
       text-align: center;
+      padding: 4rem 1rem;
     }
-
-    section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    h1 {
+    header h1 {
       font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
     }
-
-    h2 {
-      font-size: 1.5rem;
-      color: #666;
+    header p {
+      font-size: 1.25rem;
+      color: #555555;
       margin-bottom: 2rem;
     }
-
-    .buttons {
+    .btn-container {
       display: flex;
+      justify-content: center;
       gap: 1rem;
-      margin-bottom: 2rem;
     }
-
     .btn {
+      background-color: #007BFF;
+      color: white;
+      border: none;
       padding: 0.75rem 2rem;
       font-size: 1rem;
-      border: none;
       border-radius: 0.5rem;
-      background-color: #0099ff;
-      color: white;
       cursor: pointer;
-      transition: background 0.3s;
     }
-
     .btn:hover {
-      background-color: #007acc;
+      background-color: #0056b3;
     }
-
-    #agePrompt, #welcomeScreen {
+    .form-step {
       display: none;
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid #ccc;
+      border-radius: 1rem;
     }
-
-    select {
+    .form-step.active {
+      display: block;
+    }
+    input, select {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
       padding: 0.5rem;
       font-size: 1rem;
-      margin-top: 1rem;
     }
-
-    footer {
-      padding: 2rem 1rem;
-      color: #888;
+    .username-check {
+      margin-top: -1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <section id="main">
+  <header>
     <h1>Welcome to EDUCES</h1>
-    <h2>Where education meets technology</h2>
-    <p>Unlock your potential and learn Math in a modern style — interactive, live, and AI-powered tutoring designed for the next generation.</p>
-    <div class="buttons">
-      <button class="btn" onclick="chooseRole('learner')">Join as a Learner</button>
-      <button class="btn" onclick="chooseRole('mentor')">Join as a Mentor</button>
+    <p>Where education meets technology</p>
+    <div class="btn-container">
+      <button class="btn" onclick="selectRole('mentor')">Join as a Mentor</button>
+      <button class="btn" onclick="selectRole('learner')">Join as a Learner</button>
     </div>
-  </section>
+  </header>
 
-  <section id="agePrompt">
-    <h2>How old are you?</h2>
-    <select id="ageRange">
-      <option value="">Select age range</option>
-      <option value="under13">Under 13</option>
-      <option value="13-17">13–17</option>
-      <option value="18+">18 and over</option>
+  <div class="form-step" id="step1">
+    <label for="month">Month of Birth:</label>
+    <select id="month">
+      <option>January</option>
+      <option>February</option>
+      <option>March</option>
+      <option>April</option>
+      <option>May</option>
+      <option>June</option>
+      <option>July</option>
+      <option>August</option>
+      <option>September</option>
+      <option>October</option>
+      <option>November</option>
+      <option>December</option>
     </select>
-    <div style="margin-top: 2rem;">
-      <div id="g_id_onload"
-        data-client_id="441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse"
-        data-auto_prompt="false">
-      </div>
-      <div class="g_id_signin" data-type="standard"></div>
-    </div>
-  </section>
 
-  <section id="welcomeScreen">
-    <h1 id="welcomeMessage"></h1>
-    <p>Coming soon</p>
-  </section>
+    <label for="year">Year of Birth:</label>
+    <select id="year"></select>
 
-  <footer>
-    © 2025 EDUCES — Empowering youth education
-  </footer>
+    <button class="btn" onclick="goToStep(2)">Next</button>
+  </div>
+
+  <div class="form-step" id="step2">
+    <input type="text" id="firstName" placeholder="First Name" />
+    <input type="text" id="lastName" placeholder="Last Name" />
+
+    <input type="text" id="username" placeholder="Username" oninput="checkUsername()" />
+    <div id="usernameStatus" class="username-check"></div>
+
+    <input type="password" id="password" placeholder="Password" />
+
+    <button class="btn" onclick="goToStep(3)">Next</button>
+  </div>
+
+  <div class="form-step" id="step3">
+    <button class="btn" onclick="signInWithGoogle()">Sign in with Google</button>
+  </div>
+
+  <div class="form-step" id="step4">
+    <h2 id="welcomeMessage"></h2>
+    <p>Coming soon...</p>
+  </div>
 
   <script>
-    let userRole = '';
+    const yearSelect = document.getElementById("year");
+    for (let y = 2025; y >= 1940; y--) {
+      const opt = document.createElement("option");
+      opt.value = opt.textContent = y;
+      yearSelect.appendChild(opt);
+    }
 
-    function chooseRole(role) {
+    let userRole = "";
+    function selectRole(role) {
       userRole = role;
-      document.getElementById('main').style.display = 'none';
-      document.getElementById('agePrompt').style.display = 'flex';
+      goToStep(1);
     }
 
-    function handleCredentialResponse(response) {
-      const data = parseJwt(response.credential);
-      const name = data.name || 'User';
-      const welcomeText = `Welcome ${userRole === 'mentor' ? 'Mentor' : 'Learner'} ${name}`;
-      document.getElementById('agePrompt').style.display = 'none';
-      document.getElementById('welcomeMessage').innerText = welcomeText;
-      document.getElementById('welcomeScreen').style.display = 'flex';
+    function goToStep(step) {
+      document.querySelectorAll(".form-step").forEach((el) => el.classList.remove("active"));
+      document.getElementById("step" + step).classList.add("active");
     }
 
-    function parseJwt(token) {
-      try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-      } catch (e) {
-        return {};
+    function checkUsername() {
+      const username = document.getElementById("username").value;
+      const status = document.getElementById("usernameStatus");
+      // Fake username check (replace with backend call later)
+      if (username === "krishay") {
+        status.textContent = "❌ Username taken";
+        status.style.color = "red";
+      } else {
+        status.textContent = "✅ Username available";
+        status.style.color = "green";
       }
+    }
+
+    function signInWithGoogle() {
+      // Replace with real OAuth logic later
+      const name = document.getElementById("firstName").value;
+      document.getElementById("welcomeMessage").textContent =
+        "Welcome " + (userRole === "mentor" ? "Mentor " : "Learner ") + name;
+      goToStep(4);
     }
   </script>
 </body>

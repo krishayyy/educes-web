@@ -1,50 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <<!-- AOS Animation Library -->
-<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EDUCES - Empowering Youth</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-50 text-gray-800 font-sans">
-    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-center py-10 shadow-md">
-      <h1 class="text-5xl font-bold">EDUCES</h1>
-      <p class="text-xl mt-2">Empowering Youth Through Modern Education</p>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EDUCES - Empower Your Future</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <main class="max-w-5xl mx-auto px-4 py-16 text-center">
-      <h2 class="text-3xl font-semibold mb-12">What would you like to do?</h2>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff;
+      color: #000;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
 
-      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        <a href="/courses" class="bg-green-500 hover:bg-green-600 text-white p-8 rounded-xl shadow-lg transition transform hover:scale-105">
-          <h3 class="text-2xl font-bold mb-2">📚 Join a Class</h3>
-          <p>Explore and register for weekly live tutoring courses.</p>
-        </a>
+    h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeInUp 1s forwards 0.2s;
+    }
 
-        <a href="/chat" class="bg-purple-500 hover:bg-purple-600 text-white p-8 rounded-xl shadow-lg transition transform hover:scale-105">
-          <h3 class="text-2xl font-bold mb-2">🤖 AI Help 24/7</h3>
-          <p>Ask questions and get instant answers from our AI assistant.</p>
-        </a>
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 400;
+      margin-bottom: 2rem;
+      color: #333;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeInUp 1s forwards 0.5s;
+    }
 
-        <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white p-8 rounded-xl shadow-lg transition transform hover:scale-105">
-          <h3 class="text-2xl font-bold mb-2">🧑‍🎓 Dashboard</h3>
-          <p>Manage your enrolled classes and activity.</p>
-        </a>
-      </div>
+    p {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 3rem;
+      color: #222;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeInUp 1s forwards 0.8s;
+    }
 
-      <div class="mt-12">
-        <p class="text-lg">Want to get involved or partner with us?</p>
-        <button onclick="alert('Email us at contact@educes.org')"
-          class="mt-4 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition">
-          Contact Us
-        </button>
-      </div>
-    </main>
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script>
-  AOS.init();
-</script>
+    /* Google Sign-In button container */
+    #g_id_signin {
+      display: flex;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeInUp 1s forwards 1.1s;
+    }
+
+    /* Fade In + Slide Up Animation */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+  </style>
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+<body>
+
+  <h1>Welcome to EDUCES</h1>
+  <h2>where education meets technology</h2>
+  <p>Unlock your potential today</p>
+
+  <!-- Google Sign-In Button -->
+  <div id="g_id_signin"
+       data-client_id="441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com"
+       data-type="standard"
+       data-shape="rectangular"
+       data-theme="outline"
+       data-text="signin_with"
+       data-size="large"
+       data-logo_alignment="left">
+  </div>
+
 </body>
 </html>

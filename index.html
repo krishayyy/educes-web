@@ -3,143 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EDUCES - Empower Your Future</title>
+  <title>EDUCES - Empowering Youth Education</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    /* Basic Reset */
+    /* Reset */
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
     }
-
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fff;
-      color: #000;
-      min-height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #f9f9f9;
+      color: #111;
       overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
     }
-
+    main {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
     h1 {
-      font-size: 4rem;
       font-weight: 900;
-      text-align: center;
-      margin-bottom: 0.5rem;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeInUp 1s forwards 0.2s;
+      font-size: 4.5rem;
+      margin-bottom: 0.2em;
+      color: #000;
+      line-height: 1.1;
     }
-
     h2 {
-      font-size: 1.75rem;
       font-weight: 400;
-      margin-bottom: 2rem;
-      color: #333;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeInUp 1s forwards 0.5s;
+      font-size: 1.6rem;
+      color: #666;
+      margin-top: 0;
+      margin-bottom: 2.5em;
+      letter-spacing: 0.05em;
     }
-
-    p {
-      font-size: 1.25rem;
-      font-weight: 500;
-      margin-bottom: 3rem;
-      color: #222;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeInUp 1s forwards 0.8s;
-    }
-
-    #message {
-      margin-top: 20px;
-      font-weight: 600;
-      color: green;
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
-
     #g_id_signin {
+      margin-bottom: 4em;
+    }
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      will-change: opacity, transform;
+      margin-bottom: 3em;
+    }
+    .fade-in-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .description {
+      font-size: 1.25rem;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto 5em;
+    }
+    .image-row {
       display: flex;
       justify-content: center;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeInUp 1s forwards 1.1s;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
     }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .image-row img {
+      width: 180px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
     }
-
+    .image-row img:hover {
+      transform: scale(1.05);
+    }
+    footer {
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #999;
+      border-top: 1px solid #eee;
+      text-align: center;
+      margin-bottom: 40px;
+    }
   </style>
-
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
 </head>
 <body>
 
-  <h1>Welcome to EDUCES</h1>
-  <h2>where education meets technology</h2>
-  <p>Unlock your potential today</p>
+  <main>
+    <section class="fade-in-section visible">
+      <h1>Welcome to EDUCES</h1>
+      <h2>Where education meets technology</h2>
+      <div id="g_id_signin"></div>
+    </section>
 
-  <!-- Google Sign-In Button Container -->
-  <div id="g_id_signin"></div>
+    <section class="fade-in-section">
+      <p class="description">
+        Unlock your potential and learn Math in a modern style — interactive, live, and AI-powered tutoring designed for the next generation.
+      </p>
+    </section>
 
-  <div id="message"></div>
+    <section class="fade-in-section image-row">
+      <img src="https://images.unsplash.com/photo-1581093588401-85f04f4e89dc?auto=format&fit=crop&w=600&q=80" alt="Math concept illustration" />
+      <img src="https://images.unsplash.com/photo-1555529669-0e1ab43ed2e7?auto=format&fit=crop&w=600&q=80" alt="Student learning online" />
+      <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80" alt="Modern technology" />
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 EDUCES — Empowering youth education
+  </footer>
 
   <script>
-    window.onload = function () {
-      google.accounts.id.initialize({
-        client_id: "441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com",
-        callback: handleCredentialResponse
-      });
+    // Google Sign-In initialization
+    function handleCredentialResponse(response) {
+      const id_token = response.credential;
 
-      google.accounts.id.renderButton(
-        document.getElementById("g_id_signin"),
-        {
-          theme: "outline",
-          size: "large",
-          type: "standard",
-          shape: "rectangular",
-          text: "signin_with",
-          logo_alignment: "left"
-        }
-      );
-
-      google.accounts.id.prompt();
-    };
-
-    async function handleCredentialResponse(response) {
-      // Send token to backend for verification/login
-      const res = await fetch('http://localhost:4000/api/auth/google', {
+      fetch('http://localhost:4000/api/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: response.credential })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        document.getElementById('message').style.opacity = 1;
-        document.getElementById('message').textContent = `Welcome, ${data.user.name}! You are logged in.`;
-      } else {
-        document.getElementById('message').style.opacity = 1;
-        document.getElementById('message').style.color = 'red';
-        document.getElementById('message').textContent = 'Login failed: ' + data.message;
-      }
+        body: JSON.stringify({ token: id_token })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.success){
+          alert(`Welcome ${data.user.name} (${data.user.email})!`);
+          // TODO: Save user info or redirect here
+        } else {
+          alert('Login failed: ' + data.message);
+        }
+      })
+      .catch(() => alert('Error connecting to server'));
     }
-  </script>
 
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: '441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com',
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById('g_id_signin'),
+        { theme: 'outline', size: 'large' }
+      );
+      google.accounts.id.prompt(); // Show One Tap
+    };
+
+    // Scroll animation for fade-in sections
+    const faders = document.querySelectorAll('.fade-in-section');
+    const appearOptions = {
+      threshold: 0,
+      rootMargin: "0px 0px -100px 0px"
+    };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          return;
+        } else {
+          entry.target.classList.add('visible');
+          appearOnScroll.unobserve(entry.target);
+        }
+      });
+    }, appearOptions);
+
+    faders.forEach(fader => {
+      appearOnScroll.observe(fader);
+    });
+  </script>
 </body>
 </html>

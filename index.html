@@ -2,171 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EDUCES - Empowering Youth Education</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDUCES</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    /* Reset */
-    * {
-      box-sizing: border-box;
-    }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      background: #f9f9f9;
-      color: #111;
-      overflow-x: hidden;
-    }
-    main {
-      max-width: 900px;
-      margin: 60px auto;
-      padding: 0 20px;
-      text-align: center;
-    }
-    h1 {
-      font-weight: 900;
-      font-size: 4.5rem;
-      margin-bottom: 0.2em;
-      color: #000;
-      line-height: 1.1;
-    }
-    h2 {
-      font-weight: 400;
-      font-size: 1.6rem;
-      color: #666;
-      margin-top: 0;
-      margin-bottom: 2.5em;
-      letter-spacing: 0.05em;
-    }
-    #g_id_signin {
-      margin-bottom: 4em;
-    }
-    .fade-in-section {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-      will-change: opacity, transform;
-      margin-bottom: 3em;
-    }
-    .fade-in-section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .description {
-      font-size: 1.25rem;
-      line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f9f9f9;
       color: #333;
-      max-width: 600px;
-      margin: 0 auto 5em;
-    }
-    .image-row {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      margin-bottom: 60px;
-    }
-    .image-row img {
-      width: 180px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      transition: transform 0.3s ease;
-    }
-    .image-row img:hover {
-      transform: scale(1.05);
-    }
-    footer {
-      padding: 20px;
-      font-size: 0.9rem;
-      color: #999;
-      border-top: 1px solid #eee;
       text-align: center;
-      margin-bottom: 40px;
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #0099ff;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #007acc;
+    }
+
+    #agePrompt, #welcomeScreen {
+      display: none;
+    }
+
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+
+    footer {
+      padding: 2rem 1rem;
+      color: #888;
     }
   </style>
 </head>
 <body>
+  <section id="main">
+    <h1>Welcome to EDUCES</h1>
+    <h2>Where education meets technology</h2>
+    <p>Unlock your potential and learn Math in a modern style — interactive, live, and AI-powered tutoring designed for the next generation.</p>
+    <div class="buttons">
+      <button class="btn" onclick="chooseRole('learner')">Join as a Learner</button>
+      <button class="btn" onclick="chooseRole('mentor')">Join as a Mentor</button>
+    </div>
+  </section>
 
-  <main>
-    <section class="fade-in-section visible">
-      <h1>Welcome to EDUCES</h1>
-      <h2>Where education meets technology</h2>
-      <div id="g_id_signin"></div>
-    </section>
+  <section id="agePrompt">
+    <h2>How old are you?</h2>
+    <select id="ageRange">
+      <option value="">Select age range</option>
+      <option value="under13">Under 13</option>
+      <option value="13-17">13–17</option>
+      <option value="18+">18 and over</option>
+    </select>
+    <div style="margin-top: 2rem;">
+      <div id="g_id_onload"
+        data-client_id="441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin" data-type="standard"></div>
+    </div>
+  </section>
 
-    <section class="fade-in-section">
-      <p class="description">
-        Unlock your potential and learn Math in a modern style — interactive, live, and AI-powered tutoring designed for the next generation.
-      </p>
-    </section>
-
-    <section class="fade-in-section image-row">
-      <img src="https://images.unsplash.com/photo-1581093588401-85f04f4e89dc?auto=format&fit=crop&w=600&q=80" alt="Math concept illustration" />
-      <img src="https://images.unsplash.com/photo-1555529669-0e1ab43ed2e7?auto=format&fit=crop&w=600&q=80" alt="Student learning online" />
-      <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80" alt="Modern technology" />
-    </section>
-  </main>
+  <section id="welcomeScreen">
+    <h1 id="welcomeMessage"></h1>
+    <p>Coming soon</p>
+  </section>
 
   <footer>
-    &copy; 2025 EDUCES — Empowering youth education
+    © 2025 EDUCES — Empowering youth education
   </footer>
 
   <script>
-    // Google Sign-In initialization
-    function handleCredentialResponse(response) {
-      const id_token = response.credential;
+    let userRole = '';
 
-      fetch('http://localhost:4000/api/auth/google', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: id_token })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.success){
-          alert(`Welcome ${data.user.name} (${data.user.email})!`);
-          // TODO: Save user info or redirect here
-        } else {
-          alert('Login failed: ' + data.message);
-        }
-      })
-      .catch(() => alert('Error connecting to server'));
+    function chooseRole(role) {
+      userRole = role;
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('agePrompt').style.display = 'flex';
     }
 
-    window.onload = function () {
-      google.accounts.id.initialize({
-        client_id: '441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com',
-        callback: handleCredentialResponse
-      });
-      google.accounts.id.renderButton(
-        document.getElementById('g_id_signin'),
-        { theme: 'outline', size: 'large' }
-      );
-      google.accounts.id.prompt(); // Show One Tap
-    };
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      const name = data.name || 'User';
+      const welcomeText = `Welcome ${userRole === 'mentor' ? 'Mentor' : 'Learner'} ${name}`;
+      document.getElementById('agePrompt').style.display = 'none';
+      document.getElementById('welcomeMessage').innerText = welcomeText;
+      document.getElementById('welcomeScreen').style.display = 'flex';
+    }
 
-    // Scroll animation for fade-in sections
-    const faders = document.querySelectorAll('.fade-in-section');
-    const appearOptions = {
-      threshold: 0,
-      rootMargin: "0px 0px -100px 0px"
-    };
-
-    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) {
-          return;
-        } else {
-          entry.target.classList.add('visible');
-          appearOnScroll.unobserve(entry.target);
-        }
-      });
-    }, appearOptions);
-
-    faders.forEach(fader => {
-      appearOnScroll.observe(fader);
-    });
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        return {};
+      }
+    }
   </script>
 </body>
 </html>

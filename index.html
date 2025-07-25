@@ -1,50 +1,176 @@
+// Full EDUCES Platform (Dashboard, Login, Chat, Courses)
 
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EDUCES - Empowering Youth Education</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background: #f5f5f5;
-      color: #333;
-      text-align: center;
+// pages/index.jsx
+import React from "react";
+import Link from "next/link";
+
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-gray-100 text-gray-800">
+      <header className="bg-blue-600 text-white py-8 px-4 text-center rounded-b-3xl shadow-md">
+        <h1 className="text-4xl font-bold">Welcome to EDUCES</h1>
+        <p className="text-lg mt-2">Empowering youth through education and opportunity.</p>
+        <nav className="mt-6 space-x-4">
+          <Link href="/login" className="underline">Login</Link>
+          <Link href="/dashboard" className="underline">Dashboard</Link>
+          <Link href="/chat" className="underline">AI Chat</Link>
+          <Link href="/courses" className="underline">Courses</Link>
+        </nav>
+      </header>
+
+      <main className="text-center mt-10">
+        <p className="text-xl">Join us to make a difference!</p>
+        <button
+          onClick={() => alert("Thanks for your interest! Contact us at contact@educes.org")}
+          className="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-xl text-lg"
+        >
+          Get Involved
+        </button>
+      </main>
+    </div>
+  );
+}
+
+// pages/login.jsx
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const handleLogin = () => {
+    // Simulate login
+    if (email && password) {
+      alert("Login successful!");
+      router.push("/dashboard");
+    } else {
+      alert("Please enter your email and password.");
     }
-    header {
-      background: #0077cc;
-      color: white;
-      padding: 20px;
-      border-radius: 8px;
-    }
-    main {
-      margin-top: 30px;
-    }
-    button {
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      font-size: 18px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #005fa3;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Welcome to EDUCES</h1>
-    <p>Empowering youth through education and opportunity.</p>
-  </header>
-  <main>
-    <p>Join us to make a difference!</p>
-    <button onclick="alert('Thanks for your interest! Contact us at contact@educes.org')">
-      Get Involved
-    </button>
-  </main>
-</body>
-</html>
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-10 rounded-xl shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">Login to EDUCES</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-3 border border-gray-300 rounded mb-4"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-3 border border-gray-300 rounded mb-4"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          onClick={handleLogin}
+          className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700"
+        >
+          Login
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// pages/dashboard.jsx
+import React from "react";
+import Link from "next/link";
+
+export default function Dashboard() {
+  return (
+    <div className="min-h-screen bg-gray-50 p-10">
+      <h1 className="text-3xl font-bold mb-6">Student Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Link href="/courses" className="block p-6 bg-white shadow rounded-xl hover:bg-blue-50">
+          📚 View & Join Courses
+        </Link>
+        <Link href="/chat" className="block p-6 bg-white shadow rounded-xl hover:bg-blue-50">
+          🤖 Ask AI Questions
+        </Link>
+        <a href="mailto:contact@educes.org" className="block p-6 bg-white shadow rounded-xl hover:bg-blue-50">
+          📬 Contact Support
+        </a>
+      </div>
+    </div>
+  );
+}
+
+// pages/chat.jsx
+import React, { useState } from "react";
+
+export default function Chat() {
+  const [message, setMessage] = useState("");
+  const [responses, setResponses] = useState([]);
+
+  const sendMessage = () => {
+    if (!message) return;
+    const reply = `AI: I see you said: "${message}"`;
+    setResponses([...responses, `You: ${message}`, reply]);
+    setMessage("");
+  };
+
+  return (
+    <div className="min-h-screen p-10 bg-gray-100">
+      <h1 className="text-2xl font-bold mb-4">24/7 AI Help Desk</h1>
+      <div className="bg-white p-6 rounded-xl shadow max-w-2xl mx-auto">
+        <div className="mb-4 h-64 overflow-y-auto border p-4 rounded">
+          {responses.map((res, i) => (
+            <p key={i} className="mb-2">{res}</p>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Ask a question..."
+            className="flex-1 p-3 border rounded"
+          />
+          <button
+            onClick={sendMessage}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// pages/courses.jsx
+import React from "react";
+
+const mockCourses = [
+  { id: 1, title: "Algebra I - Mondays at 5PM", status: "Ongoing" },
+  { id: 2, title: "Geometry - Wednesdays at 4PM", status: "Open for Registration" },
+  { id: 3, title: "SAT Prep - Sundays at 2PM", status: "Full" },
+];
+
+export default function Courses() {
+  return (
+    <div className="min-h-screen p-10 bg-gray-50">
+      <h1 className="text-3xl font-bold mb-6">Available Courses</h1>
+      <div className="space-y-4">
+        {mockCourses.map((course) => (
+          <div key={course.id} className="bg-white p-6 rounded-xl shadow">
+            <h2 className="text-xl font-semibold">{course.title}</h2>
+            <p className="text-gray-600">Status: {course.status}</p>
+            {course.status === "Open for Registration" && (
+              <button className="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Join Class
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+

@@ -57,7 +57,15 @@
       animation: fadeInUp 1s forwards 0.8s;
     }
 
-    /* Google Sign-In button container */
+    #message {
+      margin-top: 20px;
+      font-weight: 600;
+      color: green;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
     #g_id_signin {
       display: flex;
       justify-content: center;
@@ -66,7 +74,6 @@
       animation: fadeInUp 1s forwards 1.1s;
     }
 
-    /* Fade In + Slide Up Animation */
     @keyframes fadeInUp {
       to {
         opacity: 1;
@@ -89,6 +96,8 @@
   <!-- Google Sign-In Button Container -->
   <div id="g_id_signin"></div>
 
+  <div id="message"></div>
+
   <script>
     window.onload = function () {
       google.accounts.id.initialize({
@@ -108,12 +117,27 @@
         }
       );
 
-      google.accounts.id.prompt(); // Show One Tap prompt if possible
+      google.accounts.id.prompt();
     };
 
-    function handleCredentialResponse(response) {
-      alert("Encoded JWT ID token: " + response.credential);
-      // TODO: Send this token to your backend for verification and user login
+    async function handleCredentialResponse(response) {
+      // Send token to backend for verification/login
+      const res = await fetch('http://localhost:4000/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('message').style.opacity = 1;
+        document.getElementById('message').textContent = `Welcome, ${data.user.name}! You are logged in.`;
+      } else {
+        document.getElementById('message').style.opacity = 1;
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').textContent = 'Login failed: ' + data.message;
+      }
     }
   </script>
 

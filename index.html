@@ -1,151 +1,118 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Educe – Learn Better</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Educe | Learn. Grow. Succeed.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background: #f4f6f9;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(to right, #7F7FD5, #86A8E7, #91EAE4);
+      padding: 2rem;
+      text-align: center;
+      color: white;
+    }
+    header h1 {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .buttons button {
+      background: #333;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .buttons button:hover {
+      background: #555;
+    }
+    .section {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .section img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .section h2 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      color: #4a4a4a;
+    }
+    .section p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      margin-top: 5rem;
+      padding: 2rem;
+      background: #ddd;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Educe</h1>
-    <p>Empowering students through smart, human-backed tutoring.</p>
-    <button id="signUpBtn">Sign Up</button>
-    <button id="loginBtn">Log In</button>
+    <h1>Welcome to Educe</h1>
+    <p>Empowering Learners. Inspiring Mentors. Built by Krishay.</p>
+    <div class="buttons">
+      <button onclick="location.href='login.html'">Log In</button>
+      <button onclick="location.href='signup.html'">Sign Up</button>
+    </div>
   </header>
 
-  <section id="formSection" style="display: none;">
-    <div id="formContainer"></div>
-    <button id="backBtn" style="margin-top: 1rem;">⬅ Back</button>
+  <section class="section">
+    <img src="https://cdn.pixabay.com/photo/2017/08/10/03/47/kids-2618953_960_720.jpg" alt="Inspiring youth">
+    <h2>Our Mission</h2>
+    <p>
+      At Educe, we're on a mission to revolutionize the way students learn. With real mentors and personalized learning tools, our platform bridges the gap between curiosity and mastery — all in a fun, supportive environment.
+    </p>
+  </section>
+
+  <section class="section">
+    <img src="https://cdn.pixabay.com/photo/2016/03/26/13/09/child-1280963_1280.jpg" alt="Kids learning online">
+    <h2>What We Offer</h2>
+    <p>
+      - Free live tutoring from verified mentors<br>
+      - 24/7 AI chat support<br>
+      - Placement quizzes to match your skill level<br>
+      - Google sign-in or email-based verification<br>
+      - A personalized dashboard for learners and mentors
+    </p>
   </section>
 
   <footer>
-    <p>Founded by Krishay • Changing lives through Educe</p>
+    Founded by Krishay — Empowering the Next Generation
   </footer>
-
-  <script src="script.js"></script>
 </body>
 </html>
-
-<!-- style.css -->
-/* style.css */
-body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background: #f7f9fc;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-header {
-  background: #dfefff;
-  text-align: center;
-  padding: 4rem 2rem;
-  animation: fadeIn 1s ease-in-out;
-}
-
-header h1 {
-  font-size: 3rem;
-  color: #2a5f9c;
-  margin-bottom: 0.5rem;
-}
-
-header p {
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 2rem;
-}
-
-button {
-  padding: 0.75rem 1.5rem;
-  margin: 0.25rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #2a5f9c;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #244e7a;
-}
-
-#formContainer {
-  max-width: 400px;
-  margin: auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  margin-top: 2rem;
-}
-
-footer {
-  margin-top: auto;
-  text-align: center;
-  padding: 1rem;
-  background: #eee;
-  font-size: 0.9rem;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-<!-- script.js -->
-// script.js
-
-document.getElementById('signUpBtn').addEventListener('click', () => {
-  showForm('signup');
-});
-
-document.getElementById('loginBtn').addEventListener('click', () => {
-  showForm('login');
-});
-
-document.getElementById('backBtn').addEventListener('click', () => {
-  document.getElementById('formSection').style.display = 'none';
-});
-
-function showForm(type) {
-  const formContainer = document.getElementById('formContainer');
-  document.getElementById('formSection').style.display = 'block';
-
-  if (type === 'signup') {
-    formContainer.innerHTML = `
-      <h2>Create your Educe account</h2>
-      <input type="email" placeholder="Email" id="email"/><br/><br/>
-      <input type="text" placeholder="Username" id="username"/><br/><br/>
-      <input type="password" placeholder="Password" id="password"/><br/><br/>
-      <button onclick="submitSignup()">Create Account</button>
-    `;
-  } else if (type === 'login') {
-    formContainer.innerHTML = `
-      <h2>Log In to Educe</h2>
-      <input type="text" placeholder="Username" id="loginUsername"/><br/><br/>
-      <input type="password" placeholder="Password" id="loginPassword"/><br/><br/>
-      <button onclick="submitLogin()">Log In</button>
-    `;
-  }
-}
-
-function submitSignup() {
-  const email = document.getElementById('email').value;
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  alert(`Sign up request sent:\nEmail: ${email}\nUsername: ${username}`);
-  // Here you would send a POST request to your backend
-}
-
-function submitLogin() {
-  const username = document.getElementById('loginUsername').value;
-  const password = document.getElementById('loginPassword').value;
-  alert(`Log in request:\nUsername: ${username}`);
-  // Here you would send a POST request to your backend
-}

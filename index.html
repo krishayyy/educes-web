@@ -1,262 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Educe | Learn & Mentor</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f7f8fc;
-      color: #333;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 3rem 1rem;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      color: #4a4a8e;
-    }
-
-    p {
-      font-size: 1.2rem;
-      color: #666;
-    }
-
-    .btn-group {
-      margin-top: 2rem;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      background: #a0c4ff;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .btn:hover {
-      background: #7fb8ff;
-    }
-
-    .form-container {
-      display: none;
-      margin-top: 3rem;
-      text-align: left;
-      max-width: 500px;
-      margin-inline: auto;
-      padding: 2rem;
-      background: #fff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      border-radius: 16px;
-    }
-
-    .form-container.active {
-      display: block;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.8rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
-    }
-
-    .dashboard {
-      display: none;
-      padding: 2rem;
-      text-align: center;
-      background: linear-gradient(to right, #d0f4de, #a9def9);
-      min-height: 100vh;
-    }
-
-    .dashboard.active {
-      display: block;
-    }
-
-    .profile {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      text-align: right;
-    }
-
-    .profile span {
-      font-weight: bold;
-      display: block;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EDUCE - Modern Learning Platform</title>
+<style>
+  /* --- Reset & base --- */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6f8;
+    color: #334;
+  }
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    padding: 12px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 3px 2px #a0c4ff;
+  }
+  input, select {
+    font-size: 16px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1.8px solid #ccc;
+    width: 100%;
+    transition: border-color 0.3s ease;
+  }
+  input:focus, select:focus {
+    border-color: #80b3ff;
+    outline: none;
+  }
+  .container {
+    max-width: 480px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 16px;
+    padding: 30px 40px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.07);
+  }
+  h1, h2 {
+    margin: 0 0 15px;
+    font-weight: 700;
+  }
+  h1 {
+    font-size: 36px;
+    color: #0a2540;
+  }
+  h2 {
+    font-size: 22px;
+    color: #1e3a8a;
+  }
+  p.description {
+    font-size: 18px;
+    color: #556;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .btn-primary {
+    background-color: #80b3ff;
+    color: white;
+  }
+  .btn-primary:hover {
+    background-color: #4a90e2;
+  }
+  .btn-secondary {
+    background-color: #d0d7e6;
+    color: #334;
+  }
+  .btn-secondary:hover {
+    background-color: #b0b8cc;
+  }
+  .btn-link {
+    background: none;
+    color: #4a90e2;
+    text-decoration: underline;
+    padding: 0;
+    font-size: 14px;
+  }
+  .flex-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .flex-grow {
+    flex-grow: 1;
+  }
+  .error-msg {
+    color: #e53e3e;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .success-msg {
+    color: #2f855a;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  /* Image styling */
+  .hero-image {
+    max-width: 100%;
+    border-radius: 16px;
+    margin-bottom: 30px;
+  }
+  /* Username availability indicator */
+  .username-status {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: 700;
+  }
+  .username-available {
+    color: #2f855a;
+  }
+  .username-taken {
+    color: #e53e3e;
+  }
+  /* Header user menu */
+  .header {
+    background: #1e3a8a;
+    padding: 10px 40px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 20px 20px;
+  }
+  .header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .header .username {
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .header .profile-pic {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: #a0c4ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    color: #0a2540;
+    user-select: none;
+  }
+  /* Dropdown for user info */
+  .user-dropdown {
+    position: absolute;
+    right: 40px;
+    top: 65px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.12);
+    width: 260px;
+    padding: 16px 24px;
+    display: none;
+    z-index: 999;
+  }
+  .user-dropdown.visible {
+    display: block;
+  }
+  .user-dropdown h3 {
+    margin-bottom: 12px;
+    color: #334;
+  }
+  .user-dropdown p {
+    margin: 6px 0;
+    font-size: 15px;
+    color: #555;
+  }
+  /* Dashboard main */
+  .dashboard {
+    padding: 40px;
+  }
+  .dashboard h2 {
+    margin-bottom: 24px;
+  }
+  /* Booking form */
+  .booking-section {
+    background: #f0f5ff;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .booking-section h3 {
+    margin-bottom: 16px;
+  }
+  .booking-section label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .booking-section input, .booking-section select {
+    margin-bottom: 18px;
+  }
+  /* Back button container */
+  .back-container {
+    margin-bottom: 20px;
+  }
+</style>
 </head>
 <body>
-  <div class="container" id="home">
-    <h1>Welcome to Educe</h1>
-    <p>Your personalized learning & mentoring hub for students and mentors</p>
 
-    <div class="btn-group">
-      <button class="btn" onclick="showForm('login')">Login</button>
-      <button class="btn" onclick="showForm('signup')">Sign Up</button>
+<!-- Header user info bar, shown after login -->
+<header class="header" id="header" style="display:none;">
+  <div>Welcome, <span id="welcomeRoleName"></span></div>
+  <div class="user-info" tabindex="0" id="userMenuToggle" aria-label="User menu" role="button">
+    <div class="username" id="headerUsername"></div>
+    <div class="profile-pic" id="profilePic">U</div>
+  </div>
+</header>
+
+<!-- User dropdown info -->
+<div class="user-dropdown" id="userDropdown">
+  <h3>User Info</h3>
+  <p><b>Name:</b> <span id="infoName"></span></p>
+  <p><b>Last Name:</b> <span id="infoLastName"></span></p>
+  <p><b>Birth Month:</b> <span id="infoMonth"></span></p>
+  <p><b>Birth Year:</b> <span id="infoYear"></span></p>
+  <p><b>Email:</b> <span id="infoEmail"></span></p>
+  <button onclick="logout()" style="margin-top:12px; width:100%; background:#e53e3e; color:white;">Log Out</button>
+</div>
+
+<main>
+  <!-- Container to dynamically show all steps -->
+  <div class="container" id="app">
+
+    <!-- LANDING PAGE -->
+    <div id="landingPage">
+      <h1>Welcome to EDUCE</h1>
+      <p class="description">
+        Unlock your potential with free live tutoring classes. 
+        Personalized learning with mentors and learners, backed by technology.
+      </p>
+      <img src="https://images.unsplash.com/photo-1596495577886-d920f1eea7b2?auto=format&fit=crop&w=800&q=80" alt="Students learning" class="hero-image" />
+      <div class="flex-row">
+        <button class="btn-primary flex-grow" onclick="goToSignUp()">Sign Up</button>
+        <button class="btn-secondary flex-grow" onclick="goToLogIn()">Sign In</button>
+      </div>
     </div>
-  </div>
 
-  <!-- Login Form -->
-  <div id="login-form" class="form-container">
-    <h2>Login</h2>
-    <label>Username</label>
-    <input type="text" id="login-username">
-    <label>Password</label>
-    <input type="password" id="login-password">
-    <button class="btn" onclick="handleLogin()">Log In</button>
-  </div>
-
-  <!-- Signup Form Part 1: Age -->
-  <div id="signup-form" class="form-container">
-    <h2>Sign Up - Step 1</h2>
-    <label>Month of Birth</label>
-    <select id="month">
-      <option>January</option><option>February</option><option>March</option>
-      <option>April</option><option>May</option><option>June</option>
-      <option>July</option><option>August</option><option>September</option>
-      <option>October</option><option>November</option><option>December</option>
-    </select>
-    <label>Year of Birth</label>
-    <select id="year"></select>
-    <button class="btn" onclick="proceedSignupStep2()">Continue</button>
-  </div>
-
-  <!-- Signup Form Part 2: Email Confirmation -->
-  <div id="email-form" class="form-container">
-    <h2>Email Confirmation</h2>
-    <label id="email-label"></label>
-    <input type="email" id="email">
-    <button class="btn" onclick="sendConfirmationCode()">Send Code</button>
-    <div id="code-block" style="display:none">
-      <label>Enter Confirmation Code</label>
-      <input type="text" id="code">
-      <button class="btn" onclick="verifyCode()">Verify</button>
-      <button class="btn" onclick="sendConfirmationCode()">Resend Code</button>
+    <!-- AGE ENTRY -->
+    <div id="ageEntry" style="display:none;">
+      <div class="back-container">
+        <button class="btn-secondary" onclick="goBackToLanding()">← Back</button>
+      </div>
+      <h2>How old are you?</h2>
+      <div class="flex-row">
+        <select id="birthMonthSelect" aria-label="Select birth month">
+          <option value="">Month</option>
+          <option>January</option><option>February</option><option>March</option><option>April</option>
+          <option>May</option><option>June</option><option>July</option><option>August</option>
+          <option>September</option><option>October</option><option>November</option><option>December</option>
+        </select>
+        <select id="birthYearSelect" aria-label="Select birth year">
+          <option value="">Year</option>
+          <!-- JavaScript will fill years -->
+        </select>
+      </div>
+      <button class="btn-primary" id="ageContinueBtn" disabled onclick="onAgeContinue()">Continue</button>
     </div>
-  </div>
 
-  <!-- Signup Form Part 3: Create Account -->
-  <div id="final-signup" class="form-container">
-    <h2>Complete Your Profile</h2>
-    <label>First Name</label>
-    <input type="text" id="first-name">
-    <label>Last Name</label>
-    <input type="text" id="last-name">
-    <label>Username</label>
-    <input type="text" id="new-username">
-    <label>Password</label>
-    <input type="password" id="new-password">
-    <label>Confirm Password</label>
-    <input type="password" id="confirm-password">
-    <button class="btn" onclick="completeSignup()">Create Account</button>
-  </div>
-
-  <!-- Dashboard -->
-  <div id="dashboard" class="dashboard">
-    <div class="profile">
-      <span id="role"></span>
-      <span id="profile-username"></span>
+    <!-- EMAIL ENTRY & SIGN IN OPTIONS -->
+    <div id="emailEntry" style="display:none;">
+      <div class="back-container">
+        <button class="btn-secondary" onclick="goBackToAge()">← Back</button>
+      </div>
+      <h2 id="emailLabel">Enter your email</h2>
+      <input type="email" id="emailInput" placeholder="you@example.com" autocomplete="email" />
+      <div style="margin-top:12px;">
+        <button class="btn-primary" id="emailConfirmBtn" disabled onclick="onEmailConfirm()">Confirm</button>
+      </div>
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="googleSignInBtn" onclick="onGoogleSignIn()">Sign in with Google</button>
+      </div>
+      <p style="margin-top: 10px; font-size: 14px; color:#666;">*You can sign in with Google instantly or use email confirmation*</p>
     </div>
-    <h2 id="welcome-text"></h2>
-    <p>Dashboard features coming soon...</p>
-    <p>You’ll be able to book sessions, manage profile, and more!</p>
-  </div>
 
-  <script>
-    const yearSelect = document.getElementById('year');
-    for (let i = new Date().getFullYear(); i >= 2000; i--) {
-      const option = document.createElement('option');
-      option.text = i;
-      yearSelect.add(option);
-    }
-
-    function showForm(form) {
-      document.getElementById('home').style.display = 'none';
-      document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-      document.getElementById(`${form}-form`).classList.add('active');
-    }
-
-    function handleLogin() {
-      const username = document.getElementById('login-username').value;
-      const password = document.getElementById('login-password').value;
-      // Temporary fake user login for demo
-      if (username === 'learner1' && password === 'password123') {
-        launchDashboard('Learner', username);
-      } else if (username === 'mentor1' && password === 'password123') {
-        launchDashboard('Mentor', username);
-      } else {
-        alert('Incorrect login');
-      }
-    }
-
-    function proceedSignupStep2() {
-      const year = parseInt(document.getElementById('year').value);
-      const currentYear = new Date().getFullYear();
-      const age = currentYear - year;
-      document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-      document.getElementById('email-form').classList.add('active');
-      document.getElementById('email-label').innerText = age < 13 ? "Enter your parent's email" : "Enter your email";
-    }
-
-    function sendConfirmationCode() {
-      document.getElementById('code-block').style.display = 'block';
-      alert('Pretend confirmation code sent. Use 123456.');
-    }
-
-    function verifyCode() {
-      const code = document.getElementById('code').value;
-      if (code === '123456') {
-        document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-        document.getElementById('final-signup').classList.add('active');
-      } else {
-        alert('Incorrect code');
-      }
-    }
-
-    function completeSignup() {
-      const name = document.getElementById('first-name').value;
-      const username = document.getElementById('new-username').value;
-      const password = document.getElementById('new-password').value;
-      const confirmPassword = document.getElementById('confirm-password').value;
-
-      if (username.length < 4) return alert('Username must be at least 4 characters');
-      if (password.length < 8) return alert('Password must be at least 8 characters');
-      if (password !== confirmPassword) return alert('Passwords do not match');
-
-      launchDashboard('Learner', username, name);
-    }
-
-    function launchDashboard(role, username, name = '') {
-      document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-      document.getElementById('dashboard').classList.add('active');
-      document.getElementById('role').innerText = role;
-      document.getElementById('profile-username').innerText = username;
-      document.getElementById('welcome-text').innerText = `Welcome to Educe, ${name || username}`;
-    }
-  </script>
-</body>
-</html>
+    <!-- OTP VERIFICATION -->
+    <div id="otpVerification" style="display:none;">
+      <div class="back-container">
+        <button class="btn-secondary" onclick="goBackToEmail()">← Back</button>
+      </div>
+      <h2>Enter verification code sent to <span id="otpEmailDisplay"></span></h2>
+      <input type="text" id="otpInput" maxlength="6" placeholder="6-digit code" />
+      <button class="btn-primary" id="otpVerifyBtn" disabled onclick="onVerifyOtp()">Verify</button>
+      <p style="margin-top: 12px; font-size: 14px;">
+        Didn't get the code? <button class="btn-link" onclick="resendOtp()">Resend Code</button>
+      </p>
+      <p id="otpErrorMsg"

@@ -3,167 +3,274 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDUCES - Welcome</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <title>EDUCE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-    body {
       margin: 0;
       padding: 0;
-      background-color: #ffffff;
-      color: #111111;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
     }
-    header {
-      text-align: center;
-      padding: 4rem 1rem;
+    body, html {
+      height: 100%;
+      background: #f9f9f9;
     }
-    header h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-    header p {
-      font-size: 1.25rem;
-      color: #555555;
-      margin-bottom: 2rem;
-    }
-    .btn-container {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-    }
-    .btn {
-      background-color: #007BFF;
+    .lock-screen {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
       color: white;
-      border: none;
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .lock-screen input {
+      padding: 10px;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .lock-screen button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
       cursor: pointer;
     }
-    .btn:hover {
-      background-color: #0056b3;
+    .hidden {
+      opacity: 0;
+      transform: translateY(-100%);
+      pointer-events: none;
     }
-    .form-step {
+    header {
+      padding: 20px;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header .role {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    header .user {
+      display: flex;
+      align-items: center;
+    }
+    header .user span {
+      margin-right: 10px;
+    }
+    header .user i {
+      font-size: 20px;
+      cursor: pointer;
+    }
+    main {
+      padding: 40px;
+      text-align: center;
+    }
+    .auth-options, .signup-options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .auth-options button, .signup-options button {
+      padding: 15px 30px;
+      font-size: 16px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
       display: none;
+      z-index: 10000;
       max-width: 400px;
-      margin: 2rem auto;
-      padding: 2rem;
+      text-align: left;
+    }
+    .modal.active {
+      display: block;
+    }
+    .modal .close {
+      text-align: right;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container input {
+      margin: 8px 0;
+      padding: 10px;
+      width: 250px;
       border: 1px solid #ccc;
-      border-radius: 1rem;
+      border-radius: 4px;
     }
-    .form-step.active {
-      display: block;
+    .form-container button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    input, select {
-      display: block;
-      width: 100%;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
-    .username-check {
-      margin-top: -1rem;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
+    .status-msg {
+      margin-top: 30px;
+      font-size: 24px;
+      color: #333;
     }
   </style>
 </head>
 <body>
+  <div class="lock-screen" id="lockScreen">
+    <h1>🔒 Enter Password</h1>
+    <input type="password" id="unlockPass" placeholder="Enter password..." />
+    <button onclick="unlockSite()">Unlock</button>
+  </div>
+
   <header>
-    <h1>Welcome to EDUCES</h1>
-    <p>Where education meets technology</p>
-    <div class="btn-container">
-      <button class="btn" onclick="selectRole('mentor')">Join as a Mentor</button>
-      <button class="btn" onclick="selectRole('learner')">Join as a Learner</button>
+    <div class="role" id="userRole"></div>
+    <div class="user">
+      <span id="usernameTop"></span>
+      <i class="fas fa-user-circle" onclick="showProfile()"></i>
     </div>
   </header>
 
-  <div class="form-step" id="step1">
-    <label for="month">Month of Birth:</label>
-    <select id="month">
-      <option>January</option>
-      <option>February</option>
-      <option>March</option>
-      <option>April</option>
-      <option>May</option>
-      <option>June</option>
-      <option>July</option>
-      <option>August</option>
-      <option>September</option>
-      <option>October</option>
-      <option>November</option>
-      <option>December</option>
-    </select>
+  <main>
+    <h1>Welcome to EDUCE</h1>
+    <p class="status-msg" id="statusMsg">Coming soon</p>
 
-    <label for="year">Year of Birth:</label>
-    <select id="year"></select>
+    <div class="auth-options">
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showSignupOptions()">Sign Up</button>
+    </div>
 
-    <button class="btn" onclick="goToStep(2)">Next</button>
-  </div>
+    <div id="loginForm" class="form-container" style="display:none">
+      <input type="text" placeholder="Username" id="loginUser" />
+      <input type="password" placeholder="Password" id="loginPass" />
+      <button onclick="loginUser()">Login</button>
+    </div>
 
-  <div class="form-step" id="step2">
-    <input type="text" id="firstName" placeholder="First Name" />
-    <input type="text" id="lastName" placeholder="Last Name" />
+    <div id="signupOptions" class="signup-options" style="display:none">
+      <button onclick="startSignup('learner')">Sign up as Learner</button>
+      <button onclick="startSignup('mentor')">Sign up as Mentor</button>
+      <button onclick="toggleModal()">What is a learner or mentor?</button>
+    </div>
 
-    <input type="text" id="username" placeholder="Username" oninput="checkUsername()" />
-    <div id="usernameStatus" class="username-check"></div>
+    <div id="signupForm" class="form-container" style="display:none">
+      <select id="dobMonth">
+        <option>Month</option>
+        <option>January</option><option>February</option><option>March</option>
+        <option>April</option><option>May</option><option>June</option>
+        <option>July</option><option>August</option><option>September</option>
+        <option>October</option><option>November</option><option>December</option>
+      </select>
+      <select id="dobYear">
+        <option>Year</option>
+        <script>
+          const yearSel = document.currentScript.parentElement;
+          const now = new Date().getFullYear();
+          for (let y = now; y >= 1900; y--) {
+            const opt = document.createElement('option');
+            opt.text = y;
+            yearSel.appendChild(opt);
+          }
+        </script>
+      </select>
+      <input type="text" placeholder="First Name" id="firstName" />
+      <input type="text" placeholder="Last Name" id="lastName" />
+      <input type="text" placeholder="Create a username" id="signupUser" oninput="checkUsername(this.value)" />
+      <span id="userCheck"></span>
+      <input type="password" placeholder="Password" id="signupPass" />
+      <input type="password" placeholder="Confirm Password" id="signupPass2" />
+      <button onclick="completeSignup()">Sign up with Google</button>
+    </div>
+  </main>
 
-    <input type="password" id="password" placeholder="Password" />
-
-    <button class="btn" onclick="goToStep(3)">Next</button>
-  </div>
-
-  <div class="form-step" id="step3">
-    <button class="btn" onclick="signInWithGoogle()">Sign in with Google</button>
-  </div>
-
-  <div class="form-step" id="step4">
-    <h2 id="welcomeMessage"></h2>
-    <p>Coming soon...</p>
+  <div class="modal" id="roleModal">
+    <div class="close" onclick="toggleModal()">✖</div>
+    <h3>Learner vs. Mentor</h3>
+    <p><strong>Learner:</strong> A student who receives help through our free tutoring system.</p>
+    <p><strong>Mentor:</strong> A volunteer tutor who provides guidance and support to learners.</p>
   </div>
 
   <script>
-    const yearSelect = document.getElementById("year");
-    for (let y = 2025; y >= 1940; y--) {
-      const opt = document.createElement("option");
-      opt.value = opt.textContent = y;
-      yearSelect.appendChild(opt);
-    }
-
-    let userRole = "";
-    function selectRole(role) {
-      userRole = role;
-      goToStep(1);
-    }
-
-    function goToStep(step) {
-      document.querySelectorAll(".form-step").forEach((el) => el.classList.remove("active"));
-      document.getElementById("step" + step).classList.add("active");
-    }
-
-    function checkUsername() {
-      const username = document.getElementById("username").value;
-      const status = document.getElementById("usernameStatus");
-      // Fake username check (replace with backend call later)
-      if (username === "krishay") {
-        status.textContent = "❌ Username taken";
-        status.style.color = "red";
+    function unlockSite() {
+      const pass = document.getElementById('unlockPass').value;
+      if (pass === '67') {
+        document.getElementById('lockScreen').classList.add('hidden');
       } else {
-        status.textContent = "✅ Username available";
-        status.style.color = "green";
+        alert('Incorrect password');
       }
     }
-
-    function signInWithGoogle() {
-      // Replace with real OAuth logic later
-      const name = document.getElementById("firstName").value;
-      document.getElementById("welcomeMessage").textContent =
-        "Welcome " + (userRole === "mentor" ? "Mentor " : "Learner ") + name;
-      goToStep(4);
+    function showProfile() {
+      alert("Coming soon: Profile Details");
+    }
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'flex';
+      document.getElementById('signupOptions').style.display = 'none';
+      document.getElementById('signupForm').style.display = 'none';
+    }
+    function showSignupOptions() {
+      document.getElementById('signupOptions').style.display = 'flex';
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('signupForm').style.display = 'none';
+    }
+    function startSignup(role) {
+      window.userRole = role;
+      document.getElementById('signupForm').style.display = 'flex';
+      document.getElementById('signupOptions').style.display = 'none';
+    }
+    function toggleModal() {
+      document.getElementById('roleModal').classList.toggle('active');
+    }
+    function checkUsername(name) {
+      const taken = ['admin', 'test', 'user'];
+      const icon = document.getElementById('userCheck');
+      if (taken.includes(name.toLowerCase())) {
+        icon.textContent = '❌';
+        icon.style.color = 'red';
+      } else {
+        icon.textContent = '✅';
+        icon.style.color = 'green';
+      }
+    }
+    function completeSignup() {
+      const name = document.getElementById('signupUser').value;
+      const pass = document.getElementById('signupPass').value;
+      const conf = document.getElementById('signupPass2').value;
+      if (!name || !pass || pass !== conf) return alert('Invalid info');
+      document.getElementById('userRole').textContent = `Welcome ${window.userRole}`;
+      document.getElementById('usernameTop').textContent = name;
+      document.getElementById('statusMsg').textContent = `Welcome to EDUCE, ${name}. Got it.`;
+      document.getElementById('signupForm').style.display = 'none';
+    }
+    function loginUser() {
+      const u = document.getElementById('loginUser').value;
+      const p = document.getElementById('loginPass').value;
+      if (u && p) {
+        document.getElementById('userRole').textContent = `Welcome Back`; // Role unknown here
+        document.getElementById('usernameTop').textContent = u;
+        document.getElementById('statusMsg').textContent = `Welcome to EDUCE, ${u}. Got it.`;
+        document.getElementById('loginForm').style.display = 'none';
+      }
     }
   </script>
 </body>

@@ -1,139 +1,214 @@
-import React, { useState } from 'react';
-import './App.css';
-import axios from 'axios';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Educe - Empowering Learners</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body, html {
+    font-family: 'Poppins', sans-serif;
+    background:#f5f7fa; color:#334;
+  }
+  .hero {
+    position:relative;
+    height:100vh; width:100%;
+    background:url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
+    color:white; text-align:center;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+  }
+  .hero::after {
+    content:""; position:absolute;
+    inset:0; background:rgba(0,0,0,0.5);
+  }
+  .hero > * { position:relative; z-index:1; }
+  .hero h1 { font-size:4rem; font-weight:700; animation:fadeUp 1s;}
+  .hero p { margin-top:20px; font-size:1.3rem; opacity:0; animation:fadeUp 1s 0.4s forwards;}
+  .hero .buttons { margin-top:40px; display:flex; gap:20px; opacity:0; animation:fadeUp 1s 0.8s forwards;}
+  .hero button {
+    padding:16px 32px;
+    font-size:1.1rem;
+    border-radius:8px;
+    border:none;
+    font-weight:700;
+  }
+  .primary { background:#60a5fa; color:white; }
+  .secondary { background:#d3e3fc; color:#1e3a8a; }
+  .primary:hover { background:#3b82f6; }
+  .secondary:hover { background:#bfdbfe; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 
-function App() {
-  const [view, setView] = useState('home');
-  const [age, setAge] = useState('');
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
-  const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
-    password: '',
+  section { display:none; padding:40px 20px; max-width:480px; margin: auto; background:white; border-radius:16px; margin-top:40px; }
+  section.active { display:block; }
+  h2 { font-size:2rem; margin-bottom:24px; color:#1e3a8a; }
+  input, select { width:100%; padding:12px; margin-bottom:20px; border-radius:6px; border:1.5px solid #ccd1d9; font-size:1rem; }
+  input:focus, select:focus { border-color:#60a5fa; outline:none; }
+  .back { margin-top:10px; background:#e2e8f0; color:#334; }
+  .footer { text-align:center; padding:20px; font-size:1rem; color:#64748b; margin-top:auto; }
+</style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<div class="hero" id="hero">
+  <h1>Welcome to EDUCE</h1>
+  <p>Live, free tutoring with student mentors — powered by community and AI support.</p>
+  <div class="buttons">
+    <button class="primary" onclick="show('age')">Sign Up</button>
+    <button class="secondary" onclick="show('login')">Sign In</button>
+  </div>
+</div>
+
+<!-- Age Input -->
+<section id="age" class="active">
+  <h2>How old are you?</h2>
+  <div>
+    <select id="month">
+      <option value="">Month</option><option>Jan</option><option>Feb</option><option>Mar</option>
+      <option>Apr</option><option>May</option><option>Jun</option><option>Jul</option>
+      <option>Aug</option><option>Sep</option><option>Oct</option><option>Nov</option><option>Dec</option>
+    </select>
+    <select id="year">
+      <option value="">Year</option>
+    </select>
+  </div>
+  <button class="primary" onclick="onAge()">Continue</button>
+  <button class="back" onclick="show('hero')">Back</button>
+</section>
+
+<!-- Email & Google -->
+<section id="email">
+  <h2 id="emailLabel">Enter Your Email</h2>
+  <input type="email" id="emailInput" placeholder="you@example.com"/>
+  <button class="primary" id="emailBtn" onclick="onEmail()">Confirm Email</button>
+  <button class="primary" id="googleBtn" style="margin-top:10px;">Sign in with Google</button>
+  <button class="back" onclick="show('age')">Back</button>
+</section>
+
+<!-- OTP Verification -->
+<section id="otp">
+  <h2>Enter Verification Code</h2>
+  <input type="text" id="otpInput" placeholder="6‑digit code"/>
+  <button class="primary" onclick="onVerify()">Verify</button>
+  <button class="back" onclick="show('email')">Back</button>
+</section>
+
+<!-- Registration -->
+<section id="register">
+  <h2>Create Your Account</h2>
+  <input type="text" id="firstName" placeholder="First name"/>
+  <input type="text" id="lastName" placeholder="Last name"/>
+  <input type="text" id="username" placeholder="Username"/>
+  <span id="userMsg" style="font-size:0.9rem;"></span>
+  <input type="password" id="password" placeholder="Password (min 8 chars)"/>
+  <button class="primary" onclick="onRegister()">Sign Up</button>
+  <button class="back" onclick="show('otp')">Back</button>
+</section>
+
+<!-- Login -->
+<section id="login">
+  <h2>Sign In</h2>
+  <input type="text" id="loginUsername" placeholder="Username"/>
+  <input type="password" id="loginPassword" placeholder="Password"/>
+  <button class="primary" onclick="onLogin()">Log In</button>
+  <button class="back" onclick="show('hero')">Back</button>
+</section>
+
+<!-- Dashboard -->
+<section id="dashboard">
+  <h2 id="dashWelcome"></h2>
+  <p><strong>Username:</strong> <span id="dashUser"></span></p>
+  <p><strong>Email:</strong> <span id="dashEmail"></span></p>
+  <p><strong>Role:</strong> Learner</p>
+  <button class="primary" onclick="logout()">Log Out</button>
+</section>
+
+<div class="footer">
+  © 2025 EDUCE — Founded by Krishay
+</div>
+
+<script>
+  // populate years
+  const yr = document.getElementById('year');
+  for(let y=new Date().getFullYear(); y>=2000; y--) {
+    const opt = document.createElement('option');
+    opt.value = y; opt.text = y;
+    yr.add(opt);
+  }
+
+  // simple user store
+  const users = JSON.parse(localStorage.getItem('educeUsers')||'{}');
+
+  function show(step){
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(step).classList.add('active');
+  }
+
+  function onAge(){
+    // validate
+    const mo = document.getElementById('month').value;
+    const ye = document.getElementById('year').value;
+    if(!mo||!ye) return alert('Pick month and year');
+    const age = new Date().getFullYear() - ye;
+    document.getElementById('emailLabel').innerText = age<13 ? "Parent’s email" : "Your email";
+    show('email');
+  }
+
+  function onEmail(){
+    const email = document.getElementById('emailInput').value;
+    if(!email.includes('@')) return alert('Enter valid email');
+    // simulate OTP send
+    sessionStorage.setItem('otpCode','123456');
+    alert('Code sent (use 123456)');
+    show('otp');
+    document.getElementById('googleBtn').style.display='none';
+  }
+
+  function onVerify(){
+    const code = document.getElementById('otpInput').value;
+    if(code === sessionStorage.getItem('otpCode')){
+      show('register');
+    } else alert('Wrong code');
+  }
+
+  document.getElementById('username').addEventListener('input',e=>{
+    const name=e.target.value;
+    const msg=document.getElementById('userMsg');
+    if(name.length<4) return msg.innerText="Username too short";
+    msg.innerText = users[name]? "Taken":"Available";
+    msg.style.color = users[name]? '#dc2626':'#16a34a';
   });
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
 
-  const sendOtp = async () => {
-    try {
-      await axios.post('http://localhost:4000/api/auth/send-otp', { email });
-      setOtpSent(true);
-    } catch (err) {
-      alert('Error sending OTP');
-    }
-  };
+  function onRegister(){
+    const fn=document.getElementById('firstName').value;
+    const ln=document.getElementById('lastName').value;
+    const un=document.getElementById('username').value;
+    const pw=document.getElementById('password').value;
+    if(!fn||!ln||pw.length<8) return alert('Complete all fields with valid password');
+    users[un] = {firstName:fn, lastName:ln, email:document.getElementById('emailInput').value};
+    localStorage.setItem('educeUsers',JSON.stringify(users));
+    alert('Registered successfully');
+    document.getElementById('dashWelcome').innerText = `Welcome, ${fn}`;
+    document.getElementById('dashUser').innerText = un;
+    document.getElementById('dashEmail').innerText = users[un].email;
+    show('dashboard');
+  }
 
-  const verifyOtp = async () => {
-    try {
-      await axios.post('http://localhost:4000/api/auth/verify-otp', { email, otp });
-      setOtpVerified(true);
-    } catch (err) {
-      alert('Invalid OTP');
-    }
-  };
+  function onLogin(){
+    const un=document.getElementById('loginUsername').value;
+    const pw=document.getElementById('loginPassword').value;
+    if(users[un]){
+      document.getElementById('dashWelcome').innerText = `Welcome back, ${users[un].firstName}`;
+      document.getElementById('dashUser').innerText = un;
+      document.getElementById('dashEmail').innerText = users[un].email;
+      show('dashboard');
+    } else alert('Invalid login');
+  }
 
-  const register = async () => {
-    try {
-      await axios.post('http://localhost:4000/api/auth/register', { email, ...userData });
-      alert('Registered successfully');
-      setView('login');
-    } catch (err) {
-      alert('Error registering');
-    }
-  };
-
-  const login = async () => {
-    try {
-      const res = await axios.post('http://localhost:4000/api/auth/login', loginData);
-      setLoggedInUser(res.data.user);
-      setView('dashboard');
-    } catch (err) {
-      alert('Invalid credentials');
-    }
-  };
-
-  return (
-    <div className="app">
-      {view === 'home' && (
-        <div className="home">
-          <h1>Welcome to Educe</h1>
-          <p>Free, live, 24/7 support for students. Founded by Krishay.</p>
-          <img src="/hero-image.png" alt="Education banner" />
-          <div className="btns">
-            <button onClick={() => setView('signup-age')}>Sign Up</button>
-            <button onClick={() => setView('login')}>Log In</button>
-          </div>
-        </div>
-      )}
-
-      {view === 'signup-age' && (
-        <div className="form">
-          <h2>Enter your age</h2>
-          <input value={age} onChange={(e) => setAge(e.target.value)} placeholder="Age" />
-          <button onClick={() => setView('signup-email')}>Next</button>
-          <button className="back" onClick={() => setView('home')}>Back</button>
-        </div>
-      )}
-
-      {view === 'signup-email' && (
-        <div className="form">
-          <h2>{age < 13 ? 'Enter parent email' : 'Enter your email'}</h2>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-          <button onClick={sendOtp}>Send OTP</button>
-          <button className="back" onClick={() => setView('signup-age')}>Back</button>
-        </div>
-      )}
-
-      {otpSent && !otpVerified && (
-        <div className="form">
-          <h2>Enter the OTP sent to {email}</h2>
-          <input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="OTP" />
-          <button onClick={verifyOtp}>Verify</button>
-          <button onClick={sendOtp}>Resend OTP</button>
-        </div>
-      )}
-
-      {otpVerified && view !== 'register' && setView('register')}
-
-      {view === 'register' && (
-        <div className="form">
-          <h2>Sign Up</h2>
-          <input placeholder="First Name" onChange={(e) => setUserData({ ...userData, firstName: e.target.value })} />
-          <input placeholder="Last Name" onChange={(e) => setUserData({ ...userData, lastName: e.target.value })} />
-          <input placeholder="Username" onChange={(e) => setUserData({ ...userData, username: e.target.value })} />
-          <input type="password" placeholder="Password" onChange={(e) => setUserData({ ...userData, password: e.target.value })} />
-          <button onClick={register}>Submit</button>
-        </div>
-      )}
-
-      {view === 'login' && (
-        <div className="form">
-          <h2>Login</h2>
-          <input placeholder="Username" value={loginData.username} onChange={(e) => setLoginData({ ...loginData, username: e.target.value })} />
-          <input type="password" placeholder="Password" value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
-          <button onClick={login}>Log In</button>
-          <button className="back" onClick={() => setView('home')}>Back</button>
-        </div>
-      )}
-
-      {view === 'dashboard' && loggedInUser && (
-        <div className="dashboard">
-          <h1>Welcome, {loggedInUser.firstName}</h1>
-          <p>You are now signed in as {loggedInUser.username}</p>
-          <div className="user-card">
-            <p><strong>Full Name:</strong> {loggedInUser.firstName} {loggedInUser.lastName}</p>
-            <p><strong>Email:</strong> {loggedInUser.email}</p>
-            <p><strong>Username:</strong> {loggedInUser.username}</p>
-          </div>
-          <button onClick={() => setView('home')}>Log Out</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default App;
+  function logout(){
+    show('hero');
+  }
+</script>
+</body>
+</html>

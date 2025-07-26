@@ -1,71 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Educe - Empowering Learners</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body, html {
-    font-family: 'Poppins', sans-serif;
-    background:#f5f7fa; color:#334;
-  }
-  .hero {
-    position:relative;
-    height:100vh; width:100%;
-    background:url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
-    color:white; text-align:center;
-    display:flex; flex-direction:column; justify-content:center; align-items:center;
-  }
-  .hero::after {
-    content:""; position:absolute;
-    inset:0; background:rgba(0,0,0,0.5);
-  }
-  .hero > * { position:relative; z-index:1; }
-  .hero h1 { font-size:4rem; font-weight:700; animation:fadeUp 1s;}
-  .hero p { margin-top:20px; font-size:1.3rem; opacity:0; animation:fadeUp 1s 0.4s forwards;}
-  .hero .buttons { margin-top:40px; display:flex; gap:20px; opacity:0; animation:fadeUp 1s 0.8s forwards;}
-  .hero button {
-    padding:16px 32px;
-    font-size:1.1rem;
-    border-radius:8px;
-    border:none;
-    font-weight:700;
-  }
-  .primary { background:#60a5fa; color:white; }
-  .secondary { background:#d3e3fc; color:#1e3a8a; }
-  .primary:hover { background:#3b82f6; }
-  .secondary:hover { background:#bfdbfe; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+const express = require('express');
+const cors = require('cors');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
-  section { display:none; padding:40px 20px; max-width:480px; margin: auto; background:white; border-radius:16px; margin-top:40px; }
-  section.active { display:block; }
-  h2 { font-size:2rem; margin-bottom:24px; color:#1e3a8a; }
-  input, select { width:100%; padding:12px; margin-bottom:20px; border-radius:6px; border:1.5px solid #ccd1d9; font-size:1rem; }
-  input:focus, select:focus { border-color:#60a5fa; outline:none; }
-  .back { margin-top:10px; background:#e2e8f0; color:#334; }
-  .footer { text-align:center; padding:20px; font-size:1rem; color:#64748b; margin-top:auto; }
-</style>
-</head>
-<body>
+const app = express();
+const PORT = process.env.PORT || 4000;
 
-<!-- Hero Section -->
-<div class="hero" id="hero">
-  <h1>Welcome to EDUCE</h1>
-  <p>Live, free tutoring with student mentors — powered by community and AI support.</p>
-  <div class="buttons">
-    <button class="primary" onclick="show('age')">Sign Up</button>
-    <button class="secondary" onclick="show('login')">Sign In</button>
-  </div>
-</div>
+app.use(cors());
+app.use(bodyParser.json());
 
-<!-- JavaScript at end -->
-<script>
-  function show(id) {
-    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+let otpStore = {};
+let users = {}; // { username: { email, password, firstName, lastName, dob, role } }
+
+// Setup mail transporter (replace with your real email and app password)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'your_email@gmail.com',
+    pass: 'your_app_password' // You need to use an app password, not your regular one
   }
-</script>
-</body>
-</html>
+});
+
+// ✅ Send OTP to email
+app.post('/api/send-otp', (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).send('Email is required');
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  otpStore[email] = otp;
+
+  const mailOptions = {
+    from: 'your_email@gmail.com',
+    to: email,
+    subject: 'Your Educe Confirmation Code',
+    text: `Your code is: ${otp}`
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).send('Failed to send code');
+    }
+    res.status(200).send('Code sent');
+  });
+});
+
+// ✅ Verify OTP
+app.post('/api/verify-otp', (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) return res.status(400).send('Email and code required');
+
+  if (otpStore[email] === otp) {
+    delete otpStore[email];
+    res.status(200).send('Verified');
+  } else {
+    res.status(400).send('Invalid code');
+  }
+});
+
+// ✅ Check username availability
+app.post('/api/check-username', (req, res) => {
+  const { username } = req.body;
+  if (!username) return res.status(400).send('Username required');
+
+  if (users[username]) {
+    res.status(409).send('Username already taken');
+  } else {
+    res.status(200).send('Available');
+  }
+});
+
+// ✅ Register user
+app.post('/api/register', (req, res) => {
+  const { username, password, email, firstName, lastName, dob, role } = req.body;
+
+  if (!username || !password || !email || !firstName || !lastName || !dob || !role) {
+    return res.status(400).send('All fields are required');
+  }
+
+  if (users[username]) {
+    return res.status(409).send('Username already exists');
+  }
+
+  users[username] = { email, password, firstName, lastName, dob, role };
+  res.status(200).send('Registered');
+});
+
+// ✅ Login user
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) return res.status(400).send('Username and password required');
+
+  const user = users[username];
+  if (!user || user.password !== password) {
+    return res.status(401).send('Invalid login');
+  }
+
+  res.status(200).json({ message: 'Welcome back!', user });
+});
+
+// ✅ Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+

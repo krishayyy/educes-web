@@ -1,374 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>EDUCE - Empowering Learners & Mentors</title>
+import React, { useState } from 'react';
+import './App.css';
+import axios from 'axios';
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+function App() {
+  const [view, setView] = useState('home');
+  const [age, setAge] = useState('');
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [userData, setUserData] = useState({
+    firstName: '',
+    lastName: '',
+    username: '',
+    password: '',
+  });
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
 
-<style>
-  /* Reset & base */
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #f0f4f8;
-    color: #2c3e50;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  button {
-    font-family: inherit;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    padding: 14px 28px;
-    font-size: 1.1rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(112, 163, 255, 0.6);
-  }
-  input, select {
-    font-family: inherit;
-    font-size: 1rem;
-    padding: 12px 14px;
-    border-radius: 8px;
-    border: 2px solid #cbd5e1;
-    width: 100%;
-    transition: border-color 0.3s ease;
-  }
-  input:focus, select:focus {
-    border-color: #60a5fa;
-    outline: none;
-  }
-  /* Container */
-  #app {
-    flex-grow: 1;
-    max-width: 960px;
-    margin: auto;
-    padding: 0 20px 80px;
-  }
-  /* --- HERO --- */
-  #landingPage {
-    height: 100vh;
-    background: url('https://images.unsplash.com/photo-1519452575416-9a72daac6c62?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-    padding: 0 20px;
-  }
-  #landingPage::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(28, 35, 50, 0.6);
-    z-index: 0;
-  }
-  #landingPage > * {
-    position: relative;
-    z-index: 1;
-  }
-  #landingPage h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
-    opacity: 0;
-    animation: fadeInUp 1s forwards;
-  }
-  #landingPage p.description {
-    max-width: 600px;
-    font-size: 1.4rem;
-    font-weight: 500;
-    margin-bottom: 3rem;
-    opacity: 0;
-    animation: fadeInUp 1s 0.3s forwards;
-  }
-  #landingPage .btn-container {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeInUp 1s 0.6s forwards;
-  }
-  #landingPage button {
-    min-width: 160px;
-  }
-  #landingPage .btn-primary {
-    background-color: #60a5fa;
-    color: white;
-  }
-  #landingPage .btn-primary:hover {
-    background-color: #3b82f6;
-  }
-  #landingPage .btn-secondary {
-    background-color: #dbeafe;
-    color: #1e40af;
-  }
-  #landingPage .btn-secondary:hover {
-    background-color: #bfdbfe;
-  }
-  /* Animations */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+  const sendOtp = async () => {
+    try {
+      await axios.post('http://localhost:4000/api/auth/send-otp', { email });
+      setOtpSent(true);
+    } catch (err) {
+      alert('Error sending OTP');
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  /* Forms common */
-  section.form-step {
-    max-width: 480px;
-    margin: 40px auto;
-    background: white;
-    border-radius: 20px;
-    padding: 30px 40px;
-    box-shadow: 0 10px 30px rgb(0 0 0 / 0.1);
-    display: none;
-    flex-direction: column;
-  }
-  section.form-step.active {
-    display: flex;
-  }
-  section.form-step h2 {
-    margin-bottom: 24px;
-    font-weight: 700;
-    color: #1e3a8a;
-    font-size: 2rem;
-  }
-  .input-row {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-  .input-row select, .input-row input {
-    flex: 1;
-  }
-  button.btn-primary {
-    background-color: #60a5fa;
-    color: white;
-  }
-  button.btn-primary:hover {
-    background-color: #2563eb;
-  }
-  button.btn-secondary {
-    background-color: #e2e8f0;
-    color: #334155;
-  }
-  button.btn-secondary:hover {
-    background-color: #cbd5e1;
-  }
-  .back-btn-container {
-    margin-bottom: 20px;
-  }
-  .small-text {
-    font-size: 0.9rem;
-    color: #64748b;
-  }
-  .link-btn {
-    background: none;
-    color: #2563eb;
-    padding: 0;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    cursor: pointer;
-    border-radius: 0;
-  }
-  /* Error and success messages */
-  .error-msg {
-    color: #dc2626;
-    font-weight: 600;
-    margin-top: -10px;
-    margin-bottom: 10px;
-  }
-  .success-msg {
-    color: #16a34a;
-    font-weight: 600;
-    margin-top: -10px;
-    margin-bottom: 10px;
-  }
-  /* Username status */
-  .username-status {
-    display: inline-block;
-    margin-left: 8px;
-    font-weight: 700;
-  }
-  .username-available {
-    color: #16a34a;
-  }
-  .username-taken {
-    color: #dc2626;
-  }
-  /* Dashboard */
-  #dashboard {
-    max-width: 800px;
-    margin: 40px auto 80px;
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 10px 30px rgb(0 0 0 / 0.1);
-    display: none;
-    flex-direction: column;
-  }
-  #dashboard.active {
-    display: flex;
-  }
-  #dashboard h2 {
-    font-size: 2.4rem;
-    margin-bottom: 20px;
-    color: #1e40af;
-  }
-  #dashboard .user-role {
-    font-weight: 600;
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    color: #4b5563;
-  }
-  /* User menu */
-  #userMenu {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: white;
-    box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
-    border-radius: 14px;
-    width: 280px;
-    padding: 20px;
-    display: none;
-    flex-direction: column;
-    z-index: 10;
-  }
-  #userMenu.active {
-    display: flex;
-  }
-  #userMenu h3 {
-    margin: 0 0 12px;
-    color: #334155;
-  }
-  #userMenu p {
-    margin: 4px 0;
-    color: #64748b;
-    font-weight: 600;
-  }
-  #userMenu button.logout-btn {
-    margin-top: 20px;
-    background-color: #ef4444;
-    color: white;
-    padding: 12px;
-    font-weight: 700;
-    border-radius: 12px;
-    cursor: pointer;
-  }
-  #userMenu button.logout-btn:hover {
-    background-color: #b91c1c;
-  }
-  /* Profile icon top right */
-  #profileIcon {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background-color: #60a5fa;
-    color: white;
-    width: 44px;
-    height: 44px;
-    font-weight: 700;
-    font-size: 1.2rem;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    z-index: 20;
-  }
-  /* Booking example */
-  .booking-section {
-    background: #e0efff;
-    border-radius: 16px;
-    padding: 28px;
-    margin-top: 30px;
-  }
-  .booking-section h3 {
-    margin-bottom: 18px;
-    color: #1e40af;
-  }
-  .booking-section label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .booking-section input, .booking-section select {
-    margin-bottom: 20px;
-  }
-  .booking-section button {
-    width: 100%;
-  }
-  /* Footer */
-  footer {
-    background: #1e3a8a;
-    color: white;
-    padding: 14px 20px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1rem;
-    margin-top: auto;
-  }
-  /* Responsive */
-  @media(max-width: 600px) {
-    #landingPage h1 {
-      font-size: 2.8rem;
-    }
-    #landingPage p.description {
-      font-size: 1.1rem;
-    }
-    section.form-step {
-      margin: 20px;
-      padding: 20px;
-    }
-    #dashboard {
-      margin: 20px;
-      padding: 20px;
-    }
-  }
-</style>
-</head>
-<body>
+  };
 
-<div id="app">
+  const verifyOtp = async () => {
+    try {
+      await axios.post('http://localhost:4000/api/auth/verify-otp', { email, otp });
+      setOtpVerified(true);
+    } catch (err) {
+      alert('Invalid OTP');
+    }
+  };
 
-  <!-- LANDING PAGE -->
-  <section id="landingPage" class="active">
-    <h1>Welcome to EDUCE</h1>
-    <p class="description">
-      Empowering learners and mentors through free live tutoring sessions.<br/>
-      Personalized learning backed by technology and community.
-    </p>
-    <div class="btn-container">
-      <button class="btn-primary" onclick="startSignUp()">Sign Up</button>
-      <button class="btn-secondary" onclick="startLogIn()">Sign In</button>
+  const register = async () => {
+    try {
+      await axios.post('http://localhost:4000/api/auth/register', { email, ...userData });
+      alert('Registered successfully');
+      setView('login');
+    } catch (err) {
+      alert('Error registering');
+    }
+  };
+
+  const login = async () => {
+    try {
+      const res = await axios.post('http://localhost:4000/api/auth/login', loginData);
+      setLoggedInUser(res.data.user);
+      setView('dashboard');
+    } catch (err) {
+      alert('Invalid credentials');
+    }
+  };
+
+  return (
+    <div className="app">
+      {view === 'home' && (
+        <div className="home">
+          <h1>Welcome to Educe</h1>
+          <p>Free, live, 24/7 support for students. Founded by Krishay.</p>
+          <img src="/hero-image.png" alt="Education banner" />
+          <div className="btns">
+            <button onClick={() => setView('signup-age')}>Sign Up</button>
+            <button onClick={() => setView('login')}>Log In</button>
+          </div>
+        </div>
+      )}
+
+      {view === 'signup-age' && (
+        <div className="form">
+          <h2>Enter your age</h2>
+          <input value={age} onChange={(e) => setAge(e.target.value)} placeholder="Age" />
+          <button onClick={() => setView('signup-email')}>Next</button>
+          <button className="back" onClick={() => setView('home')}>Back</button>
+        </div>
+      )}
+
+      {view === 'signup-email' && (
+        <div className="form">
+          <h2>{age < 13 ? 'Enter parent email' : 'Enter your email'}</h2>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+          <button onClick={sendOtp}>Send OTP</button>
+          <button className="back" onClick={() => setView('signup-age')}>Back</button>
+        </div>
+      )}
+
+      {otpSent && !otpVerified && (
+        <div className="form">
+          <h2>Enter the OTP sent to {email}</h2>
+          <input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="OTP" />
+          <button onClick={verifyOtp}>Verify</button>
+          <button onClick={sendOtp}>Resend OTP</button>
+        </div>
+      )}
+
+      {otpVerified && view !== 'register' && setView('register')}
+
+      {view === 'register' && (
+        <div className="form">
+          <h2>Sign Up</h2>
+          <input placeholder="First Name" onChange={(e) => setUserData({ ...userData, firstName: e.target.value })} />
+          <input placeholder="Last Name" onChange={(e) => setUserData({ ...userData, lastName: e.target.value })} />
+          <input placeholder="Username" onChange={(e) => setUserData({ ...userData, username: e.target.value })} />
+          <input type="password" placeholder="Password" onChange={(e) => setUserData({ ...userData, password: e.target.value })} />
+          <button onClick={register}>Submit</button>
+        </div>
+      )}
+
+      {view === 'login' && (
+        <div className="form">
+          <h2>Login</h2>
+          <input placeholder="Username" value={loginData.username} onChange={(e) => setLoginData({ ...loginData, username: e.target.value })} />
+          <input type="password" placeholder="Password" value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
+          <button onClick={login}>Log In</button>
+          <button className="back" onClick={() => setView('home')}>Back</button>
+        </div>
+      )}
+
+      {view === 'dashboard' && loggedInUser && (
+        <div className="dashboard">
+          <h1>Welcome, {loggedInUser.firstName}</h1>
+          <p>You are now signed in as {loggedInUser.username}</p>
+          <div className="user-card">
+            <p><strong>Full Name:</strong> {loggedInUser.firstName} {loggedInUser.lastName}</p>
+            <p><strong>Email:</strong> {loggedInUser.email}</p>
+            <p><strong>Username:</strong> {loggedInUser.username}</p>
+          </div>
+          <button onClick={() => setView('home')}>Log Out</button>
+        </div>
+      )}
     </div>
-  </section>
+  );
+}
 
-  <!-- AGE ENTRY -->
-  <section id="ageEntry" class="form-step">
+export default App;

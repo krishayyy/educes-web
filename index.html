@@ -1,107 +1,151 @@
-const express = require('express');
-const cors = require('cors');
-const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Educe – Learn Better</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Educe</h1>
+    <p>Empowering students through smart, human-backed tutoring.</p>
+    <button id="signUpBtn">Sign Up</button>
+    <button id="loginBtn">Log In</button>
+  </header>
 
-const app = express();
-const PORT = process.env.PORT || 4000;
+  <section id="formSection" style="display: none;">
+    <div id="formContainer"></div>
+    <button id="backBtn" style="margin-top: 1rem;">⬅ Back</button>
+  </section>
 
-app.use(cors());
-app.use(bodyParser.json());
+  <footer>
+    <p>Founded by Krishay • Changing lives through Educe</p>
+  </footer>
 
-let otpStore = {};
-let users = {}; // { username: { email, password, firstName, lastName, dob, role } }
+  <script src="script.js"></script>
+</body>
+</html>
 
-// Setup mail transporter (replace with your real email and app password)
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'your_email@gmail.com',
-    pass: 'your_app_password' // You need to use an app password, not your regular one
+<!-- style.css -->
+/* style.css */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #f7f9fc;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background: #dfefff;
+  text-align: center;
+  padding: 4rem 2rem;
+  animation: fadeIn 1s ease-in-out;
+}
+
+header h1 {
+  font-size: 3rem;
+  color: #2a5f9c;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  margin: 0.25rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2a5f9c;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #244e7a;
+}
+
+#formContainer {
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 1rem;
+  background: #eee;
+  font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+<!-- script.js -->
+// script.js
+
+document.getElementById('signUpBtn').addEventListener('click', () => {
+  showForm('signup');
+});
+
+document.getElementById('loginBtn').addEventListener('click', () => {
+  showForm('login');
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  document.getElementById('formSection').style.display = 'none';
+});
+
+function showForm(type) {
+  const formContainer = document.getElementById('formContainer');
+  document.getElementById('formSection').style.display = 'block';
+
+  if (type === 'signup') {
+    formContainer.innerHTML = `
+      <h2>Create your Educe account</h2>
+      <input type="email" placeholder="Email" id="email"/><br/><br/>
+      <input type="text" placeholder="Username" id="username"/><br/><br/>
+      <input type="password" placeholder="Password" id="password"/><br/><br/>
+      <button onclick="submitSignup()">Create Account</button>
+    `;
+  } else if (type === 'login') {
+    formContainer.innerHTML = `
+      <h2>Log In to Educe</h2>
+      <input type="text" placeholder="Username" id="loginUsername"/><br/><br/>
+      <input type="password" placeholder="Password" id="loginPassword"/><br/><br/>
+      <button onclick="submitLogin()">Log In</button>
+    `;
   }
-});
+}
 
-// ✅ Send OTP to email
-app.post('/api/send-otp', (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).send('Email is required');
+function submitSignup() {
+  const email = document.getElementById('email').value;
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  alert(`Sign up request sent:\nEmail: ${email}\nUsername: ${username}`);
+  // Here you would send a POST request to your backend
+}
 
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  otpStore[email] = otp;
-
-  const mailOptions = {
-    from: 'your_email@gmail.com',
-    to: email,
-    subject: 'Your Educe Confirmation Code',
-    text: `Your code is: ${otp}`
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      return res.status(500).send('Failed to send code');
-    }
-    res.status(200).send('Code sent');
-  });
-});
-
-// ✅ Verify OTP
-app.post('/api/verify-otp', (req, res) => {
-  const { email, otp } = req.body;
-  if (!email || !otp) return res.status(400).send('Email and code required');
-
-  if (otpStore[email] === otp) {
-    delete otpStore[email];
-    res.status(200).send('Verified');
-  } else {
-    res.status(400).send('Invalid code');
-  }
-});
-
-// ✅ Check username availability
-app.post('/api/check-username', (req, res) => {
-  const { username } = req.body;
-  if (!username) return res.status(400).send('Username required');
-
-  if (users[username]) {
-    res.status(409).send('Username already taken');
-  } else {
-    res.status(200).send('Available');
-  }
-});
-
-// ✅ Register user
-app.post('/api/register', (req, res) => {
-  const { username, password, email, firstName, lastName, dob, role } = req.body;
-
-  if (!username || !password || !email || !firstName || !lastName || !dob || !role) {
-    return res.status(400).send('All fields are required');
-  }
-
-  if (users[username]) {
-    return res.status(409).send('Username already exists');
-  }
-
-  users[username] = { email, password, firstName, lastName, dob, role };
-  res.status(200).send('Registered');
-});
-
-// ✅ Login user
-app.post('/api/login', (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) return res.status(400).send('Username and password required');
-
-  const user = users[username];
-  if (!user || user.password !== password) {
-    return res.status(401).send('Invalid login');
-  }
-
-  res.status(200).json({ message: 'Welcome back!', user });
-});
-
-// ✅ Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-
+function submitLogin() {
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('loginPassword').value;
+  alert(`Log in request:\nUsername: ${username}`);
+  // Here you would send a POST request to your backend
+}

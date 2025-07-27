@@ -2,117 +2,258 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Educe | Learn. Grow. Succeed.</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Educe - Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
     }
     body {
-      background: #f4f6f9;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    header {
-      background: linear-gradient(to right, #7F7FD5, #86A8E7, #91EAE4);
-      padding: 2rem;
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+      max-width: 420px;
+      width: 100%;
+      padding: 30px 30px 40px;
+      position: relative;
+    }
+    h2 {
       text-align: center;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: #3b82f6;
+      letter-spacing: 1.2px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      margin-top: 14px;
+    }
+    button.primary {
+      background: #3b82f6;
       color: white;
     }
-    header h1 {
-      font-size: 3rem;
-      font-weight: bold;
+    button.primary:hover {
+      background: #2563eb;
     }
-    header p {
-      margin-top: 0.5rem;
-      font-size: 1.2rem;
+    button.grey {
+      background: #e5e7eb;
+      color: #374151;
     }
-    .buttons {
+    button.grey:hover {
+      background: #d1d5db;
+    }
+    .back-btn {
+      margin-top: 18px;
+      text-align: center;
+      color: #6b7280;
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #d1d5db;
+      font-size: 16px;
+      transition: border-color 0.25s ease;
+      font-weight: 500;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 5px rgba(59,130,246,0.5);
+    }
+    .desc-box {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 16px;
+      position: relative;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+    .close-x {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      color: #6b7280;
+      user-select: none;
+    }
+    .otp-input {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 18px 0;
+    }
+    .otp-input input {
+      width: 44px;
+      height: 56px;
+      font-size: 28px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1.5px solid #d1d5db;
+      font-weight: 600;
+      transition: border-color 0.25s ease;
+    }
+    .otp-input input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 7px rgba(59,130,246,0.6);
+      outline: none;
+    }
+    .status-icon {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 20px;
+      user-select: none;
+    }
+    #g_id_onload, .g_id_signin {
       display: flex;
       justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    .buttons button {
-      background: #333;
-      color: white;
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .buttons button:hover {
-      background: #555;
-    }
-    .section {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-    .section img {
-      width: 100%;
-      border-radius: 8px;
-    }
-    .section h2 {
-      margin-bottom: 1rem;
-      font-size: 2rem;
-      color: #4a4a4a;
-    }
-    .section p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-    footer {
-      text-align: center;
-      margin-top: 5rem;
-      padding: 2rem;
-      background: #ddd;
-      color: #333;
+      margin-top: 14px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to Educe</h1>
-    <p>Empowering Learners. Inspiring Mentors. Built by Krishay.</p>
-    <div class="buttons">
-      <button onclick="location.href='login.html'">Log In</button>
-      <button onclick="location.href='signup.html'">Sign Up</button>
+  <div class="container" id="mainContainer">
+    <h2>Sign up as:</h2>
+    <button class="primary" onclick="selectRole('learner')">Learner</button>
+    <button class="primary" onclick="selectRole('mentor')">Mentor</button>
+    <button class="grey" onclick="toggleInfo()">What does that mean?</button>
+
+    <div id="roleInfo" class="desc-box" style="display:none">
+      <span class="close-x" onclick="toggleInfo()">&times;</span>
+      <p><strong>Learner:</strong> A student who wants to improve their skills by attending live tutoring and using resources.</p>
+      <p><strong>Mentor:</strong> An expert or tutor who volunteers to guide and teach learners.</p>
     </div>
-  </header>
 
-  <section class="section">
-    <img src="https://cdn.pixabay.com/photo/2017/08/10/03/47/kids-2618953_960_720.jpg" alt="Inspiring youth">
-    <h2>Our Mission</h2>
-    <p>
-      At Educe, we're on a mission to revolutionize the way students learn. With real mentors and personalized learning tools, our platform bridges the gap between curiosity and mastery — all in a fun, supportive environment.
-    </p>
-  </section>
+    <!-- AGE -->
+    <div id="ageBox" style="display:none">
+      <h2>Enter Your Birth Month & Year</h2>
+      <select id="birthMonth">
+        <option disabled selected>Month</option>
+        <option>January</option>
+        <option>February</option>
+        <option>March</option>
+        <option>April</option>
+        <option>May</option>
+        <option>June</option>
+        <option>July</option>
+        <option>August</option>
+        <option>September</option>
+        <option>October</option>
+        <option>November</option>
+        <option>December</option>
+      </select>
+      <select id="birthYear"></select>
+      <button class="primary" onclick="submitAge()">Next</button>
+      <div class="back-btn" onclick="goBackToRole()">Back</div>
+    </div>
 
-  <section class="section">
-    <img src="https://cdn.pixabay.com/photo/2016/03/26/13/09/child-1280963_1280.jpg" alt="Kids learning online">
-    <h2>What We Offer</h2>
-    <p>
-      - Free live tutoring from verified mentors<br>
-      - 24/7 AI chat support<br>
-      - Placement quizzes to match your skill level<br>
-      - Google sign-in or email-based verification<br>
-      - A personalized dashboard for learners and mentors
-    </p>
-  </section>
+    <!-- EMAIL -->
+    <div id="emailBox" style="display:none">
+      <h2 id="emailPrompt">Enter Your Email</h2>
+      <input type="email" id="userEmail" placeholder="Your Email" autocomplete="email" />
+      <div id="g_id_onload"
+           data-client_id="26092089861-1v4hu1c0qdptj1i7pcu59l2mnqm29k5m.apps.googleusercontent.com"
+           data-context="signup"
+           data-ux_mode="popup"
+           data-callback="handleGoogleSignIn">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="pill"
+           data-theme="outline"
+           data-text="sign_up_with"
+           data-size="large"
+           data-logo_alignment="left">
+      </div>
+      <button class="primary" onclick="sendOTP()">Use Email</button>
+      <div class="back-btn" onclick="showAgeBox()">Back</div>
+    </div>
 
-  <footer>
-    Founded by Krishay — Empowering the Next Generation
-  </footer>
-</body>
-</html>
+    <!-- OTP -->
+    <div id="otpBox" style="display:none">
+      <h2>Enter Confirmation Code</h2>
+      <div class="otp-input">
+        <input maxlength="1" oninput="moveFocus(event,0)" id="otp0" />
+        <input maxlength="1" oninput="moveFocus(event,1)" id="otp1" />
+        <input maxlength="1" oninput="moveFocus(event,2)" id="otp2" />
+        <input maxlength="1" oninput="moveFocus(event,3)" id="otp3" />
+        <input maxlength="1" oninput="moveFocus(event,4)" id="otp4" />
+        <input maxlength="1" oninput="moveFocus(event,5)" id="otp5" />
+      </div>
+      <button class="primary" onclick="verifyOTP()">Confirm</button>
+      <div class="back-btn" onclick="showEmailBox()">Back</div>
+    </div>
+
+    <!-- FINAL SIGNUP -->
+    <div id="finalSignup" style="display:none">
+      <h2>Create Account</h2>
+      <input id="firstName" placeholder="First Name" autocomplete="given-name" />
+      <input id="lastName" placeholder="Last Name" autocomplete="family-name" />
+      <div style="position:relative;">
+        <input id="username" placeholder="Username (3-8 chars)" oninput="checkUsernameAvailability()" autocomplete="username" />
+        <span id="usernameStatus" class="status-icon">❌</span>
+      </div>
+      <input type="password" id="password" placeholder="Password (min 7 chars)" autocomplete="new-password" />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" autocomplete="new-password" />
+      <button class="primary" onclick="submitSignup()">Create Account</button>
+      <div class="back-btn" onclick="showOTPBox()">Back</div>
+    </div>
+
+    <div style="margin-top:30px; font-size:12px; color:#999; text-align:center;">
+      Founded by Krishay Suresh
+    </div>
+  </div>
+
+  <script>
+    // Populate birthYear select with years dynamically
+    const birthYearSelect = document.getElementById('birthYear');
+    const currentYear = new Date().getFullYear();
+    for(let y = currentYear; y >= 1900; y--) {
+      let opt = document.createElement('option');
+      opt.value = y;
+      opt.innerText = y;
+      birthYearSelect.appendChild(opt);
+    }
+
+    let selectedRole = '';
+    let isGoogleSignup = false;
+
+    function selectRole(role) {
+      selectedRole = role;
+      toggleInfo(false);
+      showSection('ageBox');
+    }
+
+    function toggleInfo(forceClose) {
+      const info = document.getElementById('roleInfo');

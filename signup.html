@@ -1,301 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Educe - Sign Up</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<style>
-  /* Basic Reset */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #a8edea, #fed6e3);
-    color: #333;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .container {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-    max-width: 420px;
-    width: 100%;
-    padding: 30px 30px 40px;
-    position: relative;
-  }
-  h2 {
-    text-align: center;
-    font-weight: 800;
-    margin-bottom: 24px;
-    color: #3b82f6;
-    letter-spacing: 1.2px;
-  }
-  button {
-    width: 100%;
-    padding: 14px;
-    font-weight: 600;
-    font-size: 16px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.25s ease;
-    margin-top: 14px;
-  }
-  button.primary {
-    background: #3b82f6;
-    color: white;
-  }
-  button.primary:hover {
-    background: #2563eb;
-  }
-  button.grey {
-    background: #e5e7eb;
-    color: #374151;
-  }
-  button.grey:hover {
-    background: #d1d5db;
-  }
-  .back-btn {
-    margin-top: 18px;
-    text-align: center;
-    color: #6b7280;
-    cursor: pointer;
-    font-weight: 600;
-    user-select: none;
-  }
-  .back-btn:hover {
-    text-decoration: underline;
-  }
-  input, select {
-    width: 100%;
-    padding: 12px 14px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: 1.5px solid #d1d5db;
-    font-size: 16px;
-    transition: border-color 0.25s ease;
-    font-weight: 500;
-  }
-  input:focus, select:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 5px rgba(59,130,246,0.5);
-  }
-  .desc-box {
-    background: #f3f4f6;
-    border-radius: 12px;
-    padding: 18px;
-    margin-top: 16px;
-    position: relative;
-    font-size: 14px;
-    color: #4b5563;
-    line-height: 1.5;
-  }
-  .close-x {
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    font-weight: 700;
-    font-size: 18px;
-    cursor: pointer;
-    color: #6b7280;
-    user-select: none;
-  }
-  .otp-input {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 18px 0;
-  }
-  .otp-input input {
-    width: 44px;
-    height: 56px;
-    font-size: 28px;
-    border-radius: 12px;
-    text-align: center;
-    border: 1.5px solid #d1d5db;
-    font-weight: 600;
-    transition: border-color 0.25s ease;
-  }
-  .otp-input input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 7px rgba(59,130,246,0.6);
-    outline: none;
-  }
-  .status-icon {
-    display: inline-block;
-    margin-left: 10px;
-    font-size: 20px;
-    user-select: none;
-  }
-  #g_id_onload, .g_id_signin {
-    display: flex;
-    justify-content: center;
-    margin-top: 14px;
-  }
-  /* Hide sections by default */
-  section {
-    display: none;
-  }
-  section.active {
-    display: block;
-  }
-  /* Username input and status */
-  .username-container {
-    position: relative;
-  }
-  .username-status {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 22px;
-    user-select: none;
-  }
-  /* Loader icon for username check */
-  .loader {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3b82f6;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    animation: spin 1s linear infinite;
-    display: inline-block;
-  }
-  @keyframes spin {
-    0% { transform: rotate(0deg);}
-    100% { transform: rotate(360deg);}
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Educe - Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    /* Reset & basics */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+      max-width: 420px;
+      width: 100%;
+      padding: 30px 30px 40px;
+      position: relative;
+    }
+    h2 {
+      text-align: center;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: #3b82f6;
+      letter-spacing: 1.2px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      margin-top: 14px;
+    }
+    button.primary {
+      background: #3b82f6;
+      color: white;
+    }
+    button.primary:hover {
+      background: #2563eb;
+    }
+    button.grey {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    button.grey:hover {
+      background: #d1d5db;
+    }
+    .back-btn {
+      margin-top: 18px;
+      text-align: center;
+      color: #6b7280;
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #d1d5db;
+      font-size: 16px;
+      transition: border-color 0.25s ease;
+      font-weight: 500;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 5px rgba(59,130,246,0.5);
+    }
+    .desc-box {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 16px;
+      position: relative;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+    .close-x {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      color: #6b7280;
+      user-select: none;
+    }
+    .otp-input {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 18px 0;
+    }
+    .otp-input input {
+      width: 44px;
+      height: 56px;
+      font-size: 28px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1.5px solid #d1d5db;
+      font-weight: 600;
+      transition: border-color 0.25s ease;
+    }
+    .otp-input input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 7px rgba(59,130,246,0.6);
+      outline: none;
+    }
+    .status-icon {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 20px;
+      user-select: none;
+    }
+    #g_id_onload, .g_id_signin {
+      display: flex;
+      justify-content: center;
+      margin-top: 14px;
+    }
+    #usernameStatus {
+      position: absolute;
+      right: 15px;
+      top: 14px;
+      font-size: 20px;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <!-- Step 1: Role Selection -->
-  <section id="step-role" class="active">
-    <h2>Sign up as:</h2>
-    <button class="primary" onclick="selectRole('learner')">Learner</button>
-    <button class="primary" onclick="selectRole('mentor')">Mentor</button>
-    <button class="grey" onclick="toggleInfo()">What does that mean?</button>
+  <div class="container" id="mainContainer">
 
-    <div id="roleInfo" class="desc-box" style="display:none;">
-      <span class="close-x" onclick="toggleInfo()">&times;</span>
-      <p><strong>Learner:</strong> A student who wants to improve their skills by attending live tutoring and using resources.</p>
-      <p><strong>Mentor:</strong> An expert or tutor who volunteers to guide and teach learners.</p>
+    <!-- STEP 1: Role Selection -->
+    <div id="roleSelection">
+      <h2>Sign up as:</h2>
+      <button class="primary" onclick="selectRole('learner')">Learner</button>
+      <button class="primary" onclick="selectRole('mentor')">Mentor</button>
+      <button class="grey" onclick="toggleInfo()">What does that mean?</button>
+
+      <div id="roleInfo" class="desc-box" style="display:none">
+        <span class="close-x" onclick="toggleInfo()">&times;</span>
+        <p><strong>Learner:</strong> A student who wants to improve their skills by attending live tutoring and using resources.</p>
+        <p><strong>Mentor:</strong> An expert or tutor who volunteers to guide and teach learners.</p>
+      </div>
     </div>
-  </section>
 
-  <!-- Step 2: Birthday -->
-  <section id="step-birthday">
-    <h2>Enter Your Birth Month & Year</h2>
-    <select id="birthMonth" aria-label="Select Birth Month">
-      <option value="" disabled selected>Month</option>
-      <option>January</option>
-      <option>February</option>
-      <option>March</option>
-      <option>April</option>
-      <option>May</option>
-      <option>June</option>
-      <option>July</option>
-      <option>August</option>
-      <option>September</option>
-      <option>October</option>
-      <option>November</option>
-      <option>December</option>
-    </select>
-    <select id="birthYear" aria-label="Select Birth Year"></select>
-    <button class="primary" onclick="submitBirthday()">Next</button>
-    <div class="back-btn" onclick="goBackToRole()">Back</div>
-  </section>
-
-  <!-- Step 3: Email input + Google Sign In -->
-  <section id="step-email">
-    <h2 id="emailPrompt">Enter Your Email</h2>
-    <input type="email" id="userEmail" placeholder="Your Email" autocomplete="email" />
-    <div id="g_id_onload"
-      data-client_id="26092089861-1v4hu1c0qdptj1i7pcu59l2mnqm29k5m.apps.googleusercontent.com"
-      data-context="signup"
-      data-ux_mode="popup"
-      data-callback="handleGoogleSignIn">
+    <!-- STEP 2: Birthday selection -->
+    <div id="ageBox" style="display:none">
+      <h2>Enter Your Birth Month & Year</h2>
+      <select id="birthMonth" aria-label="Select birth month">
+        <option disabled selected value="">Month</option>
+        <option value="January">January</option>
+        <option value="February">February</option>
+        <option value="March">March</option>
+        <option value="April">April</option>
+        <option value="May">May</option>
+        <option value="June">June</option>
+        <option value="July">July</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+        <option value="October">October</option>
+        <option value="November">November</option>
+        <option value="December">December</option>
+      </select>
+      <select id="birthYear" aria-label="Select birth year"></select>
+      <button class="primary" onclick="submitAge()">Next</button>
+      <div class="back-btn" onclick="goBackToRole()">Back</div>
     </div>
-    <div class="g_id_signin"
-      data-type="standard"
-      data-shape="pill"
-      data-theme="outline"
-      data-text="sign_up_with"
-      data-size="large"
-      data-logo_alignment="left">
-    </div>
-    <button class="primary" onclick="sendOTP()">Use Email</button>
-    <div class="back-btn" onclick="goBackToBirthday()">Back</div>
-  </section>
 
-  <!-- Step 4: OTP input -->
-  <section id="step-otp">
-    <h2>Enter Confirmation Code</h2>
-    <div class="otp-input">
-      <input maxlength="1" oninput="moveFocus(event,0)" id="otp0" autocomplete="one-time-code" inputmode="numeric" />
-      <input maxlength="1" oninput="moveFocus(event,1)" id="otp1" autocomplete="one-time-code" inputmode="numeric" />
-      <input maxlength="1" oninput="moveFocus(event,2)" id="otp2" autocomplete="one-time-code" inputmode="numeric" />
-      <input maxlength="1" oninput="moveFocus(event,3)" id="otp3" autocomplete="one-time-code" inputmode="numeric" />
-      <input maxlength="1" oninput="moveFocus(event,4)" id="otp4" autocomplete="one-time-code" inputmode="numeric" />
-      <input maxlength="1" oninput="moveFocus(event,5)" id="otp5" autocomplete="one-time-code" inputmode="numeric" />
-    </div>
-    <button class="primary" onclick="verifyOTP()">Confirm</button>
-    <div class="back-btn" onclick="goBackToEmail()">Back</div>
-  </section>
+    <!-- STEP 3: Email input -->
+    <div id="emailBox" style="display:none">
+      <h2 id="emailPrompt">Enter Your Email</h2>
+      <input type="email" id="userEmail" placeholder="Your Email" autocomplete="email" />
+      <button class="primary" onclick="sendOTP()">Send OTP</button>
+      <div class="back-btn" onclick="showAgeBox()">Back</div>
 
-  <!-- Step 5: Final Signup -->
-  <section id="step-final">
-    <h2>Create Account</h2>
-    <input id="firstName" placeholder="First Name" autocomplete="given-name" />
-    <input id="lastName" placeholder="Last Name" autocomplete="family-name" />
-    <div class="username-container" style="margin-top: 10px;">
-      <input id="username" placeholder="Username (3-8 chars)" autocomplete="username" oninput="debouncedCheckUsername()" />
-      <span id="usernameStatus" class="username-status">❌</span>
+      <!-- Google Sign-In -->
+      <div id="g_id_onload"
+        data-client_id="441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com"
+        data-callback="handleGoogleSignIn"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+        data-type="standard"
+        data-shape="pill"
+        data-theme="outline"
+        data-text="sign_up_with"
+        data-size="large"
+        data-logo_alignment="left">
+      </div>
     </div>
-    <input type="password" id="password" placeholder="Password (min 7 chars)" autocomplete="new-password" />
-    <input type="password" id="confirmPassword" placeholder="Confirm Password" autocomplete="new-password" />
-    <button class="primary" onclick="submitSignup()">Create Account</button>
-    <div class="back-btn" onclick="goBackToOTP()">Back</div>
-  </section>
 
-  <div style="margin-top:30px; font-size:12px; color:#999; text-align:center;">
-    Founded by Krishay Suresh
+    <!-- STEP 4: OTP input -->
+    <div id="otpBox" style="display:none">
+      <h2>Enter Confirmation Code</h2>
+      <div class="otp-input" role="group" aria-label="Enter 6 digit OTP code">
+        <input maxlength="1" oninput="moveFocus(event,0)" id="otp0" aria-label="OTP digit 1" />
+        <input maxlength="1" oninput="moveFocus(event,1)" id="otp1" aria-label="OTP digit 2" />
+        <input maxlength="1" oninput="moveFocus(event,2)" id="otp2" aria-label="OTP digit 3" />
+        <input maxlength="1" oninput="moveFocus(event,3)" id="otp3" aria-label="OTP digit 4" />
+        <input maxlength="1" oninput="moveFocus(event,4)" id="otp4" aria-label="OTP digit 5" />
+        <input maxlength="1" oninput="moveFocus(event,5)" id="otp5" aria-label="OTP digit 6" />
+      </div>
+      <button class="primary" onclick="verifyOTP()">Confirm</button>
+      <div class="back-btn" onclick="showEmailBox()">Back</div>
+    </div>
+
+    <!-- STEP 5: Final Signup -->
+    <div id="finalSignup" style="display:none">
+      <h2>Create Account</h2>
+      <input id="firstName" placeholder="First Name" autocomplete="given-name" />
+      <input id="lastName" placeholder="Last Name" autocomplete="family-name" />
+      <div style="position:relative;">
+        <input id="username" placeholder="Username (3-8 chars)" oninput="checkUsernameAvailability()" autocomplete="username" />
+        <span id="usernameStatus" class="status-icon">❌</span>
+      </div>
+      <input type="password" id="password" placeholder="Password (min 7 chars)" autocomplete="new-password" />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" autocomplete="new-password" />
+      <button class="primary" onclick="submitSignup()">Create Account</button>
+      <div class="back-btn" onclick="showOTPBox()">Back</div>
+    </div>
+
+    <div style="margin-top:30px; font-size:12px; color:#999; text-align:center;">
+      Founded by Krishay Suresh
+    </div>
   </div>
-</div>
 
-<script>
-  // Constants & state
-  const currentYear = new Date().getFullYear();
-  let selectedRole = '';
-  let isGoogleSignup = false;
-  let userEmailGlobal = '';
+  <script>
+    // Populate birthYear select dynamically
+    const birthYearSelect = document.getElementById('birthYear');
+    const currentYear = new Date().getFullYear();
+    for(let y = currentYear; y >= 1900; y--) {
+      let opt = document.createElement('option');
+      opt.value = y;
+      opt.innerText = y;
+      birthYearSelect.appendChild(opt);
+    }
 
-  // Fill birthYear dropdown dynamically
-  const birthYearSelect = document.getElementById('birthYear');
-  for(let y = currentYear; y >= 1900; y--) {
-    let opt = document.createElement('option');
-    opt.value = y;
-    opt.textContent = y;
-    birthYearSelect.appendChild(opt);
-  }
+    let selectedRole = '';
+    let isGoogleSignup = false;
+    let signedUpEmail = '';
 
-  // Section helper
-  function showStep(stepId) {
-    ['step-role', 'step-birthday', 'step-email', 'step-otp', 'step-final'].forEach(id => {
-      document.getElementById(id).classList.toggle('active', id === stepId);
-    });
-  }
+    // Show/hide sections
+    function showSection(id) {
+      ['roleSelection', 'ageBox', 'emailBox', 'otpBox', 'finalSignup'].forEach(sectionId => {
+        document.getElementById(sectionId).style.display = (sectionId === id) ? 'block' : 'none';
+      });
+    }
 
-  // Toggle role info box
-  function toggleInfo() {
-    const info = document.getElementById('roleInfo');
-   
+    // Role selection handlers
+    function selectRole(role) {
+      selectedRole = role;
+      toggleInfo(false);
+      showSection('ageBox');
+    }
+    function toggleInfo(forceClose) {
+      const info = document.getElementById('roleInfo');
+      if(forceClose === true) {
+        info.style.display = 'none';
+      } else {
+        info.style.display = info.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+    function goBackToRole() {
+      selectedRole = '';
+      isGoogleSignup = false;
+      signedUpEmail = '';
+      showSection('roleSelection');
+      toggleInfo(false);
+      resetAllInputs();
+    }
+
+    // Birthday selection and validation
+    function submitAge() {
+      const birthMonth = document.getElementById('birthMonth').value;
+      const birthYear = parseInt(document.getElementById('birthYear').value);
+      if (!birthMonth || !birthYear) {
+        alert('Please select both birth month and year.');
+        return;
+      }
+      const age = currentYear - birthYear;
+      isGoogleSignup = false;
+
+      // Email prompt changes based on age
+      document.getElementById('emailPrompt').innerText = age < 13 ? "Enter Parent's Email" : "Enter Your Email";
+
+      showSection('emailBox');
+    }
+
+    function showAgeBox() {
+      showSection('ageBox');
+      isGoogleSignup = false;
+    }
+    function showEmailBox() {
+      showSection('emailBox');
+      isGoogleSignup = false;
+    }
+    function showOTPBox() {
+      showSection('otpBox');
+      isGoogleSignup = false;
+      clearOTPInputs();
+    }
+    function clearOTPInputs() {
+      for(let i=0; i<6; i++) {
+        document.getElementById(`otp${i}`).value = '';
+      }
+      document.getElementById('otp0').focus();
+    }
+
+    // OTP input auto focus logic
+    function moveFocus(e, idx) {
+      if(e.target.value.length === 1 && idx < 5) {
+        document.getElementById(`otp${idx+1}`).focus();
+      } else if(e.target.value.length === 0 && idx > 0) {
+        document.getElementById(`otp${idx-1}`).focus();
+      }
+    }
+
+    // Send OTP via backend
+    async function sendOTP() {
+      const email = document.getElementById('userEmail').value.trim();
+      if (!email) {
+        alert('Please enter an email.');
+        return;
+      }
+      try {
+        const res = await fetch('http://localhost:4000/api/send-otp', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email})
+        });
+        if (res.ok) {
+          signedUpEmail = email;
+          showOTPBox();
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Failed to send OTP. Please try again.');
+        }
+      } catch (e) {
+        alert('Network error. Please try again.');
+      }
+    }
+
+    // Verify OTP via backend
+    async function verifyOTP() {
+      let otp = '';
+      for(let i=0; i<6; i++) {
+        otp += document.getElementById(`otp${i}`).value;
+      }
+      if(otp.length < 6) {
+        alert('Please enter the full 6-digit code.');
+        return;
+      }
+      try {
+        const res = await fetch('http://localhost:4000/api/verify-otp', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email: signedUpEmail, otp})
+        });
+        if(res.ok) {
+          showFinalSignup();
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Invalid OTP. Please try again.');
+        }
+      } catch (e) {
+        alert('Network error. Please try again.');
+      }
+    }
+
+    // Show final signup form
+    function showFinalSignup() {
+      showSection('finalSignup');
+    }
+    function showOTPBox() {
+      showSection('otpBox');
+      clearOTPInputs();
+    }
+
+    // Live username availability check
+    let usernameCheckTimeout;
+    async function checkUsernameAvailability() {
+      clearTimeout(usernameCheckTimeout);
+      const username = document.getElementById('username').value.trim();
+
+      const statusEl = document.getElementById('usernameStatus');
+
+      if (username.length < 3 || username.length > 8) {
+        statusEl.innerText = '❌';
+        return;
+      }
+
+      usernameCheckTimeout = setTimeout(async () => {
+        try {
+          const res = await fetch(`http://localhost:4000/api/check-username?username=${encodeURIComponent(username)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.available) {
+              statusEl.innerText = '✅';
+            } else {
+              statusEl.innerText = '❌';
+            }
+          } else {
+            statusEl.innerText = '❌';
+          }
+        } catch (e) {
+          statusEl.innerText = '❌';
+        }
+      }, 500);
+    }
+
+    // Final signup submission
+    function submitSignup() {
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if(!firstName || !lastName || !username || !password || !confirmPassword) {
+        alert('Please fill all fields.');
+        return;
+      }
+      if(username.length < 3 || username.length > 8) {
+        alert('Username must be 3-8 characters.');
+        return;
+      }
+      if(password.length < 7) {
+        alert('Password must be at least 7 characters.');
+        return;
+      }
+      if(password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+      // Normally here you would send data to backend to create user account
+      alert(`Account created for ${firstName} ${lastName} as ${selectedRole}!\n\n(You can implement backend signup now.)`);
+      resetAllInputs();
+      goBackToRole();
+    }
+
+    // Reset all inputs
+    function resetAllInputs() {
+      document.getElementById('birthMonth').selectedIndex = 0;
+      document.getElementById('birthYear').selectedIndex = 0;
+      document.getElementById('userEmail').value = '';
+      for(let i=0; i<6; i++) {
+        document.getElementById(`otp${i}`).value = '';
+      }
+      document.getElementBy

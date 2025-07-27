@@ -1,208 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Signup | EDUCE</title>
-  <style>
-    .section { display: none; }
-    .visible { display: block; }
-    .status-icon { font-size: 18px; margin-left: 5px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Educe - Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  /* Basic Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    max-width: 420px;
+    width: 100%;
+    padding: 30px 30px 40px;
+    position: relative;
+  }
+  h2 {
+    text-align: center;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: #3b82f6;
+    letter-spacing: 1.2px;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    margin-top: 14px;
+  }
+  button.primary {
+    background: #3b82f6;
+    color: white;
+  }
+  button.primary:hover {
+    background: #2563eb;
+  }
+  button.grey {
+    background: #e5e7eb;
+    color: #374151;
+  }
+  button.grey:hover {
+    background: #d1d5db;
+  }
+  .back-btn {
+    margin-top: 18px;
+    text-align: center;
+    color: #6b7280;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+  }
+  .back-btn:hover {
+    text-decoration: underline;
+  }
+  input, select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1.5px solid #d1d5db;
+    font-size: 16px;
+    transition: border-color 0.25s ease;
+    font-weight: 500;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 5px rgba(59,130,246,0.5);
+  }
+  .desc-box {
+    background: #f3f4f6;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 16px;
+    position: relative;
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+  .close-x {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    color: #6b7280;
+    user-select: none;
+  }
+  .otp-input {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 18px 0;
+  }
+  .otp-input input {
+    width: 44px;
+    height: 56px;
+    font-size: 28px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1.5px solid #d1d5db;
+    font-weight: 600;
+    transition: border-color 0.25s ease;
+  }
+  .otp-input input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 7px rgba(59,130,246,0.6);
+    outline: none;
+  }
+  .status-icon {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 20px;
+    user-select: none;
+  }
+  #g_id_onload, .g_id_signin {
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+  }
+  /* Hide sections by default */
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+  /* Username input and status */
+  .username-container {
+    position: relative;
+  }
+  .username-status {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 22px;
+    user-select: none;
+  }
+  /* Loader icon for username check */
+  .loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+  }
+</style>
 </head>
 <body>
-  <h2>Signup</h2>
+<div class="container">
+  <!-- Step 1: Role Selection -->
+  <section id="step-role" class="active">
+    <h2>Sign up as:</h2>
+    <button class="primary" onclick="selectRole('learner')">Learner</button>
+    <button class="primary" onclick="selectRole('mentor')">Mentor</button>
+    <button class="grey" onclick="toggleInfo()">What does that mean?</button>
 
-  <!-- Section 1: Role & Birthday -->
-  <div id="initialInfo" class="section visible">
-    <label for="role">I'm signing up as:</label>
-    <select id="role" onchange="checkBirthday()">
-      <option value="learner">Learner</option>
-      <option value="parent">Parent</option>
-      <option value="tutor">Tutor</option>
-    </select><br><br>
-
-    <label>Birth Month:</label>
-    <select id="birthMonth" onchange="checkBirthday()">
-      <option value="">--Select--</option>
-      <!-- 1 to 12 -->
-      ${[...Array(12)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
-    </select>
-
-    <label>Birth Year:</label>
-    <select id="birthYear" onchange="checkBirthday()">
-      <option value="">--Select--</option>
-      <!-- 2005 to 2022 -->
-      ${[...Array(18)].map((_, i) => {
-        const year = 2022 - i;
-        return `<option value="${year}">${year}</option>`;
-      }).join('')}
-    </select><br><br>
-
-    <div id="parentEmailSection" style="display:none;">
-      <label>Parent's Email (required for under 13):</label>
-      <input type="email" id="parentEmail" /><br><br>
+    <div id="roleInfo" class="desc-box" style="display:none;">
+      <span class="close-x" onclick="toggleInfo()">&times;</span>
+      <p><strong>Learner:</strong> A student who wants to improve their skills by attending live tutoring and using resources.</p>
+      <p><strong>Mentor:</strong> An expert or tutor who volunteers to guide and teach learners.</p>
     </div>
+  </section>
 
-    <label>Email Address:</label>
-    <input type="email" id="userEmail" /><br><br>
+  <!-- Step 2: Birthday -->
+  <section id="step-birthday">
+    <h2>Enter Your Birth Month & Year</h2>
+    <select id="birthMonth" aria-label="Select Birth Month">
+      <option value="" disabled selected>Month</option>
+      <option>January</option>
+      <option>February</option>
+      <option>March</option>
+      <option>April</option>
+      <option>May</option>
+      <option>June</option>
+      <option>July</option>
+      <option>August</option>
+      <option>September</option>
+      <option>October</option>
+      <option>November</option>
+      <option>December</option>
+    </select>
+    <select id="birthYear" aria-label="Select Birth Year"></select>
+    <button class="primary" onclick="submitBirthday()">Next</button>
+    <div class="back-btn" onclick="goBackToRole()">Back</div>
+  </section>
 
-    <button onclick="sendOTP()">Send OTP</button>
+  <!-- Step 3: Email input + Google Sign In -->
+  <section id="step-email">
+    <h2 id="emailPrompt">Enter Your Email</h2>
+    <input type="email" id="userEmail" placeholder="Your Email" autocomplete="email" />
+    <div id="g_id_onload"
+      data-client_id="26092089861-1v4hu1c0qdptj1i7pcu59l2mnqm29k5m.apps.googleusercontent.com"
+      data-context="signup"
+      data-ux_mode="popup"
+      data-callback="handleGoogleSignIn">
+    </div>
+    <div class="g_id_signin"
+      data-type="standard"
+      data-shape="pill"
+      data-theme="outline"
+      data-text="sign_up_with"
+      data-size="large"
+      data-logo_alignment="left">
+    </div>
+    <button class="primary" onclick="sendOTP()">Use Email</button>
+    <div class="back-btn" onclick="goBackToBirthday()">Back</div>
+  </section>
+
+  <!-- Step 4: OTP input -->
+  <section id="step-otp">
+    <h2>Enter Confirmation Code</h2>
+    <div class="otp-input">
+      <input maxlength="1" oninput="moveFocus(event,0)" id="otp0" autocomplete="one-time-code" inputmode="numeric" />
+      <input maxlength="1" oninput="moveFocus(event,1)" id="otp1" autocomplete="one-time-code" inputmode="numeric" />
+      <input maxlength="1" oninput="moveFocus(event,2)" id="otp2" autocomplete="one-time-code" inputmode="numeric" />
+      <input maxlength="1" oninput="moveFocus(event,3)" id="otp3" autocomplete="one-time-code" inputmode="numeric" />
+      <input maxlength="1" oninput="moveFocus(event,4)" id="otp4" autocomplete="one-time-code" inputmode="numeric" />
+      <input maxlength="1" oninput="moveFocus(event,5)" id="otp5" autocomplete="one-time-code" inputmode="numeric" />
+    </div>
+    <button class="primary" onclick="verifyOTP()">Confirm</button>
+    <div class="back-btn" onclick="goBackToEmail()">Back</div>
+  </section>
+
+  <!-- Step 5: Final Signup -->
+  <section id="step-final">
+    <h2>Create Account</h2>
+    <input id="firstName" placeholder="First Name" autocomplete="given-name" />
+    <input id="lastName" placeholder="Last Name" autocomplete="family-name" />
+    <div class="username-container" style="margin-top: 10px;">
+      <input id="username" placeholder="Username (3-8 chars)" autocomplete="username" oninput="debouncedCheckUsername()" />
+      <span id="usernameStatus" class="username-status">❌</span>
+    </div>
+    <input type="password" id="password" placeholder="Password (min 7 chars)" autocomplete="new-password" />
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" autocomplete="new-password" />
+    <button class="primary" onclick="submitSignup()">Create Account</button>
+    <div class="back-btn" onclick="goBackToOTP()">Back</div>
+  </section>
+
+  <div style="margin-top:30px; font-size:12px; color:#999; text-align:center;">
+    Founded by Krishay Suresh
   </div>
+</div>
 
-  <!-- Section 2: OTP -->
-  <div id="otpSection" class="section">
-    <h3>Enter the 6-digit OTP sent to your email:</h3>
-    <div>
-      ${[...Array(6)].map((_, i) => `<input type="text" id="otp${i}" maxlength="1" size="1" />`).join(' ')}
-    </div><br>
-    <button onclick="verifyOTP()">Verify</button>
-  </div>
+<script>
+  // Constants & state
+  const currentYear = new Date().getFullYear();
+  let selectedRole = '';
+  let isGoogleSignup = false;
+  let userEmailGlobal = '';
 
-  <!-- Section 3: Final Signup -->
-  <div id="finalSignup" class="section">
-    <label>First Name:</label>
-    <input type="text" id="firstName" /><br><br>
+  // Fill birthYear dropdown dynamically
+  const birthYearSelect = document.getElementById('birthYear');
+  for(let y = currentYear; y >= 1900; y--) {
+    let opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    birthYearSelect.appendChild(opt);
+  }
 
-    <label>Last Name:</label>
-    <input type="text" id="lastName" /><br><br>
+  // Section helper
+  function showStep(stepId) {
+    ['step-role', 'step-birthday', 'step-email', 'step-otp', 'step-final'].forEach(id => {
+      document.getElementById(id).classList.toggle('active', id === stepId);
+    });
+  }
 
-    <label>Username (3-8 chars):</label>
-    <input type="text" id="username" oninput="checkUsernameAvailability()" />
-    <span id="usernameStatus" class="status-icon">❌</span><br><br>
-
-    <label>Password (min 6):</label>
-    <input type="password" id="password" /><br><br>
-
-    <label>Confirm Password:</label>
-    <input type="password" id="confirmPassword" /><br><br>
-
-    <button onclick="submitSignup()">Create Account</button>
-  </div>
-
-  <script>
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
-      document.getElementById(id).classList.add('visible');
-    }
-
-    function checkBirthday() {
-      const year = parseInt(document.getElementById('birthYear').value);
-      const month = parseInt(document.getElementById('birthMonth').value);
-      if (!year || !month) return;
-
-      const birthDate = new Date(year, month - 1);
-      const ageDiff = new Date().getFullYear() - year;
-      const parentEmailSection = document.getElementById('parentEmailSection');
-      if (ageDiff < 13) {
-        parentEmailSection.style.display = 'block';
-      } else {
-        parentEmailSection.style.display = 'none';
-      }
-    }
-
-    function sendOTP() {
-      const email = document.getElementById('userEmail').value.trim();
-      if (!email.includes('@')) return alert('Enter a valid email.');
-
-      fetch('http://localhost:4000/api/send-otp', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ email })
-      }).then(res => res.json()).then(data => {
-        if (data.success) {
-          showSection('otpSection');
-        } else {
-          alert('Failed to send OTP.');
-        }
-      }).catch(() => alert('Error sending OTP.'));
-    }
-
-    function verifyOTP() {
-      let otp = '';
-      for (let i = 0; i < 6; i++) {
-        otp += document.getElementById(`otp${i}`).value;
-      }
-      if (otp.length < 6) return alert('Enter the full 6-digit code.');
-
-      const email = document.getElementById('userEmail').value.trim();
-      fetch('http://localhost:4000/api/verify-otp', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ email, otp })
-      }).then(res => res.json()).then(data => {
-        if (data.success) {
-          showSection('finalSignup');
-        } else {
-          alert('Invalid OTP.');
-        }
-      }).catch(() => alert('Error verifying OTP.'));
-    }
-
-    function checkUsernameAvailability() {
-      const username = document.getElementById('username').value.trim();
-      const status = document.getElementById('usernameStatus');
-      if (username.length < 3 || username.length > 8) {
-        status.textContent = '❌';
-        return;
-      }
-
-      fetch('http://localhost:4000/api/check-username', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
-      }).then(res => res.json()).then(data => {
-        status.textContent = data.available ? '✅' : '❌';
-      }).catch(() => status.textContent = '❌');
-    }
-
-    function submitSignup() {
-      const email = document.getElementById('userEmail').value.trim();
-      const parentEmail = document.getElementById('parentEmail').value.trim();
-      const username = document.getElementById('username').value.trim();
-      const firstName = document.getElementById('firstName').value.trim();
-      const lastName = document.getElementById('lastName').value.trim();
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const role = document.getElementById('role').value;
-      const birthMonth = parseInt(document.getElementById('birthMonth').value);
-      const birthYear = parseInt(document.getElementById('birthYear').value);
-
-      if (!firstName || !lastName || !username || !password || !confirmPassword) {
-        return alert('Please fill out all fields.');
-      }
-      if (password !== confirmPassword) {
-        return alert('Passwords do not match.');
-      }
-      if (username.length < 3 || username.length > 8) {
-        return alert('Username must be 3–8 characters.');
-      }
-      if (password.length < 6) {
-        return alert('Password must be at least 6 characters.');
-      }
-
-      fetch('http://localhost:4000/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          parentEmail: parentEmail || null,
-          username,
-          firstName,
-          lastName,
-          password,
-          role,
-          birthMonth,
-          birthYear
-        })
-      }).then(res => res.json()).then(data => {
-        if (data.success) {
-          alert('Account created! Redirecting...');
-          window.location.href = '/dashboard'; // or wherever you want
-        } else {
-          alert(data.message || 'Registration failed.');
-        }
-      }).catch(() => alert('Network error during registration.'));
-    }
-  </script>
-</body>
-</html>
+  // Toggle role info box
+  function toggleInfo() {
+    const info = document.getElementById('roleInfo');
+   

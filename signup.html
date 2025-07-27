@@ -135,18 +135,17 @@
       margin-left: 10px;
       font-size: 20px;
       user-select: none;
+      position: absolute;
+      right: 15px;
+      top: 14px;
     }
     #g_id_onload, .g_id_signin {
       display: flex;
       justify-content: center;
       margin-top: 14px;
     }
-    #usernameStatus {
-      position: absolute;
-      right: 15px;
-      top: 14px;
-      font-size: 20px;
-      user-select: none;
+    .relative {
+      position: relative;
     }
   </style>
 </head>
@@ -233,7 +232,7 @@
       <h2>Create Account</h2>
       <input id="firstName" placeholder="First Name" autocomplete="given-name" />
       <input id="lastName" placeholder="Last Name" autocomplete="family-name" />
-      <div style="position:relative;">
+      <div class="relative">
         <input id="username" placeholder="Username (3-8 chars)" oninput="checkUsernameAvailability()" autocomplete="username" />
         <span id="usernameStatus" class="status-icon">❌</span>
       </div>
@@ -395,10 +394,6 @@
     function showFinalSignup() {
       showSection('finalSignup');
     }
-    function showOTPBox() {
-      showSection('otpBox');
-      clearOTPInputs();
-    }
 
     // Live username availability check
     let usernameCheckTimeout;
@@ -456,8 +451,7 @@
         alert('Passwords do not match.');
         return;
       }
-      // Normally here you would send data to backend to create user account
-      alert(`Account created for ${firstName} ${lastName} as ${selectedRole}!\n\n(You can implement backend signup now.)`);
+      alert(`Account created for ${firstName} ${lastName} as ${selectedRole}!\n\n(Implement backend signup next.)`);
       resetAllInputs();
       goBackToRole();
     }
@@ -470,4 +464,7 @@
       for(let i=0; i<6; i++) {
         document.getElementById(`otp${i}`).value = '';
       }
-      document.getElementBy
+      document.getElementById('firstName').value = '';
+      document.getElementById('lastName').value = '';
+      document.getElementById('username').value = '';
+      document.get

@@ -1,104 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Educe Sign Up</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Educe - Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
+    /* Reset & basics */
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #f6f9fc;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
     .container {
-      max-width: 500px;
-      margin: 30px auto;
       background: white;
-      padding: 2rem;
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+      max-width: 420px;
+      width: 100%;
+      padding: 30px 30px 40px;
+      position: relative;
     }
     h2 {
       text-align: center;
-      margin-bottom: 1rem;
       font-weight: 800;
+      margin-bottom: 24px;
+      color: #3b82f6;
+      letter-spacing: 1.2px;
     }
-    .btn {
+    button {
       width: 100%;
-      padding: 12px;
-      border: none;
-      margin: 10px 0;
+      padding: 14px;
+      font-weight: 600;
       font-size: 16px;
       border-radius: 12px;
+      border: none;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: background-color 0.25s ease;
+      margin-top: 14px;
     }
-    .btn.primary {
+    button.primary {
       background: #3b82f6;
       color: white;
     }
-    .btn.grey {
+    button.primary:hover {
+      background: #2563eb;
+    }
+    button.grey {
       background: #e5e7eb;
-      color: #111827;
+      color: #374151;
+    }
+    button.grey:hover {
+      background: #d1d5db;
     }
     .back-btn {
-      display: block;
-      margin-top: 1rem;
+      margin-top: 18px;
       text-align: center;
       color: #6b7280;
       cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+    .back-btn:hover {
       text-decoration: underline;
-    }
-    .desc-box {
-      background: #f3f4f6;
-      padding: 1rem;
-      border-radius: 12px;
-      margin-top: 1rem;
-      position: relative;
-    }
-    .close-x {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      cursor: pointer;
-      font-weight: bold;
-      color: #4b5563;
     }
     input, select {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #d1d5db;
       font-size: 16px;
+      transition: border-color 0.25s ease;
+      font-weight: 500;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 5px rgba(59,130,246,0.5);
+    }
+    .desc-box {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 16px;
+      position: relative;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+    .close-x {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      color: #6b7280;
+      user-select: none;
     }
     .otp-input {
       display: flex;
       gap: 10px;
       justify-content: center;
+      margin: 18px 0;
     }
     .otp-input input {
-      width: 40px;
-      height: 50px;
+      width: 44px;
+      height: 56px;
+      font-size: 28px;
+      border-radius: 12px;
       text-align: center;
-      font-size: 24px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
+      border: 1.5px solid #d1d5db;
+      font-weight: 600;
+      transition: border-color 0.25s ease;
+    }
+    .otp-input input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 7px rgba(59,130,246,0.6);
+      outline: none;
     }
     .status-icon {
       display: inline-block;
-      margin-left: 8px;
+      margin-left: 10px;
+      font-size: 20px;
+      user-select: none;
+    }
+    #g_id_onload, .g_id_signin {
+      display: flex;
+      justify-content: center;
+      margin-top: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="mainContainer">
     <h2>Sign up as:</h2>
-    <button class="btn primary" onclick="selectRole('learner')">Learner</button>
-    <button class="btn primary" onclick="selectRole('mentor')">Mentor</button>
-    <button class="btn grey" onclick="toggleInfo()">What does that mean?</button>
+    <button class="primary" onclick="selectRole('learner')">Learner</button>
+    <button class="primary" onclick="selectRole('mentor')">Mentor</button>
+    <button class="grey" onclick="toggleInfo()">What does that mean?</button>
 
     <div id="roleInfo" class="desc-box" style="display:none">
       <span class="close-x" onclick="toggleInfo()">&times;</span>
@@ -106,6 +156,7 @@
       <p><strong>Mentor:</strong> An expert or tutor who volunteers to guide and teach learners.</p>
     </div>
 
+    <!-- AGE -->
     <div id="ageBox" style="display:none">
       <h2>Enter Your Birth Month & Year</h2>
       <select id="birthMonth">
@@ -123,180 +174,207 @@
         <option>November</option>
         <option>December</option>
       </select>
-      <select id="birthYear">
-        <option disabled selected>Year</option>
-        <!-- Years from 2010 to 2000 -->
-        <script>
-          for (let y = new Date().getFullYear(); y >= 2000; y--) {
-            document.write(`<option>${y}</option>`);
-          }
-        </script>
-      </select>
-      <button class="btn primary" onclick="submitAge()">Next</button>
-      <div class="back-btn" onclick="location.reload()">Back</div>
+      <select id="birthYear"></select>
+      <button class="primary" onclick="submitAge()">Next</button>
+      <div class="back-btn" onclick="goBackToRole()">Back</div>
     </div>
 
+    <!-- EMAIL -->
     <div id="emailBox" style="display:none">
       <h2 id="emailPrompt">Enter Your Email</h2>
-      <input type="email" id="userEmail" placeholder="Your Email">
-      <button class="btn grey" onclick="googleSignup()">Sign up with Google</button>
-      <button class="btn primary" onclick="sendOTP()">Use Email</button>
+      <input type="email" id="userEmail" placeholder="Your Email" autocomplete="email" />
+      <div id="g_id_onload"
+           data-client_id="26092089861-1v4hu1c0qdptj1i7pcu59l2mnqm29k5m.apps.googleusercontent.com"
+           data-context="signup"
+           data-ux_mode="popup"
+           data-callback="handleGoogleSignIn">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="pill"
+           data-theme="outline"
+           data-text="sign_up_with"
+           data-size="large"
+           data-logo_alignment="left">
+      </div>
+      <button class="primary" onclick="sendOTP()">Use Email</button>
       <div class="back-btn" onclick="showAgeBox()">Back</div>
     </div>
 
+    <!-- OTP -->
     <div id="otpBox" style="display:none">
       <h2>Enter Confirmation Code</h2>
       <div class="otp-input">
-        <input maxlength="1" /><input maxlength="1" /><input maxlength="1" />
-        <input maxlength="1" /><input maxlength="1" /><input maxlength="1" />
+        <input maxlength="1" oninput="moveFocus(event,0)" id="otp0" />
+        <input maxlength="1" oninput="moveFocus(event,1)" id="otp1" />
+        <input maxlength="1" oninput="moveFocus(event,2)" id="otp2" />
+        <input maxlength="1" oninput="moveFocus(event,3)" id="otp3" />
+        <input maxlength="1" oninput="moveFocus(event,4)" id="otp4" />
+        <input maxlength="1" oninput="moveFocus(event,5)" id="otp5" />
       </div>
-      <button class="btn primary" onclick="verifyOTP()">Confirm</button>
+      <button class="primary" onclick="verifyOTP()">Confirm</button>
       <div class="back-btn" onclick="showEmailBox()">Back</div>
     </div>
 
+    <!-- FINAL SIGNUP -->
     <div id="finalSignup" style="display:none">
       <h2>Create Account</h2>
-      <input id="firstName" placeholder="First Name">
-      <input id="lastName" placeholder="Last Name">
-      <input id="username" placeholder="Username" oninput="checkUsernameAvailability()">
-      <span id="usernameStatus" class="status-icon">❌</span>
-      <input type="password" id="password" placeholder="Password">
-      <input type="password" id="confirmPassword" placeholder="Confirm Password">
-      <button class="btn primary" onclick="submitSignup()">Create Account</button>
+      <input id="firstName" placeholder="First Name" autocomplete="given-name" />
+      <input id="lastName" placeholder="Last Name" autocomplete="family-name" />
+      <div style="position:relative;">
+        <input id="username" placeholder="Username (3-8 chars)" oninput="checkUsernameAvailability()" autocomplete="username" />
+        <span id="usernameStatus" class="status-icon">❌</span>
+      </div>
+      <input type="password" id="password" placeholder="Password (min 7 chars)" autocomplete="new-password" />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" autocomplete="new-password" />
+      <button class="primary" onclick="submitSignup()">Create Account</button>
       <div class="back-btn" onclick="showOTPBox()">Back</div>
+    </div>
+
+    <div style="margin-top:30px; font-size:12px; color:#999; text-align:center;">
+      Founded by Krishay Suresh
     </div>
   </div>
 
   <script>
+    // Populate birthYear select with years dynamically
+    const birthYearSelect = document.getElementById('birthYear');
+    const currentYear = new Date().getFullYear();
+    for(let y = currentYear; y >= 1900; y--) {
+      let opt = document.createElement('option');
+      opt.value = y;
+      opt.innerText = y;
+      birthYearSelect.appendChild(opt);
+    }
+
     let selectedRole = '';
+    let isGoogleSignup = false;
 
     function selectRole(role) {
       selectedRole = role;
-      document.querySelector('.container').innerHTML += ''; // maybe log role if needed
+      toggleInfo(false);
       document.getElementById('ageBox').style.display = 'block';
+      document.getElementById('emailBox').style.display = 'none';
+      document.getElementById('otpBox').style.display = 'none';
+      document.getElementById('finalSignup').style.display = 'none';
+      document.querySelector('h2').innerText = `Sign up as:`;
+      showSection('ageBox');
     }
 
-    function toggleInfo() {
+    function toggleInfo(forceClose) {
       const info = document.getElementById('roleInfo');
-      info.style.display = info.style.display === 'none' ? 'block' : 'none';
+      if(forceClose === true) {
+        info.style.display = 'none';
+      } else {
+        info.style.display = info.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    function showSection(sectionId) {
+      ['ageBox', 'emailBox', 'otpBox', 'finalSignup', 'roleInfo'].forEach(id => {
+        document.getElementById(id).style.display = (id === sectionId) ? 'block' : 'none';
+      });
+    }
+
+    function goBackToRole() {
+      selectedRole = '';
+      isGoogleSignup = false;
+      showSection('');
+      document.querySelector('h2').innerText = 'Sign up as:';
+      toggleInfo(false);
+      // Reset all inputs
+      resetAllInputs();
+    }
+
+    function resetAllInputs() {
+      document.getElementById('birthMonth').selectedIndex = 0;
+      document.getElementById('birthYear').selectedIndex = 0;
+      document.getElementById('userEmail').value = '';
+      for(let i=0; i<6; i++) document.getElementById(`otp${i}`).value = '';
+      document.getElementById('firstName').value = '';
+      document.getElementById('lastName').value = '';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('confirmPassword').value = '';
+      document.getElementById('usernameStatus').innerText = '❌';
     }
 
     function submitAge() {
-      const year = document.getElementById('birthYear').value;
-      const currentYear = new Date().getFullYear();
-      const age = currentYear - parseInt(year);
-      document.getElementById('emailBox').style.display = 'block';
-      document.getElementById('ageBox').style.display = 'none';
-      if (age < 13) {
-        document.getElementById('emailPrompt').innerText = "Enter Parent's Email";
-      } else {
-        document.getElementById('emailPrompt').innerText = "Enter Your Email";
+      const birthMonth = document.getElementById('birthMonth').value;
+      const birthYear = parseInt(document.getElementById('birthYear').value);
+      if (!birthMonth || !birthYear) {
+        alert('Please select both birth month and year.');
+        return;
       }
+      const age = currentYear - birthYear;
+      isGoogleSignup = false;
+
+      // Show email prompt based on age
+      document.getElementById('emailPrompt').innerText = age < 13 ? "Enter Parent's Email" : "Enter Your Email";
+
+      showSection('emailBox');
     }
 
     function showAgeBox() {
-      document.getElementById('emailBox').style.display = 'none';
-      document.getElementById('ageBox').style.display = 'block';
+      showSection('ageBox');
+      isGoogleSignup = false;
     }
 
     function showEmailBox() {
-      document.getElementById('otpBox').style.display = 'none';
-      document.getElementById('emailBox').style.display = 'block';
+      showSection('emailBox');
+      isGoogleSignup = false;
     }
 
     function showOTPBox() {
-      document.getElementById('finalSignup').style.display = 'none';
-      document.getElementById('otpBox').style.display = 'block';
+      showSection('otpBox');
+      isGoogleSignup = false;
+      clearOTPInputs();
+    }
+
+    function clearOTPInputs() {
+      for(let i=0; i<6; i++) {
+        document.getElementById(`otp${i}`).value = '';
+      }
+      document.getElementById('otp0').focus();
+    }
+
+    // Move focus to next OTP input automatically
+    function moveFocus(e, idx) {
+      if(e.target.value.length === 1 && idx < 5) {
+        document.getElementById(`otp${idx+1}`).focus();
+      }
+      if(e.target.value.length === 0 && idx > 0) {
+        document.getElementById(`otp${idx-1}`).focus();
+      }
     }
 
     function sendOTP() {
-      const email = document.getElementById('userEmail').value;
+      const email = document.getElementById('userEmail').value.trim();
+      if (!email) {
+        alert('Please enter an email.');
+        return;
+      }
       fetch('http://localhost:4000/api/send-otp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email})
       }).then(res => {
-        if (res.ok) {
-          document.getElementById('emailBox').style.display = 'none';
-          document.getElementById('otpBox').style.display = 'block';
+        if(res.ok) {
+          showOTPBox();
         } else {
-          alert("Couldn't send code");
+          alert('Failed to send OTP. Please try again.');
         }
-      });
+      }).catch(() => alert('Network error.'));
     }
 
     function verifyOTP() {
-      const codeInputs = document.querySelectorAll('.otp-input input');
-      const otp = Array.from(codeInputs).map(i => i.value).join('');
-      const email = document.getElementById('userEmail').value;
-      fetch('http://localhost:4000/api/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp })
-      }).then(res => {
-        if (res.ok) {
-          document.getElementById('otpBox').style.display = 'none';
-          document.getElementById('finalSignup').style.display = 'block';
-        } else {
-          alert('Invalid Code');
-        }
-      });
-    }
-
-    function checkUsernameAvailability() {
-      const username = document.getElementById('username').value;
-      if (username.length < 3) {
-        document.getElementById('usernameStatus').innerText = '❌';
+      let otp = '';
+      for(let i=0; i<6; i++) {
+        otp += document.getElementById(`otp${i}`).value;
+      }
+      if(otp.length < 6) {
+        alert('Please enter the full 6-digit code.');
         return;
       }
-      fetch('http://localhost:4000/api/check-username', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
-      }).then(res => {
-        document.getElementById('usernameStatus').innerText = res.ok ? '✅' : '❌';
-      });
-    }
-
-    function submitSignup() {
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const confirm = document.getElementById('confirmPassword').value;
-      const email = document.getElementById('userEmail').value;
-      const birthMonth = document.getElementById('birthMonth').value;
-      const birthYear = document.getElementById('birthYear').value;
-
-      if (password !== confirm) return alert("Passwords don't match");
-      if (username.length < 3 || password.length < 7) return alert("Invalid input");
-
-      fetch('http://localhost:4000/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username,
-          password,
-          email,
-          firstName,
-          lastName,
-          dob: `${birthMonth} ${birthYear}`,
-          role: selectedRole
-        })
-      }).then(res => {
-        if (res.ok) {
-          localStorage.setItem('username', username);
-          window.location.href = 'dashboard.html';
-        } else {
-          alert('Signup error');
-        }
-      });
-    }
-
-    function googleSignup() {
-      alert("Google Sign In coming soon!");
-    }
-  </script>
-</body>
-</html>
-
+      const email = document.getElementById('userEmail').value.trim();
+      fetch('http://localhost:400

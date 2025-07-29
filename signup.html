@@ -136,6 +136,7 @@
       font-size: 20px;
       user-select: none;
     }
+    /* Styles for Google Sign-In button */
     #g_id_onload, .g_id_signin {
       display: flex;
       justify-content: center;
@@ -156,7 +157,6 @@
       <p><strong>Mentor:</strong> An expert or tutor who volunteers to guide and teach learners.</p>
     </div>
 
-    <!-- AGE -->
     <div id="ageBox" style="display:none">
       <h2>Enter Your Birth Month & Year</h2>
       <select id="birthMonth" aria-label="Birth Month">
@@ -179,11 +179,10 @@
       <div class="back-btn" onclick="goBackToRole()">Back</div>
     </div>
 
-    <!-- EMAIL -->
     <div id="emailBox" style="display:none">
       <h2 id="emailPrompt">Enter Your Email</h2>
       <input type="email" id="userEmail" placeholder="Your Email" autocomplete="email" />
-      
+
       <div id="g_id_onload"
            data-client_id="441654734790-f5qi7f7obkl5c977uoa34tmuhq2r1k25.apps.googleusercontent.com"
            data-context="signup"
@@ -199,12 +198,11 @@
            data-size="large"
            data-logo_alignment="left">
       </div>
-      
+
       <button class="primary" onclick="sendOTP()">Use Email</button>
       <div class="back-btn" onclick="showAgeBox()">Back</div>
     </div>
 
-    <!-- OTP -->
     <div id="otpBox" style="display:none">
       <h2>Enter Confirmation Code</h2>
       <div class="otp-input">
@@ -219,7 +217,6 @@
       <div class="back-btn" onclick="showEmailBox()">Back</div>
     </div>
 
-    <!-- FINAL SIGNUP -->
     <div id="finalSignup" style="display:none">
       <h2>Create Account</h2>
       <input id="firstName" placeholder="First Name" autocomplete="given-name" />
@@ -256,49 +253,81 @@
 
     // Show only one section
     function showSection(sectionId) {
-      ['ageBox', 'emailBox', 'otpBox', 'finalSignup', 'roleInfo'].forEach(id => {
+      // List all section IDs that are part of the multi-step form flow
+      const sections = ['ageBox', 'emailBox', 'otpBox', 'finalSignup', 'roleInfo'];
+      
+      // Hide all sections initially
+      sections.forEach(id => {
         const el = document.getElementById(id);
-        el.style.display = (id === sectionId) ? 'block' : 'none';
+        if (el) { // Check if element exists before trying to access style
+          el.style.display = 'none';
+        }
       });
+
+      // Show the requested section
+      const targetEl = document.getElementById(sectionId);
+      if (targetEl) { // Check if element exists before trying to access style
+        targetEl.style.display = 'block';
+      }
     }
 
     // Toggle info box for role description
     function toggleInfo() {
       const info = document.getElementById('roleInfo');
+      // If info box is currently hidden or not set, show it. Otherwise, hide it.
       info.style.display = (info.style.display === 'none' || !info.style.display) ? 'block' : 'none';
     }
 
     // Reset inputs
     function resetAllInputs() {
-      document.getElementById('birthMonth').selectedIndex = 0;
-      document.getElementById('birthYear').selectedIndex = 0;
-      document.getElementById('userEmail').value = '';
-      for(let i=0; i<6; i++) document.getElementById(`otp${i}`).value = '';
-      document.getElementById('firstName').value = '';
-      document.getElementById('lastName').value = '';
-      document.getElementById('username').value = '';
-      document.getElementById('password').value = '';
-      document.getElementById('confirmPassword').value = '';
-      document.getElementById('usernameStatus').innerText = '❌';
+      // Ensure elements exist before trying to access their properties
+      const birthMonth = document.getElementById('birthMonth');
+      if (birthMonth) birthMonth.selectedIndex = 0;
+      const birthYear = document.getElementById('birthYear');
+      if (birthYear) birthYear.selectedIndex = 0;
+      const userEmail = document.getElementById('userEmail');
+      if (userEmail) userEmail.value = '';
+      for(let i=0; i<6; i++) {
+        const otpInput = document.getElementById(`otp${i}`);
+        if (otpInput) otpInput.value = '';
+      }
+      const firstName = document.getElementById('firstName');
+      if (firstName) firstName.value = '';
+      const lastName = document.getElementById('lastName');
+      if (lastName) lastName.value = '';
+      const username = document.getElementById('username');
+      if (username) username.value = '';
+      const password = document.getElementById('password');
+      if (password) password.value = '';
+      const confirmPassword = document.getElementById('confirmPassword');
+      if (confirmPassword) confirmPassword.value = '';
+      const usernameStatus = document.getElementById('usernameStatus');
+      if (usernameStatus) usernameStatus.innerText = '❌';
       checkedUsernameAvailable = false;
     }
 
     // Start signup - choose role
     function selectRole(role) {
       selectedRole = role;
-      toggleInfo(false);
-      showSection('ageBox');
-      document.querySelector('h2').innerText = `Enter Your Birth Month & Year`;
+      toggleInfo(false); // Ensure info box is hidden when selecting a role
+      showSection('ageBox'); // Show the age input section
+      // The main container's h2 text is not dynamically changed here, 
+      // as each step now has its own h2.
       resetAllInputs();
     }
 
-    // Go back to role select screen
+    // Go back to role select screen (initial view)
     function goBackToRole() {
       selectedRole = '';
       isGoogleSignup = false;
-      showSection('');
-      document.querySelector('h2').innerText = 'Sign up as:';
-      toggleInfo(false);
+      // To go back to the initial state, we need to hide all step sections
+      // and ensure the initial role selection buttons are visible.
+      // This implicitly means the h2 text "Sign up as:" becomes visible again.
+      showSection(''); // Passing an empty string will hide all predefined sections
+      document.querySelector('.container h2').innerText = 'Sign up as:'; // Reset main H2 if it changes
+      document.querySelector('.container button.primary:nth-of-type(1)').style.display = 'block'; // Show Learner button
+      document.querySelector('.container button.primary:nth-of-type(2)').style.display = 'block'; // Show Mentor button
+      document.querySelector('.container button.grey').style.display = 'block'; // Show "What does that mean?" button
       resetAllInputs();
     }
 
@@ -306,7 +335,7 @@
     function submitAge() {
       const birthMonth = document.getElementById('birthMonth').value;
       const birthYear = parseInt(document.getElementById('birthYear').value);
-      if (!birthMonth || !birthYear) {
+      if (!birthMonth || birthMonth === "Month" || !birthYear || isNaN(birthYear)) { // Added check for default "Month" option
         alert('Please select both birth month and year.');
         return;
       }
@@ -318,13 +347,13 @@
       showSection('emailBox');
     }
 
-    // Show age input again
+    // Show age input again (back button from email)
     function showAgeBox() {
       showSection('ageBox');
       isGoogleSignup = false;
     }
 
-    // Show email input again
+    // Show email input again (back button from OTP)
     function showEmailBox() {
       showSection('emailBox');
       isGoogleSignup = false;
@@ -340,18 +369,23 @@
     // Clear OTP inputs and focus first
     function clearOTPInputs() {
       for(let i=0; i<6; i++) {
-        document.getElementById(`otp${i}`).value = '';
+        const otpInput = document.getElementById(`otp${i}`);
+        if (otpInput) otpInput.value = '';
       }
-      document.getElementById('otp0').focus();
+      const otp0 = document.getElementById('otp0');
+      if (otp0) otp0.focus();
     }
 
     // Move focus automatically on OTP inputs
     function moveFocus(e, idx) {
       if(e.target.value.length === 1 && idx < 5) {
-        document.getElementById(`otp${idx+1}`).focus();
+        const nextInput = document.getElementById(`otp${idx+1}`);
+        if (nextInput) nextInput.focus();
       }
-      if(e.target.value.length === 0 && idx > 0) {
-        document.getElementById(`otp${idx-1}`).focus();
+      // Handle backspace to move focus backward
+      if(e.inputType === 'deleteContentBackward' && idx > 0) {
+        const prevInput = document.getElementById(`otp${idx-1}`);
+        if (prevInput) prevInput.focus();
       }
     }
 
@@ -362,6 +396,11 @@
         alert('Please enter an email.');
         return;
       }
+      // Basic email format validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
       try {
         const res = await fetch('http://localhost:4000/api/send-otp', {
           method: 'POST',
@@ -370,11 +409,15 @@
         });
         if(res.ok) {
           showOTPBox();
+          alert('OTP sent to your email. Please check your inbox (and spam folder)!'); // User feedback
         } else {
-          alert('Failed to send OTP. Please try again.');
+          // Attempt to parse error message from server if available
+          const errorData = await res.json().catch(() => ({ message: 'Failed to send OTP.' }));
+          alert(`Error: ${errorData.message || 'Failed to send OTP. Please try again.'}`);
         }
-      } catch {
-        alert('Network error while sending OTP.');
+      } catch (error) { // Catch actual network errors
+        console.error('Network error while sending OTP:', error);
+        alert('Network error while sending OTP. Please check your connection.');
       }
     }
 
@@ -397,24 +440,21 @@
         });
         if(res.ok) {
           showFinalSignup();
+          alert('Email confirmed successfully!'); // User feedback
         } else {
-          alert('Invalid OTP. Please try again.');
+          const errorData = await res.json().catch(() => ({ message: 'Invalid OTP.' }));
+          alert(`Error: ${errorData.message || 'Invalid OTP. Please try again.'}`);
         }
-      } catch {
-        alert('Network error while verifying OTP.');
+      } catch (error) {
+        console.error('Network error while verifying OTP:', error);
+        alert('Network error while verifying OTP. Please check your connection.');
       }
     }
 
     // Show final signup form
     function showFinalSignup() {
       showSection('finalSignup');
-      isGoogleSignup = false;
-    }
-
-    // Show OTP box again (Back button from final signup)
-    function showOTPBox() {
-      showSection('otpBox');
-      isGoogleSignup = false;
+      isGoogleSignup = false; // Assuming Google signup bypasses OTP for now, or handles it differently
     }
 
     // Check username availability live
@@ -430,6 +470,7 @@
         return;
       }
 
+      // Add a debounce to prevent too many requests
       usernameCheckTimeout = setTimeout(async () => {
         try {
           const res = await fetch(`http://localhost:4000/api/check-username?username=${encodeURIComponent(username)}`);
@@ -440,14 +481,18 @@
               checkedUsernameAvailable = true;
             } else {
               statusEl.innerText = '❌';
+              checkedUsernameAvailable = false; // Explicitly set to false
             }
           } else {
             statusEl.innerText = '❌';
+            checkedUsernameAvailable = false;
           }
-        } catch {
+        } catch (error) {
+          console.error('Network error checking username:', error);
           statusEl.innerText = '❌';
+          checkedUsernameAvailable = false;
         }
-      }, 500);
+      }, 500); // Debounce time in milliseconds
     }
 
     // Submit final signup data
@@ -469,9 +514,11 @@
       if(password !== confirmPassword) {
         alert('Passwords do not match.');
         return;
-      }
+        }
+      // Re-check username availability one last time before submitting to be safe
+      // Or ensure the user interacted with the username field to get the '✅' status
       if(!checkedUsernameAvailable) {
-        alert('Please choose a valid and available username.');
+        alert('Please ensure your chosen username is valid and available (green checkmark).');
         return;
       }
 
@@ -495,5 +542,59 @@
           body: JSON.stringify(signupData),
         });
         if(res.ok) {
-          alert('Account created successfully! Please log in.');
-          window.location.href = '/login
+          alert('Account created successfully! Please log in.'); // Added semicolon
+          window.location.href = '/login'; // Added closing quote and semicolon
+        } else {
+          const errorData = await res.json().catch(() => ({ message: 'Failed to create account.' }));
+          alert(`Error: ${errorData.message || 'Failed to create account. Please try again.'}`);
+        }
+      } catch (error) {
+        console.error('Network error during signup:', error);
+        alert('Network error during signup. Please check your connection.');
+      }
+    }
+
+    // --- Google Sign-In Handler ---
+    // This function will be called by the Google GSI client after successful sign-in
+    function handleGoogleSignIn(response) {
+      console.log("Google Sign-In token:", response.credential);
+      // You would typically send this `response.credential` (ID token) to your backend server
+      // for verification and account creation/linking.
+      // For a Google signup, you might skip OTP and directly go to finalSignup if your backend allows.
+      isGoogleSignup = true; // Mark as Google signup
+      
+      // Decode the JWT to get user info if needed on client side (for display, etc.)
+      const decodedToken = JSON.parse(atob(response.credential.split('.')[1]));
+      console.log('Decoded Google User Info:', decodedToken);
+      
+      // Auto-fill relevant fields if available from Google
+      if (decodedToken.email) {
+          document.getElementById('userEmail').value = decodedToken.email;
+          document.getElementById('emailPrompt').innerText = "Email (from Google)"; // Indicate it's Google's email
+          // You might directly proceed to show the final signup form if Google's email is considered verified
+          showFinalSignup(); 
+      }
+      if (decodedToken.given_name) {
+          document.getElementById('firstName').value = decodedToken.given_name;
+      }
+      if (decodedToken.family_name) {
+          document.getElementById('lastName').value = decodedToken.family_name;
+      }
+      // Note: Username might need to be generated or prompted for, as Google doesn't provide it directly.
+      // Password is not needed for Google Sign-in as authentication is handled by Google.
+    }
+    // --- END Google Sign-In Handler ---
+
+    // Initial setup: Hide all sections except the role selection
+    document.addEventListener('DOMContentLoaded', () => {
+        showSection(''); // Call with empty string to hide all steps and show initial role buttons
+        // Restore initial H2 text if it was changed
+        document.querySelector('.container h2').innerText = 'Sign up as:'; 
+        // Ensure initial buttons are visible, as showSection('') only hides named sections
+        document.querySelector('.container button.primary:nth-of-type(1)').style.display = 'block';
+        document.querySelector('.container button.primary:nth-of-type(2)').style.display = 'block';
+        document.querySelector('.container button.grey').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

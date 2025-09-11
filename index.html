@@ -3,160 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Medical Quiz Game - Krishay & Sibi</title>
+<title>Learn Medicine - Krishay & Sibi</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  /* Reset */
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
-  body { background:#ffffff; color:#1c1c1e; scroll-behavior:smooth; }
+  body, html { height:100%; overflow-x:hidden; scroll-behavior:smooth; background:#0d0d0f; color:#fff; }
 
-  section { width:100%; display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center; }
-
-  /* Hero */
-  #hero {
-    height:100vh;
-    display:flex; flex-direction:column; justify-content:center; align-items:center;
-    background:#ffffff; text-align:center; padding:2rem;
+  /* Starfield background */
+  #stars {
+    position:fixed; top:0; left:0; width:100%; height:100%; background:#0d0d0f; overflow:hidden; z-index:-2;
   }
-  #hero h1 { font-size:3rem; font-weight:700; margin-bottom:1rem; }
-  #hero p { font-size:1.5rem; margin-bottom:2rem; opacity:0.8; }
-  #startButton { padding:1rem 2rem; font-size:1.1rem; border-radius:12px; border:none; background:#1c1c1e; color:white; cursor:pointer; font-weight:600; transition:0.3s; }
-  #startButton:hover { background:#333; transform:scale(1.05); }
+  .star {
+    position:absolute; width:2px; height:2px; background:white; border-radius:50%; opacity:0.8; animation: twinkle 4s infinite alternate;
+  }
+  @keyframes twinkle { 0%{opacity:0.2;} 50%{opacity:0.8;} 100%{opacity:0.2;} }
 
-  /* Game */
-  #gameSection { min-height:100vh; background:#f5f5f7; padding:4rem 2rem; display:flex; flex-direction:column; align-items:center; gap:2rem; }
-  #gameTitle { font-size:2rem; margin-bottom:1rem; }
-  #scoreTimer { display:flex; gap:2rem; font-weight:600; font-size:1.2rem; margin-bottom:1rem; }
-  #gameArea { width:80vw; height:60vh; border:3px solid #1c1c1e; border-radius:20px; position:relative; background:#e6e6e6; overflow:hidden; }
+  /* Hero Section */
+  #hero {
+    height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; position:relative;
+  }
+  #hero h1 { font-size:3rem; font-weight:700; letter-spacing:1px; margin-bottom:1rem; animation:fadeUp 1.2s ease forwards; opacity:0; }
+  #hero p { font-size:1.2rem; opacity:0.8; margin-bottom:2rem; animation:fadeUp 1.5s ease forwards; animation-delay:0.5s; }
+  #hero p span { font-weight:600; }
+  @keyframes fadeUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
 
-  .corner { width:25%; height:25%; position:absolute; display:flex; justify-content:center; align-items:center; text-align:center; font-weight:600; border-radius:12px; cursor:pointer; color:white; font-size:1rem; padding:0.5rem; }
-  #topLeft { top:0; left:0; background:#0071e3; }
-  #topRight { top:0; right:0; background:#00cfff; }
-  #bottomLeft { bottom:0; left:0; background:#00a3cc; }
-  #bottomRight { bottom:0; right:0; background:#005bb5; }
+  /* Buttons */
+  .heroButtons { display:flex; gap:2rem; margin-top:2rem; flex-wrap:wrap; }
+  .heroButtons a {
+    padding:1rem 2rem; border-radius:12px; text-decoration:none; font-weight:600;
+    color:#0d0d0f; background:white; transition:0.3s;
+    box-shadow:0 10px 20px rgba(255,255,255,0.2);
+  }
+  .heroButtons a:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(255,255,255,0.3); }
 
-  #player { width:40px; height:40px; background:red; border-radius:50%; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); cursor:pointer; }
+  /* Info Section */
+  #info {
+    padding:4rem 2rem; text-align:center; background:#111;
+  }
+  #info h2 { font-size:2rem; margin-bottom:1rem; }
+  #info p { max-width:800px; margin:1rem auto; line-height:1.6; opacity:0.85; }
 
-  #feedback { margin-top:1rem; font-size:1.2rem; font-weight:600; min-height:1.5em; }
-
+  /* Animate sections on scroll */
+  .fadeInSection { opacity:0; transform:translateY(50px); transition: all 1s ease; }
+  .fadeInSection.visible { opacity:1; transform:translateY(0); }
 </style>
 </head>
 <body>
 
+<!-- Stars Background -->
+<div id="stars"></div>
+
+<!-- Hero Section -->
 <section id="hero">
-  <h1>Medical Center</h1>
-  <p>Scroll to learn more</p>
-  <p>By Krishay & Sibi</p>
-  <button id="startButton">Start Game</button>
+  <h1>Welcome to Learn About Medicine</h1>
+  <p>This page was created by <span>Krishay & Sibi</span></p>
+  <div class="heroButtons">
+    <a href="game.html">Medical Quiz Game</a>
+    <a href="model.html">Human Body Model</a>
+  </div>
 </section>
 
-<section id="gameSection">
-  <div id="gameTitle">Medical Quiz Challenge</div>
-  <div id="scoreTimer">
-    <div>Score: <span id="score">0</span></div>
-    <div>Time: <span id="timer">30</span>s</div>
+<!-- Info Section -->
+<section id="info">
+  <div class="fadeInSection">
+    <h2>Why Learn Medicine?</h2>
+    <p>Understanding the human body is not only fascinating but essential. Our platform blends interactive learning, quizzes, and immersive diagrams to make medical education engaging and memorable.</p>
   </div>
-  <div id="gameArea">
-    <div id="player"></div>
-    <div class="corner" id="topLeft"></div>
-    <div class="corner" id="topRight"></div>
-    <div class="corner" id="bottomLeft"></div>
-    <div class="corner" id="bottomRight"></div>
+  <div class="fadeInSection">
+    <h2>Interactive Quiz Game</h2>
+    <p>Test your knowledge with our timed Kahoot-style quiz. Challenge yourself, track your score, and see how fast you can answer. It’s fun, competitive, and educational.</p>
   </div>
-  <div id="feedback"></div>
+  <div class="fadeInSection">
+    <h2>Human Body Model</h2>
+    <p>Explore an interactive model of the human body. Click on organs to learn their purpose, discover fun facts, and understand how your body works — all in a visually stunning interface.</p>
+  </div>
+  <div class="fadeInSection">
+    <h2>Our Mission</h2>
+    <p>We aim to make learning medicine elegant, interactive, and intuitive. Every feature is designed with care, following the highest design standards — as if it were a luxury product you’re proud to use.</p>
+  </div>
 </section>
 
 <script>
-const startButton = document.getElementById('startButton');
-const gameSection = document.getElementById('gameSection');
-startButton.addEventListener('click', () => { gameSection.scrollIntoView({behavior:'smooth'}); startGame(); });
-
-const player = document.getElementById('player');
-const gameArea = document.getElementById('gameArea');
-let playerPos = {x:gameArea.clientWidth/2 - 20, y:gameArea.clientHeight/2 - 20};
-let isDragging = false;
-player.addEventListener('mousedown', () => isDragging = true);
-document.addEventListener('mouseup', () => isDragging = false);
-document.addEventListener('mousemove', e => {
-  if(!isDragging) return;
-  const rect = gameArea.getBoundingClientRect();
-  let x = e.clientX - rect.left;
-  let y = e.clientY - rect.top;
-  x = Math.max(0, Math.min(rect.width, x));
-  y = Math.max(0, Math.min(rect.height, y));
-  player.style.left = x + 'px';
-  player.style.top = y + 'px';
-  playerPos.x = x;
-  playerPos.y = y;
-  checkAnswerCollision();
-});
-
-// Quiz data
-const questions = [
-  {q:"Which organ pumps blood throughout the body?", a:["Brain","Heart","Lungs","Kidneys"], correct:1},
-  {q:"Which organ exchanges oxygen and carbon dioxide?", a:["Heart","Stomach","Lungs","Liver"], correct:2},
-  {q:"Powerhouse of the cell?", a:["Nucleus","Mitochondria","Ribosome","Cell Membrane"], correct:1}
-];
-let currentQ=0, score=0, time=30, gameInterval;
-
-const corners = [
-  document.getElementById('topLeft'),
-  document.getElementById('topRight'),
-  document.getElementById('bottomLeft'),
-  document.getElementById('bottomRight')
-];
-
-function showQuestion() {
-  const q = questions[currentQ];
-  document.getElementById('topLeft').innerText = q.a[0];
-  document.getElementById('topRight').innerText = q.a[1];
-  document.getElementById('bottomLeft').innerText = q.a[2];
-  document.getElementById('bottomRight').innerText = q.a[3];
-  document.getElementById('feedback').innerText = '';
-  player.style.left = (gameArea.clientWidth/2 - 20) + 'px';
-  player.style.top = (gameArea.clientHeight/2 - 20) + 'px';
-  playerPos = {x:gameArea.clientWidth/2 - 20, y:gameArea.clientHeight/2 - 20};
+/* Starfield Animation */
+const starsContainer = document.getElementById('stars');
+const numStars = 150;
+for(let i=0;i<numStars;i++){
+  const star = document.createElement('div');
+  star.classList.add('star');
+  star.style.top = Math.random()*100 + '%';
+  star.style.left = Math.random()*100 + '%';
+  star.style.width = Math.random()*2 + 'px';
+  star.style.height = star.style.width;
+  starsContainer.appendChild(star);
 }
 
-function startGame() {
-  score = 0;
-  time = 30;
-  document.getElementById('score').innerText = score;
-  document.getElementById('timer').innerText = time;
-  showQuestion();
-  clearInterval(gameInterval);
-  gameInterval = setInterval(() => {
-    time--;
-    document.getElementById('timer').innerText = time;
-    if(time<=0){ clearInterval(gameInterval); document.getElementById('feedback').innerText = "Time's up! Final score: "+score;}
-  },1000);
-}
-
-// Collision detection
-function checkAnswerCollision() {
-  const q = questions[currentQ];
-  const playerCenter = {x:playerPos.x+20, y:playerPos.y+20};
-  let selected = null;
-
-  const w = gameArea.clientWidth/2, h = gameArea.clientHeight/2;
-  if(playerCenter.x<w && playerCenter.y<h) selected=0;
-  else if(playerCenter.x>w && playerCenter.y<h) selected=1;
-  else if(playerCenter.x<w && playerCenter.y>h) selected=2;
-  else if(playerCenter.x>w && playerCenter.y>h) selected=3;
-
-  if(selected!==null){
-    if(selected===q.correct){
-      document.getElementById('feedback').innerText = "Correct! ✅";
-      score++;
-      document.getElementById('score').innerText = score;
-      currentQ = (currentQ+1) % questions.length;
-      setTimeout(showQuestion,500);
-    } else {
-      document.getElementById('feedback').innerText = "Wrong! ❌ New question.";
-      currentQ = (currentQ+1) % questions.length;
-      setTimeout(showQuestion,500);
+/* Animate sections on scroll */
+const fadeSections = document.querySelectorAll('.fadeInSection');
+window.addEventListener('scroll', () => {
+  fadeSections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if(rect.top < window.innerHeight - 100){
+      section.classList.add('visible');
     }
-  }
-}
+  });
+});
 </script>
 
 </body>

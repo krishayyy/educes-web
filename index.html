@@ -1,1 +1,160 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Medical Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+  body { background: #f5f5f7; color: #1c1c1e; }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(90deg, #0071e3, #00cfff);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  header h1 {
+    font-size: 2.8rem;
+    letter-spacing: 1px;
+    animation: fadeIn 1s ease forwards;
+  }
+  @keyframes fadeIn { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
+
+  /* Container grid */
+  .container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+
+  /* Card style */
+  .card {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+  }
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  }
+  .card h2 { color: #0071e3; margin-bottom: 1rem; font-weight: 600; }
+  .card p { margin-bottom: 1rem; line-height: 1.6; color: #333; }
+
+  /* Icons */
+  .icon { font-size: 3.5rem; margin-bottom: 1rem; display: inline-block; animation: bounce 1.5s infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0);} 50% { transform: translateY(-15px);} }
+
+  /* Inputs and buttons */
+  input, button {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+  button {
+    background: #0071e3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+  }
+  button:hover { background: #005bb5; transform: scale(1.05); }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
+
+  /* Quiz & search results */
+  #gameResult, #searchResult {
+    font-weight: 600;
+    margin-top: 0.8rem;
+    transition: all 0.3s ease;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 4rem;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Interactive Medical Dashboard</h1>
+  <p style="font-weight:400; margin-top:0.5rem;">Learn, Explore, and Test Your Knowledge</p>
+</header>
+
+<div class="container">
+
+  <!-- Medical Tips Card -->
+  <div class="card">
+    <div class="icon">🩺</div>
+    <h2>Medical Tips</h2>
+    <p>💧 Stay hydrated for proper bodily function.</p>
+    <p>🧼 Wash hands regularly to prevent infection.</p>
+    <p>🩹 Regular check-ups catch diseases early.</p>
+  </div>
+
+  <!-- Quick Research Card -->
+  <div class="card">
+    <div class="icon">🔬</div>
+    <h2>Quick Research</h2>
+    <input type="text" id="searchBox" placeholder="Type topic (heart, brain, lungs)">
+    <button onclick="searchTopic()">Search</button>
+    <p id="searchResult"></p>
+  </div>
+
+  <!-- Mini Quiz Card -->
+  <div class="card">
+    <div class="icon">🎯</div>
+    <h2>Mini Quiz Game</h2>
+    <p>Click the correct answer: What is the powerhouse of the cell?</p>
+    <button onclick="checkAnswer(true)">Mitochondria ✅</button>
+    <button onclick="checkAnswer(false)">Nucleus ❌</button>
+    <button onclick="checkAnswer(false)">Ribosome ❌</button>
+    <p id="gameResult"></p>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2025 MediCare. All rights reserved.
+</footer>
+
+<script>
+function searchTopic() {
+  const topic = document.getElementById('searchBox').value.toLowerCase();
+  const resultMap = {
+    'heart': '❤️ The heart pumps blood through the circulatory system.',
+    'lungs': '🫁 The lungs exchange oxygen and carbon dioxide during respiration.',
+    'brain': '🧠 The brain controls all body functions and processes information.'
+  };
+  document.getElementById('searchResult').innerText = resultMap[topic] || 'Topic not found. Try: heart, lungs, brain.';
+}
+
+function checkAnswer(isCorrect) {
+  const el = document.getElementById('gameResult');
+  el.innerText = isCorrect ? 'Correct! ✅' : 'Wrong! ❌ Try again.';
+  el.style.color = isCorrect ? '#0071e3' : '#e63946';
+}
+</script>
+
+</body>
+</html>

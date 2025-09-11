@@ -1,93 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive Human Body - Krishay & Sibi</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
-  body, html { height:100%; background:#0f0f11; color:#fff; overflow-x:hidden; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Brain Anatomy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-  /* Header */
-  header { text-align:center; padding:2rem; }
-  header h1 { font-size:3rem; margin-bottom:0.5rem; font-weight:700; }
-  header p { opacity:0.8; font-size:1.2rem; }
+    #container {
+      position: relative;
+      width: 80vw;
+      max-width: 800px;
+      height: 80vh;
+      max-height: 600px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-  /* Container Layout */
-  #container { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:2rem; padding:2rem; }
-  #diagram { position:relative; width:400px; max-width:90vw; }
-  #diagram img { width:100%; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
+    #brain {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('brain_diagram.svg') no-repeat center center;
+      background-size: contain;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
 
-  /* Organs */
-  .organ { position:absolute; border-radius:50%; cursor:pointer; transition:0.3s; border:2px solid rgba(255,255,255,0.5); }
-  .organ:hover { transform:scale(1.3); border-color:#00cfff; box-shadow:0 0 25px #00cfff; }
+    #brain:hover {
+      transform: scale(1.05);
+    }
 
-  /* Info Panel */
-  #infoPanel { max-width:400px; background:rgba(255,255,255,0.05); padding:2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.3); transition:0.5s; min-height:350px; }
-  #infoPanel h2 { margin-bottom:1rem; color:#00cfff; font-size:1.8rem; }
-  #infoPanel p { margin-bottom:0.5rem; line-height:1.5; opacity:0.9; }
+    #infoPanel {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 20px;
+      font-size: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-  /* Floating medical icons */
-  .icon { position:absolute; font-size:1.5rem; opacity:0.3; animation:floaty 10s infinite alternate; }
-  @keyframes floaty { 0%{transform:translateY(0px);} 100%{transform:translateY(-20px);} }
+    #infoPanel.active {
+      opacity: 1;
+    }
 
-  /* Responsive */
-  @media(max-width:900px){#container{flex-direction:column;align-items:center;}}
-</style>
+    #infoPanel h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    #infoPanel p {
+      margin: 5px 0;
+    }
+
+    .highlight {
+      fill: rgba(255, 255, 255, 0.6);
+      transition: fill 0.3s ease;
+    }
+
+    .highlight:hover {
+      fill: #ffcc00;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>Explore the Human Body</h1>
-  <p>Click an organ to learn its name, purpose, and a fun fact. Designed by <strong>Krishay & Sibi</strong></p>
-</header>
-
-<div id="container">
-  <!-- Diagram -->
-  <div id="diagram">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Human_body_silhouette_with_internal_organs.svg" alt="Human Body Diagram">
-
-    <!-- Organs (approximate coordinates, adjust visually if needed) -->
-    <div class="organ" style="top:120px; left:180px; width:40px; height:40px;" onclick="showOrgan('Heart')"></div>
-    <div class="organ" style="top:80px; left:150px; width:50px; height:50px;" onclick="showOrgan('Lungs')"></div>
-    <div class="organ" style="top:220px; left:180px; width:60px; height:60px;" onclick="showOrgan('Stomach')"></div>
-    <div class="organ" style="top:300px; left:180px; width:50px; height:50px;" onclick="showOrgan('Liver')"></div>
-    <div class="organ" style="top:400px; left:170px; width:40px; height:40px;" onclick="showOrgan('Kidneys')"></div>
-    <div class="organ" style="top:40px; left:190px; width:50px; height:50px;" onclick="showOrgan('Brain')"></div>
-
-    <!-- Floating icons -->
-    <div class="icon" style="top:50px; left:50px;">🧬</div>
-    <div class="icon" style="top:200px; left:300px;">💊</div>
-    <div class="icon" style="top:400px; left:100px;">🩺</div>
-    <div class="icon" style="top:150px; left:250px;">🔬</div>
+  <div id="container">
+    <div id="brain" onclick="toggleInfoPanel()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <circle cx="50" cy="50" r="20" class="highlight" onclick="showRegionInfo('Frontal Lobe')"></circle>
+        <circle cx="150" cy="50" r="20" class="highlight" onclick="showRegionInfo('Parietal Lobe')"></circle>
+        <circle cx="50" cy="150" r="20" class="highlight" onclick="showRegionInfo('Temporal Lobe')"></circle>
+        <circle cx="150" cy="150" r="20" class="highlight" onclick="showRegionInfo('Occipital Lobe')"></circle>
+      </svg>
+    </div>
+    <div id="infoPanel">
+      <h2>Click a region!</h2>
+      <p>Learn about its function, significance, and fun facts.</p>
+    </div>
   </div>
 
-  <!-- Info Panel -->
-  <div id="infoPanel">
-    <h2>Click an organ!</h2>
-    <p>Its name, purpose, and fun fact will appear here.</p>
-  </div>
-</div>
+  <script>
+    const regions = {
+      'Frontal Lobe': {
+        purpose: 'Responsible for cognitive functions such as reasoning, planning, and problem-solving.',
+        funFact: 'The frontal lobe is the largest of the four main lobes of the brain.'
+      },
+      'Parietal Lobe': {
+        purpose: 'Processes sensory information and is involved in spatial awareness.',
+        funFact: 'Damage to the parietal lobe can affect the ability to read and write.'
+      },
+      'Temporal Lobe': {
+        purpose: 'Involved in processing auditory information and memory formation.',
+        funFact: 'The temporal lobe contains the hippocampus, which is essential for memory.'
+      },
+      'Occipital Lobe': {
+        purpose: 'Primarily responsible for visual processing.',
+        funFact: 'The occipital lobe processes information from the eyes to create visual images.'
+      }
+    };
 
-<script>
-// Organ Data
-function showOrgan(name){
-  const organData = {
-    'Heart': {purpose:'Pumps blood throughout the body.', fact:'Beats about 100,000 times per day.'},
-    'Lungs': {purpose:'Exchange oxygen and carbon dioxide.', fact:'Contains ~300 million alveoli.'},
-    'Stomach': {purpose:'Breaks down food for digestion.', fact:'Can hold roughly 1 liter of food.'},
-    'Liver': {purpose:'Detoxifies chemicals and metabolizes drugs.', fact:'Can regenerate itself even if partially removed.'},
-    'Kidneys': {purpose:'Filters waste and excess fluids from the blood.', fact:'Produce ~1-2 liters of urine per day.'},
-    'Brain': {purpose:'Controls body functions and thought processes.', fact:'Contains ~86 billion neurons.'}
-  };
-  const info = organData[name];
-  const panel = document.getElementById('infoPanel');
-  panel.innerHTML = `<h2>${name}</h2>
-    <p><strong>Purpose:</strong> ${info.purpose}</p>
-    <p><strong>Fun Fact:</strong> ${info.fact}</p>`;
-}
-</script>
+    function showRegionInfo(region) {
+      const infoPanel = document.getElementById('infoPanel');
+      const regionInfo = regions[region];
+      infoPanel.innerHTML = `
+        <h2>${region}</h2>
+        <p><strong>Purpose:</strong> ${regionInfo.purpose}</p>
+        <p><strong>Fun Fact:</strong> ${regionInfo.funFact}</p>
+      `;
+      infoPanel.classList.add('active');
+    }
+
+    function toggleInfoPanel() {
+      const infoPanel = document.getElementById('infoPanel');
+      infoPanel.classList.toggle('active');
+    }
+  </script>
 
 </body>
 </html>
+

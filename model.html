@@ -3,29 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive Body Part Detection</title>
+<title>Real-Time Hand Detection</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   body {
     margin: 0;
-    padding: 0;
     font-family: 'Roboto', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    height: 100vh;
     overflow: hidden;
   }
 
   h1 {
     font-weight: 700;
+    font-size: 2rem;
     color: #1d1d1f;
     margin-bottom: 1rem;
-    font-size: 2rem;
-    text-align: center;
-    animation: fadeIn 1s ease forwards;
   }
 
   #container {
@@ -51,108 +48,94 @@
     left: 50%;
     transform: translateX(-50%);
     background: rgba(29,29,31,0.85);
-    color: #ffffff;
+    color: #fff;
     padding: 12px 20px;
     border-radius: 50px;
     font-weight: 500;
     font-size: 1.1rem;
-    transition: all 0.3s ease;
     backdrop-filter: blur(5px);
-  }
-
-  @keyframes fadeIn {
-    from {opacity:0; transform: translateY(-20px);}
-    to {opacity:1; transform: translateY(0);}
+    transition: all 0.3s ease;
   }
 </style>
 </head>
 <body>
 
-<h1>Interactive Body Part Detection</h1>
+<h1>Real-Time Hand & Finger Detection</h1>
 <div id="container">
   <video id="video" autoplay muted playsinline></video>
-  <canvas id="overlayCanvas"></canvas>
+  <canvas id="canvas"></canvas>
   <div id="overlay">Detecting...</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.3/pose.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
 
 <script>
 const videoElement = document.getElementById('video');
-const overlayDiv = document.getElementById('overlay');
-const canvas = document.getElementById('overlayCanvas');
+const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const overlay = document.getElementById('overlay');
 
-const pose = new Pose({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.3/${file}`});
-pose.onResults(onPoseResults);
+// Initialize MediaPipe Hands
+const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+hands.setOptions({
+  maxNumHands: 2,
+  minDetectionConfidence: 0.8,
+  minTrackingConfidence: 0.7
+});
+hands.onResults(onResults);
 
+// Setup camera
 async function setupCamera() {
-  const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  const stream = await navigator.mediaDevices.getUserMedia({video:true});
   videoElement.srcObject = stream;
   await new Promise(resolve => videoElement.onloadedmetadata = resolve);
   videoElement.play();
-  detectPose();
+  detectHands();
 }
 
-function detectPose() {
-  pose.send({image: videoElement});
-  requestAnimationFrame(detectPose);
+function detectHands() {
+  hands.send({image: videoElement});
+  requestAnimationFrame(detectHands);
 }
 
-function onPoseResults(results) {
-  if (!results.poseLandmarks) {
-    overlayDiv.textContent = 'No pose detected';
+// Count raised fingers
+function countFingers(landmarks) {
+  if(!landmarks) return 0;
+
+  // Thumb: compare tip and IP along x-axis (flip due to mirror)
+  let thumb = landmarks[4].x < landmarks[3].x ? 1 : 0;
+
+  // Other fingers: tip above PIP in y-axis (screen coords)
+  let fingers = 0;
+  if(landmarks[8].y < landmarks[6].y) fingers++;   // index
+  if(landmarks[12].y < landmarks[10].y) fingers++; // middle
+  if(landmarks[16].y < landmarks[14].y) fingers++; // ring
+  if(landmarks[20].y < landmarks[18].y) fingers++; // pinky
+
+  return thumb + fingers;
+}
+
+function onResults(results) {
+  canvas.width = videoElement.videoWidth;
+  canvas.height = videoElement.videoHeight;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  if(!results.multiHandLandmarks || results.multiHandLandmarks.length === 0){
+    overlay.textContent = "No hands detected";
     return;
   }
 
-  // Resize canvas to video size
-  canvas.width = videoElement.videoWidth;
-  canvas.height = videoElement.videoHeight;
-  
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // Draw landmarks
-  results.poseLandmarks.forEach((lm, index) => {
-    const x = lm.x * canvas.width;
-    const y = lm.y * canvas.height;
-    
-    ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(42, 157, 143, 0.8)';
-    ctx.fill();
-    
-    // Label major landmarks
-    const labels = {
-      0: 'Nose', 11: 'Left Shoulder', 12: 'Right Shoulder',
-      15: 'Left Wrist', 16: 'Right Wrist', 25: 'Left Knee', 26: 'Right Knee'
-    };
-    
-    if(labels[index]) {
-      ctx.font = '16px Roboto';
-      ctx.fillStyle = '#1d1d1f';
-      ctx.fillText(labels[index], x + 12, y - 12);
-    }
+  results.multiHandLandmarks.forEach((landmarks, idx) => {
+    // Draw hand
+    drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {color:'#2a9d8f', lineWidth:4});
+    drawLandmarks(ctx, landmarks, {color:'#e76f51', lineWidth:2, radius:5});
+
+    // Count fingers
+    const fingerCount = countFingers(landmarks);
+    const handLabel = results.multiHandedness[idx].label;
+    overlay.textContent = `${handLabel} hand detected: ${fingerCount} fingers raised`;
   });
-
-  // Determine closest body part
-  const landmarks = results.poseLandmarks;
-  const nose = landmarks[0], leftShoulder = landmarks[11], rightShoulder = landmarks[12],
-        leftWrist = landmarks[15], rightWrist = landmarks[16],
-        leftKnee = landmarks[25], rightKnee = landmarks[26];
-
-  const distances = [
-    { part: 'Nose', distance: nose.z },
-    { part: 'Left Shoulder', distance: leftShoulder.z },
-    { part: 'Right Shoulder', distance: rightShoulder.z },
-    { part: 'Left Wrist', distance: leftWrist.z },
-    { part: 'Right Wrist', distance: rightWrist.z },
-    { part: 'Left Knee', distance: leftKnee.z },
-    { part: 'Right Knee', distance: rightKnee.z }
-  ];
-
-  distances.sort((a,b)=>a.distance-b.distance);
-  overlayDiv.textContent = `Showing: ${distances[0].part}`;
 }
 
 setupCamera();
@@ -160,6 +143,7 @@ setupCamera();
 
 </body>
 </html>
+
 
 
 

@@ -1,0 +1,27 @@
+<section id="bodySection" style="padding:4rem; text-align:center; background:#f5f5f7;">
+  <h2>Explore the Human Body</h2>
+  <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:2rem; margin-top:2rem;">
+    <div style="position:relative;">
+      <img src="https://i.imgur.com/XuL7ajB.png" alt="Human Body" style="max-width:400px;">
+      <!-- Example organ areas -->
+      <button style="position:absolute; top:50px; left:180px; width:40px; height:40px; border-radius:50%; background:red; opacity:0.5;" onclick="showOrgan('Heart')"></button>
+      <button style="position:absolute; top:100px; left:180px; width:40px; height:40px; border-radius:50%; background:blue; opacity:0.5;" onclick="showOrgan('Lungs')"></button>
+    </div>
+    <div id="organInfo" style="max-width:300px; text-align:left;">
+      <h3>Click an organ</h3>
+      <p>Its name, purpose, and fun fact will appear here.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+function showOrgan(name){
+  const organData = {
+    'Heart': {purpose:'Pumps blood throughout the body.', fact:'Beats about 100,000 times a day.'},
+    'Lungs': {purpose:'Exchange oxygen and CO2.', fact:'Your lungs contain around 300 million alveoli.'}
+  };
+  const info = organData[name];
+  document.getElementById('organInfo').innerHTML = `<h3>${name}</h3><p><strong>Purpose:</strong> ${info.purpose}</p><p><strong>Fun Fact:</strong> ${info.fact}</p>`;
+}
+</script>
+

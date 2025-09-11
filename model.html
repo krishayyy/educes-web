@@ -8,48 +8,55 @@
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
   body, html { height:100%; background:#0f0f11; color:#fff; overflow-x:hidden; }
-  h1, h2 { font-weight:700; }
-  h1 { font-size:2.5rem; margin-bottom:1rem; }
-  p { line-height:1.5; opacity:0.9; }
 
-  /* Page Layout */
-  #container { display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center; align-items:flex-start; padding:2rem; gap:2rem; }
+  /* Header */
+  header { text-align:center; padding:2rem; }
+  header h1 { font-size:3rem; margin-bottom:0.5rem; font-weight:700; }
+  header p { opacity:0.8; font-size:1.2rem; }
+
+  /* Container Layout */
+  #container { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:2rem; padding:2rem; }
   #diagram { position:relative; width:400px; max-width:90vw; }
   #diagram img { width:100%; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
 
-  /* Organ Buttons */
+  /* Organs */
   .organ { position:absolute; border-radius:50%; cursor:pointer; transition:0.3s; border:2px solid rgba(255,255,255,0.5); }
-  .organ:hover { transform:scale(1.2); border-color:#00cfff; box-shadow:0 0 20px #00cfff; }
+  .organ:hover { transform:scale(1.3); border-color:#00cfff; box-shadow:0 0 25px #00cfff; }
 
   /* Info Panel */
-  #infoPanel { max-width:400px; background:rgba(255,255,255,0.05); padding:1.5rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.3); transition:0.5s; min-height:250px; }
-  #infoPanel h2 { margin-bottom:1rem; color:#00cfff; }
-  #infoPanel p { margin-bottom:0.5rem; }
+  #infoPanel { max-width:400px; background:rgba(255,255,255,0.05); padding:2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.3); transition:0.5s; min-height:350px; }
+  #infoPanel h2 { margin-bottom:1rem; color:#00cfff; font-size:1.8rem; }
+  #infoPanel p { margin-bottom:0.5rem; line-height:1.5; opacity:0.9; }
 
-  /* Floating Icons */
+  /* Floating medical icons */
   .icon { position:absolute; font-size:1.5rem; opacity:0.3; animation:floaty 10s infinite alternate; }
   @keyframes floaty { 0%{transform:translateY(0px);} 100%{transform:translateY(-20px);} }
 
+  /* Responsive */
+  @media(max-width:900px){#container{flex-direction:column;align-items:center;}}
 </style>
 </head>
 <body>
 
-<section style="text-align:center; padding:2rem;">
-  <h1>Interactive Human Body</h1>
-  <p>Click on an organ to learn its name, purpose, and a fun fact.</p>
-</section>
+<header>
+  <h1>Explore the Human Body</h1>
+  <p>Click an organ to learn its name, purpose, and a fun fact. Designed by <strong>Krishay & Sibi</strong></p>
+</header>
 
 <div id="container">
   <!-- Diagram -->
   <div id="diagram">
-    <img src="https://i.imgur.com/XuL7ajB.png" alt="Human Body Diagram">
-    <!-- Organs -->
-    <div class="organ" style="top:100px; left:180px; width:40px; height:40px;" onclick="showOrgan('Heart')"></div>
-    <div class="organ" style="top:80px; left:160px; width:50px; height:50px;" onclick="showOrgan('Lungs')"></div>
-    <div class="organ" style="top:200px; left:180px; width:60px; height:60px;" onclick="showOrgan('Stomach')"></div>
-    <div class="organ" style="top:300px; left:180px; width:50px; height:50px;" onclick="showOrgan('Liver')"></div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Human_body_silhouette_with_internal_organs.svg" alt="Human Body Diagram">
 
-    <!-- Floating medical icons -->
+    <!-- Organs (approximate coordinates, adjust visually if needed) -->
+    <div class="organ" style="top:120px; left:180px; width:40px; height:40px;" onclick="showOrgan('Heart')"></div>
+    <div class="organ" style="top:80px; left:150px; width:50px; height:50px;" onclick="showOrgan('Lungs')"></div>
+    <div class="organ" style="top:220px; left:180px; width:60px; height:60px;" onclick="showOrgan('Stomach')"></div>
+    <div class="organ" style="top:300px; left:180px; width:50px; height:50px;" onclick="showOrgan('Liver')"></div>
+    <div class="organ" style="top:400px; left:170px; width:40px; height:40px;" onclick="showOrgan('Kidneys')"></div>
+    <div class="organ" style="top:40px; left:190px; width:50px; height:50px;" onclick="showOrgan('Brain')"></div>
+
+    <!-- Floating icons -->
     <div class="icon" style="top:50px; left:50px;">🧬</div>
     <div class="icon" style="top:200px; left:300px;">💊</div>
     <div class="icon" style="top:400px; left:100px;">🩺</div>
@@ -64,15 +71,19 @@
 </div>
 
 <script>
+// Organ Data
 function showOrgan(name){
   const organData = {
-    'Heart': {purpose:'Pumps blood throughout the body.', fact:'Beats about 100,000 times a day.'},
-    'Lungs': {purpose:'Exchange oxygen and carbon dioxide.', fact:'Your lungs contain ~300 million alveoli.'},
-    'Stomach': {purpose:'Breaks down food for digestion.', fact:'Can hold about 1 liter of food.'},
-    'Liver': {purpose:'Detoxifies chemicals and metabolizes drugs.', fact:'Regenerates rapidly; can regrow if partially removed.'}
+    'Heart': {purpose:'Pumps blood throughout the body.', fact:'Beats about 100,000 times per day.'},
+    'Lungs': {purpose:'Exchange oxygen and carbon dioxide.', fact:'Contains ~300 million alveoli.'},
+    'Stomach': {purpose:'Breaks down food for digestion.', fact:'Can hold roughly 1 liter of food.'},
+    'Liver': {purpose:'Detoxifies chemicals and metabolizes drugs.', fact:'Can regenerate itself even if partially removed.'},
+    'Kidneys': {purpose:'Filters waste and excess fluids from the blood.', fact:'Produce ~1-2 liters of urine per day.'},
+    'Brain': {purpose:'Controls body functions and thought processes.', fact:'Contains ~86 billion neurons.'}
   };
   const info = organData[name];
-  document.getElementById('infoPanel').innerHTML = `<h2>${name}</h2>
+  const panel = document.getElementById('infoPanel');
+  panel.innerHTML = `<h2>${name}</h2>
     <p><strong>Purpose:</strong> ${info.purpose}</p>
     <p><strong>Fun Fact:</strong> ${info.fact}</p>`;
 }
@@ -80,5 +91,3 @@ function showOrgan(name){
 
 </body>
 </html>
-
-

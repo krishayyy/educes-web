@@ -1,1 +1,93 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Medical Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+  body { background: linear-gradient(135deg, #e0f7fa, #ffffff); color: #333; }
+  header { text-align: center; padding: 2rem; background: linear-gradient(90deg, #2a9d8f, #21867a); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+  header h1 { font-size: 2.5rem; letter-spacing: 1px; animation: fadeIn 1s ease forwards; }
+  
+  @keyframes fadeIn { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
+
+  .container { max-width: 1200px; margin: auto; padding: 2rem; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
+  .card { background: white; flex: 1 1 300px; padding: 2rem; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .card:hover { transform: translateY(-10px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); }
+  h2 { color: #2a9d8f; margin-bottom: 1rem; }
+  p { margin-bottom: 1rem; line-height: 1.5; }
+
+  input, button { padding: 0.8rem 1rem; font-size: 1rem; border-radius: 10px; border: 1px solid #ccc; outline: none; }
+  button { background: #2a9d8f; color: white; border: none; cursor: pointer; transition: background 0.3s ease, transform 0.2s ease; }
+  button:hover { background: #21867a; transform: scale(1.05); }
+
+  /* Responsive grid */
+  @media (max-width: 768px) { .container { flex-direction: column; align-items: center; } }
+
+  /* Animated icons (vector graphics via emojis for simplicity) */
+  .icon { font-size: 3rem; margin-bottom: 1rem; animation: bounce 1.5s infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0);} 50% { transform: translateY(-15px);} }
+
+  /* Quiz result */
+  #gameResult { font-weight: bold; font-size: 1.2rem; margin-top: 1rem; transition: all 0.3s ease; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Interactive Medical Learning</h1>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <div class="icon">🩺</div>
+    <h2>Medical Tips</h2>
+    <p>💧 Stay hydrated for proper bodily function.</p>
+    <p>🧼 Wash hands regularly to prevent infection.</p>
+    <p>🩹 Regular check-ups catch diseases early.</p>
+  </div>
+
+  <div class="card">
+    <div class="icon">🔬</div>
+    <h2>Quick Research</h2>
+    <input type="text" id="searchBox" placeholder="Type topic (heart, brain, lungs)">
+    <button onclick="searchTopic()">Search</button>
+    <p id="searchResult"></p>
+  </div>
+
+  <div class="card">
+    <div class="icon">🎯</div>
+    <h2>Mini Quiz Game</h2>
+    <p>Click the correct answer: What is the powerhouse of the cell?</p>
+    <button onclick="checkAnswer(true)">Mitochondria ✅</button>
+    <button onclick="checkAnswer(false)">Nucleus ❌</button>
+    <button onclick="checkAnswer(false)">Ribosome ❌</button>
+    <p id="gameResult"></p>
+  </div>
+
+</div>
+
+<script>
+function searchTopic() {
+  const topic = document.getElementById('searchBox').value.toLowerCase();
+  const resultMap = {
+    'heart': '❤️ The heart pumps blood through the circulatory system.',
+    'lungs': '🫁 The lungs exchange oxygen and carbon dioxide during respiration.',
+    'brain': '🧠 The brain controls all body functions and processes information.'
+  };
+  document.getElementById('searchResult').innerText = resultMap[topic] || 'Topic not found. Try: heart, lungs, brain.';
+}
+
+function checkAnswer(isCorrect) {
+  const el = document.getElementById('gameResult');
+  el.innerText = isCorrect ? 'Correct! ✅' : 'Wrong! ❌ Try again.';
+  el.style.color = isCorrect ? '#2a9d8f' : '#e63946';
+}
+</script>
+
+</body>
+</html>

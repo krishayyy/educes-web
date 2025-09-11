@@ -3,41 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learn Medicine</title>
+<title>Learn Medicine - Krishay & Sibi</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-  body { background: #f5f5f7; color: #1c1c1e; scroll-behavior: smooth; }
+  body { background: #f5f5f7; color: #1c1c1e; overflow-x: hidden; }
 
-  /* Sections */
-  section {
-    min-height: 100vh;
+  /* Hero section */
+  #hero {
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 4rem 2rem;
     text-align: center;
-  }
-
-  /* Hero Section */
-  #hero {
     background: linear-gradient(135deg, #0071e3, #00cfff);
     color: white;
-    position: relative;
   }
-  #hero h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    animation: fadeInUp 1s ease forwards;
-  }
-  #hero p {
-    font-size: 1.5rem;
-    font-weight: 400;
-    opacity: 0.9;
-    margin-bottom: 2rem;
-  }
+  #hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+  #hero p { font-size: 1.5rem; margin-bottom: 2rem; }
   #hero button {
     padding: 1rem 2rem;
     font-size: 1rem;
@@ -49,139 +33,177 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  #hero button:hover {
-    background: #0071e3;
-    color: #fff;
-    transform: scale(1.05);
-  }
+  #hero button:hover { background: #0071e3; color: #fff; transform: scale(1.05); }
 
-  /* Cards Section */
-  #features {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: auto;
-  }
-  .card {
+  /* Game Section */
+  #gameSection {
+    height: 100vh;
+    position: relative;
     background: #fff;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    padding: 2.5rem;
-    flex: 1 1 300px;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-  }
-  .card .icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    display: inline-block;
-    animation: bounce 1.5s infinite;
-  }
-  .card h2 { color: #0071e3; margin-bottom: 1rem; font-weight: 600; }
-  .card p { color: #333; line-height: 1.6; }
-
-  /* Quiz/Search Section */
-  #interactive input, #interactive button {
-    padding: 0.8rem 1.2rem;
-    margin: 0.5rem 0;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 1rem;
-  }
-  #interactive button {
-    background: #0071e3;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-  #interactive button:hover {
-    background: #005bb5;
-    transform: scale(1.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 
-  /* Footer */
-  footer {
+  #gameTitle { font-size: 2rem; margin-bottom: 1rem; }
+
+  #gameArea {
+    width: 80vw;
+    height: 60vh;
+    border: 3px solid #0071e3;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #e6f0ff;
+  }
+
+  .corner {
+    width: 25%;
+    height: 25%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: 2rem;
-    font-size: 0.9rem;
-    color: #888;
-    margin-top: 2rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    color: white;
+    font-size: 1rem;
+    padding: 0.5rem;
   }
 
-  /* Animations */
-  @keyframes fadeInUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-  @keyframes bounce { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+  #topLeft { top: 0; left: 0; background: #0071e3; }
+  #topRight { top: 0; right: 0; background: #00cfff; }
+  #bottomLeft { bottom: 0; left: 0; background: #00a3cc; }
+  #bottomRight { bottom: 0; right: 0; background: #005bb5; }
 
-  /* Responsive */
-  @media (max-width: 768px) { #features { flex-direction: column; align-items: center; } }
+  #player {
+    width: 40px;
+    height: 40px;
+    background: #ff6b6b;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #questionBox {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  #feedback {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
 
-<!-- Hero Section -->
 <section id="hero">
   <h1>Welcome to Learn Medicine</h1>
-  <p>Explore, test your knowledge, and improve your medical understanding.</p>
-  <button onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Start Learning</button>
+  <p>By Krishay & Sibi</p>
+  <button onclick="document.getElementById('gameSection').scrollIntoView({behavior:'smooth'})">Play the Game</button>
 </section>
 
-<!-- Features Section -->
-<section id="features">
-  <div class="card">
-    <div class="icon">🩺</div>
-    <h2>Medical Tips</h2>
-    <p>💧 Stay hydrated for proper bodily function.</p>
-    <p>🧼 Wash hands regularly to prevent infection.</p>
-    <p>🩹 Regular check-ups catch diseases early.</p>
+<section id="gameSection">
+  <div id="gameTitle">Medical Quiz Challenge!</div>
+  <div id="gameArea">
+    <div id="player"></div>
+    <div class="corner" id="topLeft"></div>
+    <div class="corner" id="topRight"></div>
+    <div class="corner" id="bottomLeft"></div>
+    <div class="corner" id="bottomRight"></div>
   </div>
-  <div class="card" id="interactive">
-    <div class="icon">🔬</div>
-    <h2>Quick Research</h2>
-    <input type="text" id="searchBox" placeholder="Topic: heart, brain, lungs">
-    <button onclick="searchTopic()">Search</button>
-    <p id="searchResult"></p>
-  </div>
-  <div class="card" id="quiz">
-    <div class="icon">🎯</div>
-    <h2>Mini Quiz Game</h2>
-    <p>What is the powerhouse of the cell?</p>
-    <button onclick="checkAnswer(true)">Mitochondria ✅</button>
-    <button onclick="checkAnswer(false)">Nucleus ❌</button>
-    <button onclick="checkAnswer(false)">Ribosome ❌</button>
-    <p id="gameResult"></p>
-  </div>
+  <div id="questionBox"></div>
+  <div id="feedback"></div>
 </section>
-
-<footer>
-  &copy; 2025 MediCare. All rights reserved.
-</footer>
 
 <script>
-function searchTopic() {
-  const topic = document.getElementById('searchBox').value.toLowerCase();
-  const resultMap = {
-    'heart': '❤️ The heart pumps blood through the circulatory system.',
-    'lungs': '🫁 The lungs exchange oxygen and carbon dioxide during respiration.',
-    'brain': '🧠 The brain controls all body functions and processes information.'
-  };
-  document.getElementById('searchResult').innerText = resultMap[topic] || 'Topic not found. Try: heart, lungs, brain.';
-}
+  const player = document.getElementById('player');
+  const speed = 10; // movement in px
+  const gameArea = document.getElementById('gameArea');
+  let playerPos = { x: gameArea.clientWidth/2 - 20, y: gameArea.clientHeight/2 - 20 };
 
-function checkAnswer(isCorrect) {
-  const el = document.getElementById('gameResult');
-  el.innerText = isCorrect ? 'Correct! ✅' : 'Wrong! ❌ Try again.';
-  el.style.color = isCorrect ? '#0071e3' : '#e63946';
-}
+  const questions = [
+    {
+      question: "Which organ pumps blood throughout the body?",
+      answers: ["Brain", "Heart", "Lungs", "Kidneys"],
+      correct: 1
+    },
+    {
+      question: "Which organ exchanges oxygen and carbon dioxide?",
+      answers: ["Heart", "Stomach", "Lungs", "Liver"],
+      correct: 2
+    },
+    {
+      question: "Which is the powerhouse of the cell?",
+      answers: ["Nucleus", "Mitochondria", "Ribosome", "Cell Membrane"],
+      correct: 1
+    }
+  ];
+  let currentQ = 0;
+
+  function showQuestion() {
+    const q = questions[currentQ];
+    document.getElementById('questionBox').innerText = q.question;
+    document.getElementById('topLeft').innerText = q.answers[0];
+    document.getElementById('topRight').innerText = q.answers[1];
+    document.getElementById('bottomLeft').innerText = q.answers[2];
+    document.getElementById('bottomRight').innerText = q.answers[3];
+    document.getElementById('feedback').innerText = '';
+    // reset player to center
+    playerPos = { x: gameArea.clientWidth/2 - 20, y: gameArea.clientHeight/2 - 20 };
+    player.style.left = playerPos.x + 'px';
+    player.style.top = playerPos.y + 'px';
+  }
+
+  function checkAnswer() {
+    const q = questions[currentQ];
+    const centerX = playerPos.x + 20;
+    const centerY = playerPos.y + 20;
+    let selected = null;
+    if(centerX < gameArea.clientWidth/2 && centerY < gameArea.clientHeight/2) selected = 0;
+    else if(centerX > gameArea.clientWidth/2 && centerY < gameArea.clientHeight/2) selected = 1;
+    else if(centerX < gameArea.clientWidth/2 && centerY > gameArea.clientHeight/2) selected = 2;
+    else if(centerX > gameArea.clientWidth/2 && centerY > gameArea.clientHeight/2) selected = 3;
+
+    if(selected === q.correct) {
+      document.getElementById('feedback').innerText = 'Correct! ✅';
+    } else {
+      document.getElementById('feedback').innerText = 'Wrong! ❌';
+    }
+
+    // Next question after 2 seconds
+    setTimeout(() => {
+      currentQ = (currentQ + 1) % questions.length;
+      showQuestion();
+    }, 2000);
+  }
+
+  showQuestion();
+
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowUp') playerPos.y = Math.max(0, playerPos.y - speed);
+    if(e.key === 'ArrowDown') playerPos.y = Math.min(gameArea.clientHeight - 40, playerPos.y + speed);
+    if(e.key === 'ArrowLeft') playerPos.x = Math.max(0, playerPos.x - speed);
+    if(e.key === 'ArrowRight') playerPos.x = Math.min(gameArea.clientWidth - 40, playerPos.x + speed);
+    player.style.left = playerPos.x + 'px';
+    player.style.top = playerPos.y + 'px';
+
+    // Check if player touches any corner
+    if(playerPos.x < gameArea.clientWidth/2 && playerPos.y < gameArea.clientHeight/2 && questions[currentQ].correct === 0) checkAnswer();
+    else if(playerPos.x > gameArea.clientWidth/2 && playerPos.y < gameArea.clientHeight/2 && questions[currentQ].correct === 1) checkAnswer();
+    else if(playerPos.x < gameArea.clientWidth/2 && playerPos.y > gameArea.clientHeight/2 && questions[currentQ].correct === 2) checkAnswer();
+    else if(playerPos.x > gameArea.clientWidth/2 && playerPos.y > gameArea.clientHeight/2 && questions[currentQ].correct === 3) checkAnswer();
+  });
 </script>
 
 </body>
 </html>
-

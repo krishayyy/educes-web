@@ -1,86 +1,110 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive Medical Dashboard</title>
+<title>Learn Medicine</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-  body { background: #f5f5f7; color: #1c1c1e; }
+  body { background: #f5f5f7; color: #1c1c1e; scroll-behavior: smooth; }
 
-  /* Header */
-  header {
+  /* Sections */
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
     text-align: center;
-    padding: 3rem 2rem;
-    background: linear-gradient(90deg, #0071e3, #00cfff);
+  }
+
+  /* Hero Section */
+  #hero {
+    background: linear-gradient(135deg, #0071e3, #00cfff);
+    color: white;
+    position: relative;
+  }
+  #hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    animation: fadeInUp 1s ease forwards;
+  }
+  #hero p {
+    font-size: 1.5rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+  #hero button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: none;
+    background: #fff;
+    color: #0071e3;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  #hero button:hover {
+    background: #0071e3;
     color: #fff;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transform: scale(1.05);
   }
-  header h1 {
-    font-size: 2.8rem;
-    letter-spacing: 1px;
-    animation: fadeIn 1s ease forwards;
-  }
-  @keyframes fadeIn { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
 
-  /* Container grid */
-  .container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* Cards Section */
+  #features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2rem;
-    padding: 0 2rem;
+    max-width: 1200px;
+    margin: auto;
   }
-
-  /* Card style */
   .card {
     background: #fff;
-    padding: 2.5rem;
     border-radius: 24px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
+    padding: 2.5rem;
+    flex: 1 1 300px;
+    transition: transform 0.3s, box-shadow 0.3s;
   }
   .card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 40px rgba(0,0,0,0.1);
   }
+  .card .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    animation: bounce 1.5s infinite;
+  }
   .card h2 { color: #0071e3; margin-bottom: 1rem; font-weight: 600; }
-  .card p { margin-bottom: 1rem; line-height: 1.6; color: #333; }
+  .card p { color: #333; line-height: 1.6; }
 
-  /* Icons */
-  .icon { font-size: 3.5rem; margin-bottom: 1rem; display: inline-block; animation: bounce 1.5s infinite; }
-  @keyframes bounce { 0%, 100% { transform: translateY(0);} 50% { transform: translateY(-15px);} }
-
-  /* Inputs and buttons */
-  input, button {
+  /* Quiz/Search Section */
+  #interactive input, #interactive button {
     padding: 0.8rem 1.2rem;
-    font-size: 1rem;
+    margin: 0.5rem 0;
     border-radius: 12px;
     border: 1px solid #ccc;
     outline: none;
+    font-size: 1rem;
   }
-  button {
+  #interactive button {
     background: #0071e3;
     color: white;
     border: none;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
     font-weight: 600;
-  }
-  button:hover { background: #005bb5; transform: scale(1.05); }
-
-  /* Responsive adjustments */
-  @media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
-
-  /* Quiz & search results */
-  #gameResult, #searchResult {
-    font-weight: 600;
-    margin-top: 0.8rem;
     transition: all 0.3s ease;
+  }
+  #interactive button:hover {
+    background: #005bb5;
+    transform: scale(1.05);
   }
 
   /* Footer */
@@ -89,21 +113,28 @@
     padding: 2rem;
     font-size: 0.9rem;
     color: #888;
-    margin-top: 4rem;
+    margin-top: 2rem;
   }
 
+  /* Animations */
+  @keyframes fadeInUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+  @keyframes bounce { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+
+  /* Responsive */
+  @media (max-width: 768px) { #features { flex-direction: column; align-items: center; } }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Interactive Medical Dashboard</h1>
-  <p style="font-weight:400; margin-top:0.5rem;">Learn, Explore, and Test Your Knowledge</p>
-</header>
+<!-- Hero Section -->
+<section id="hero">
+  <h1>Welcome to Learn Medicine</h1>
+  <p>Explore, test your knowledge, and improve your medical understanding.</p>
+  <button onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Start Learning</button>
+</section>
 
-<div class="container">
-
-  <!-- Medical Tips Card -->
+<!-- Features Section -->
+<section id="features">
   <div class="card">
     <div class="icon">🩺</div>
     <h2>Medical Tips</h2>
@@ -111,28 +142,23 @@
     <p>🧼 Wash hands regularly to prevent infection.</p>
     <p>🩹 Regular check-ups catch diseases early.</p>
   </div>
-
-  <!-- Quick Research Card -->
-  <div class="card">
+  <div class="card" id="interactive">
     <div class="icon">🔬</div>
     <h2>Quick Research</h2>
-    <input type="text" id="searchBox" placeholder="Type topic (heart, brain, lungs)">
+    <input type="text" id="searchBox" placeholder="Topic: heart, brain, lungs">
     <button onclick="searchTopic()">Search</button>
     <p id="searchResult"></p>
   </div>
-
-  <!-- Mini Quiz Card -->
-  <div class="card">
+  <div class="card" id="quiz">
     <div class="icon">🎯</div>
     <h2>Mini Quiz Game</h2>
-    <p>Click the correct answer: What is the powerhouse of the cell?</p>
+    <p>What is the powerhouse of the cell?</p>
     <button onclick="checkAnswer(true)">Mitochondria ✅</button>
     <button onclick="checkAnswer(false)">Nucleus ❌</button>
     <button onclick="checkAnswer(false)">Ribosome ❌</button>
     <p id="gameResult"></p>
   </div>
-
-</div>
+</section>
 
 <footer>
   &copy; 2025 MediCare. All rights reserved.
@@ -158,3 +184,4 @@ function checkAnswer(isCorrect) {
 
 </body>
 </html>
+

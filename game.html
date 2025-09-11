@@ -4,116 +4,162 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Medical Quiz Game</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
-  body { background:#ffffff; color:#1c1c1e; display:flex; justify-content:center; align-items:center; height:100vh; }
-  #gameContainer { text-align:center; max-width:600px; width:90%; padding:2rem; border-radius:20px; background:#f5f5f7; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
-  h1 { margin-bottom:1rem; }
-  #timer, #score { font-size:1.2rem; font-weight:600; margin:0.5rem; }
-  .optionBtn { display:block; width:100%; margin:0.5rem 0; padding:1rem; font-size:1rem; border-radius:12px; border:none; background:#0071e3; color:white; cursor:pointer; transition:0.2s; }
-  .optionBtn:hover { background:#005bb5; }
-  #feedback { margin-top:1rem; font-size:1.2rem; font-weight:600; min-height:1.5em; }
-  #startBtn, #retryBtn { padding:1rem 2rem; border:none; border-radius:12px; background:#1c1c1e; color:white; font-weight:600; cursor:pointer; transition:0.3s; }
-  #startBtn:hover, #retryBtn:hover { background:#333; transform:scale(1.05); }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: #f5f5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  #game-container {
+    width: 90%;
+    max-width: 700px;
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  h1 { font-weight: 700; color: #333; margin-bottom: 1rem; }
+  p { margin: 1rem 0; }
+
+  button {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #0071e3;
+    color: white;
+    margin: 0.5rem;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  button:hover {
+    background-color: #005bb5;
+    transform: scale(1.05);
+  }
+
+  #question { font-size: 1.2rem; font-weight: 500; }
+  #score { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+  #timer { font-size: 1rem; margin-bottom: 1rem; color: #555; }
 </style>
 </head>
 <body>
 
-<div id="gameContainer">
+<div id="game-container">
   <h1>Medical Quiz Game</h1>
-  <div id="intro">
-    <p>Would you like to begin? You have 30 seconds to score as many points as possible.</p>
-    <button id="startBtn">Start Game</button>
-  </div>
-
-  <div id="game" style="display:none;">
-    <div id="score">Score: 0</div>
-    <div id="timer">Time: 30s</div>
-    <div id="question" style="margin:1rem 0; font-weight:600;"></div>
-    <div id="options"></div>
-    <div id="feedback"></div>
-  </div>
-
-  <div id="endGame" style="display:none;">
-    <h2 id="finalScore"></h2>
-    <button id="retryBtn">Try Again</button>
-  </div>
+  <p id="timer">Time left: 30s</p>
+  <p id="score">Score: 0</p>
+  <p id="question">Would you like to start the game?</p>
+  <div id="answers"></div>
+  <button id="start-btn">Start Game</button>
+  <button id="retry-btn" style="display:none;">Try Again</button>
 </div>
 
 <script>
-const startBtn = document.getElementById('startBtn');
-const retryBtn = document.getElementById('retryBtn');
-const intro = document.getElementById('intro');
-const game = document.getElementById('game');
-const endGame = document.getElementById('endGame');
+const questions = [
+  { q: "What is the powerhouse of the cell?", a: ["Mitochondria", "Nucleus", "Ribosome"], correct: 0 },
+  { q: "Which organ pumps blood?", a: ["Heart", "Lungs", "Kidney"], correct: 0 },
+  { q: "Where is insulin produced?", a: ["Pancreas", "Liver", "Stomach"], correct: 0 },
+  { q: "Which blood cells fight infection?", a: ["White Blood Cells", "Red Blood Cells", "Platelets"], correct: 0 },
+  { q: "Which organ filters blood?", a: ["Kidney", "Heart", "Spleen"], correct: 0 },
+  { q: "Which organ stores bile?", a: ["Gallbladder", "Liver", "Pancreas"], correct: 0 },
+  { q: "What is the main function of lungs?", a: ["Gas Exchange", "Circulation", "Digestion"], correct: 0 },
+  { q: "Which part of the brain controls balance?", a: ["Cerebellum", "Frontal Lobe", "Occipital Lobe"], correct: 0 },
+  { q: "Which organ produces bile?", a: ["Liver", "Stomach", "Pancreas"], correct: 0 },
+  { q: "Which part of the eye detects light?", a: ["Retina", "Cornea", "Lens"], correct: 0 },
+  { q: "Which organ stores urine?", a: ["Bladder", "Kidney", "Urethra"], correct: 0 },
+  { q: "Which cells carry oxygen?", a: ["Red Blood Cells", "White Blood Cells", "Platelets"], correct: 0 },
+  { q: "Where is the thyroid located?", a: ["Neck", "Heart", "Brain"], correct: 0 },
+  { q: "Which organ is part of the digestive system?", a: ["Stomach", "Lungs", "Heart"], correct: 0 },
+  { q: "What is the largest organ in the human body?", a: ["Skin", "Liver", "Heart"], correct: 0 },
+  { q: "Which organ produces enzymes for digestion?", a: ["Pancreas", "Kidney", "Spleen"], correct: 0 },
+  { q: "Which system transports oxygen and nutrients?", a: ["Circulatory System", "Respiratory System", "Digestive System"], correct: 0 },
+  { q: "Which organ controls hormones?", a: ["Endocrine Glands", "Liver", "Kidney"], correct: 0 },
+  { q: "Which organ is primarily responsible for vision?", a: ["Eyes", "Brain", "Nose"], correct: 0 },
+  { q: "Which organ helps with detoxification?", a: ["Liver", "Kidney", "Lungs"], correct: 0 },
+];
+
+let currentQuestion = 0;
+let score = 0;
+let timer = 30;
+let interval;
+
+const startBtn = document.getElementById('start-btn');
+const retryBtn = document.getElementById('retry-btn');
 const questionEl = document.getElementById('question');
-const optionsEl = document.getElementById('options');
+const answersEl = document.getElementById('answers');
 const scoreEl = document.getElementById('score');
 const timerEl = document.getElementById('timer');
-const feedbackEl = document.getElementById('feedback');
-const finalScoreEl = document.getElementById('finalScore');
 
-let questions = [
-  {q:"Which organ pumps blood?", options:["Brain","Heart","Lungs","Kidneys"], correct:1},
-  {q:"Which organ exchanges oxygen and CO2?", options:["Heart","Stomach","Lungs","Liver"], correct:2},
-  {q:"Powerhouse of the cell?", options:["Nucleus","Mitochondria","Ribosome","Cell Membrane"], correct:1},
-];
-let currentQ=0, score=0, time=30, timerInterval;
-
-startBtn.addEventListener('click', startGame);
-retryBtn.addEventListener('click', startGame);
-
-function startGame(){
-  intro.style.display='none';
-  endGame.style.display='none';
-  game.style.display='block';
-  score=0;
-  time=30;
-  scoreEl.innerText='Score: '+score;
-  timerEl.innerText='Time: '+time+'s';
-  feedbackEl.innerText='';
-  currentQ=0;
+function startGame() {
+  startBtn.style.display = 'none';
+  score = 0;
+  currentQuestion = 0;
+  timer = 30;
+  scoreEl.textContent = `Score: ${score}`;
   showQuestion();
-  clearInterval(timerInterval);
-  timerInterval = setInterval(()=>{
-    time--;
-    timerEl.innerText='Time: '+time+'s';
-    if(time<=0){
-      clearInterval(timerInterval);
-      endGame.style.display='block';
-      game.style.display='none';
-      finalScoreEl.innerText='Time\'s up! You scored '+score+' points.';
-    }
-  },1000);
+  interval = setInterval(updateTimer, 1000);
 }
 
-function showQuestion(){
-  const q = questions[currentQ];
-  questionEl.innerText = q.q;
-  optionsEl.innerHTML='';
-  q.options.forEach((opt,i)=>{
+function showQuestion() {
+  if(currentQuestion >= questions.length) {
+    endGame();
+    return;
+  }
+  const q = questions[currentQuestion];
+  questionEl.textContent = q.q;
+  answersEl.innerHTML = '';
+  q.a.forEach((answer, i) => {
     const btn = document.createElement('button');
-    btn.classList.add('optionBtn');
-    btn.innerText = opt;
-    btn.onclick = ()=>checkAnswer(i);
-    optionsEl.appendChild(btn);
+    btn.textContent = answer;
+    btn.onclick = () => checkAnswer(i);
+    answersEl.appendChild(btn);
   });
 }
 
-function checkAnswer(selected){
-  const q = questions[currentQ];
-  if(selected === q.correct){
+function checkAnswer(i) {
+  const q = questions[currentQuestion];
+  if(i === q.correct) {
     score++;
-    scoreEl.innerText='Score: '+score;
-    feedbackEl.innerText='Correct! ✅';
-  } else {
-    feedbackEl.innerText='Wrong! ❌';
+    scoreEl.textContent = `Score: ${score}`;
   }
-  currentQ = (currentQ+1) % questions.length;
-  setTimeout(showQuestion,500);
+  currentQuestion++;
+  showQuestion();
 }
+
+function updateTimer() {
+  timer--;
+  timerEl.textContent = `Time left: ${timer}s`;
+  if(timer <= 0) {
+    endGame();
+  }
+}
+
+function endGame() {
+  clearInterval(interval);
+  questionEl.textContent = `Time's up! You scored ${score} points.`;
+  answersEl.innerHTML = '';
+  retryBtn.style.display = 'inline-block';
+}
+
+startBtn.addEventListener('click', startGame);
+retryBtn.addEventListener('click', () => {
+  retryBtn.style.display = 'none';
+  startGame();
+});
 </script>
+
 </body>
 </html>
+
 

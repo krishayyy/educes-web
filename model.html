@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Body Part Detection</title>
+<title>Interactive Body Part Detection</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   body {
@@ -35,13 +35,14 @@
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    background: white;
+    background: #fff;
   }
 
-  video {
+  video, canvas {
     width: 100%;
-    transform: scaleX(-1);
     display: block;
+    border-radius: 20px;
+    transform: scaleX(-1);
   }
 
   #overlay {
@@ -63,23 +64,14 @@
     from {opacity:0; transform: translateY(-20px);}
     to {opacity:1; transform: translateY(0);}
   }
-
-  /* Subtle animated background effect (moving particles) */
-  #bg-canvas {
-    position: fixed;
-    top:0; left:0;
-    width: 100%; height: 100%;
-    z-index: -1;
-  }
 </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
 <h1>Interactive Body Part Detection</h1>
-
 <div id="container">
   <video id="video" autoplay muted playsinline></video>
+  <canvas id="overlayCanvas"></canvas>
   <div id="overlay">Detecting...</div>
 </div>
 
@@ -87,89 +79,88 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.0.0"></script>
 
 <script>
-  // Webcam + Pose detection
-  const videoElement = document.getElementById('video');
-  const overlay = document.getElementById('overlay');
+const videoElement = document.getElementById('video');
+const overlayDiv = document.getElementById('overlay');
+const canvas = document.getElementById('overlayCanvas');
+const ctx = canvas.getContext('2d');
 
-  const pose = new Pose({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.3/${file}`});
-  pose.onResults(onPoseResults);
+const pose = new Pose({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.3/${file}`});
+pose.onResults(onPoseResults);
 
-  async function setupCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    videoElement.srcObject = stream;
-    await new Promise(resolve => videoElement.onloadedmetadata = resolve);
-    videoElement.play();
-    detectPose();
+async function setupCamera() {
+  const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  videoElement.srcObject = stream;
+  await new Promise(resolve => videoElement.onloadedmetadata = resolve);
+  videoElement.play();
+  detectPose();
+}
+
+function detectPose() {
+  pose.send({image: videoElement});
+  requestAnimationFrame(detectPose);
+}
+
+function onPoseResults(results) {
+  if (!results.poseLandmarks) {
+    overlayDiv.textContent = 'No pose detected';
+    return;
   }
 
-  function detectPose() {
-    pose.send({image: videoElement});
-    requestAnimationFrame(detectPose);
-  }
-
-  function onPoseResults(results) {
-    if (!results.poseLandmarks) {
-      overlay.textContent = 'No pose detected';
-      return;
+  // Resize canvas to video size
+  canvas.width = videoElement.videoWidth;
+  canvas.height = videoElement.videoHeight;
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw landmarks
+  results.poseLandmarks.forEach((lm, index) => {
+    const x = lm.x * canvas.width;
+    const y = lm.y * canvas.height;
+    
+    ctx.beginPath();
+    ctx.arc(x, y, 10, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(42, 157, 143, 0.8)';
+    ctx.fill();
+    
+    // Label major landmarks
+    const labels = {
+      0: 'Nose', 11: 'Left Shoulder', 12: 'Right Shoulder',
+      15: 'Left Wrist', 16: 'Right Wrist', 25: 'Left Knee', 26: 'Right Knee'
+    };
+    
+    if(labels[index]) {
+      ctx.font = '16px Roboto';
+      ctx.fillStyle = '#1d1d1f';
+      ctx.fillText(labels[index], x + 12, y - 12);
     }
+  });
 
-    const lm = results.poseLandmarks;
-    const nose = lm[0], leftShoulder = lm[11], rightShoulder = lm[12],
-          leftWrist = lm[15], rightWrist = lm[16], leftKnee = lm[25], rightKnee = lm[26];
+  // Determine closest body part
+  const landmarks = results.poseLandmarks;
+  const nose = landmarks[0], leftShoulder = landmarks[11], rightShoulder = landmarks[12],
+        leftWrist = landmarks[15], rightWrist = landmarks[16],
+        leftKnee = landmarks[25], rightKnee = landmarks[26];
 
-    const distances = [
-      { part: 'Nose', distance: nose.z },
-      { part: 'Left Shoulder', distance: leftShoulder.z },
-      { part: 'Right Shoulder', distance: rightShoulder.z },
-      { part: 'Left Wrist', distance: leftWrist.z },
-      { part: 'Right Wrist', distance: rightWrist.z },
-      { part: 'Left Knee', distance: leftKnee.z },
-      { part: 'Right Knee', distance: rightKnee.z }
-    ];
+  const distances = [
+    { part: 'Nose', distance: nose.z },
+    { part: 'Left Shoulder', distance: leftShoulder.z },
+    { part: 'Right Shoulder', distance: rightShoulder.z },
+    { part: 'Left Wrist', distance: leftWrist.z },
+    { part: 'Right Wrist', distance: rightWrist.z },
+    { part: 'Left Knee', distance: leftKnee.z },
+    { part: 'Right Knee', distance: rightKnee.z }
+  ];
 
-    distances.sort((a,b)=>a.distance-b.distance);
-    overlay.textContent = `Showing: ${distances[0].part}`;
-  }
+  distances.sort((a,b)=>a.distance-b.distance);
+  overlayDiv.textContent = `Showing: ${distances[0].part}`;
+}
 
-  setupCamera();
-
-  // Animated background particles
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height, particles;
-  function initCanvas() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-    particles = Array.from({length: 50}, () => ({
-      x: Math.random()*width,
-      y: Math.random()*height,
-      r: Math.random()*3+1,
-      dx: (Math.random()-0.5)*0.5,
-      dy: (Math.random()-0.5)*0.5
-    }));
-  }
-
-  function animateCanvas() {
-    ctx.clearRect(0,0,width,height);
-    particles.forEach(p=>{
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(0,0,0,0.05)';
-      ctx.fill();
-      p.x += p.dx; p.y += p.dy;
-      if(p.x<0||p.x>width) p.dx*=-1;
-      if(p.y<0||p.y>height) p.dy*=-1;
-    });
-    requestAnimationFrame(animateCanvas);
-  }
-
-  window.addEventListener('resize', initCanvas);
-  initCanvas();
-  animateCanvas();
+setupCamera();
 </script>
 
 </body>
 </html>
+
 
 
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real-Time Hand & Finger Detection</title>
+<title>Debug Hand & Finger Detection</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   body {
@@ -15,124 +15,96 @@
     justify-content:center;
     height:100vh;
     background:linear-gradient(135deg,#fdfbfb,#ebedee);
-    overflow:hidden;
   }
-  h1 {
-    font-weight:700;
-    font-size:2rem;
-    color:#1d1d1f;
-    margin-bottom:1rem;
-  }
-  #container {
-    position:relative;
-    width:90%;
-    max-width:720px;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 15px 40px rgba(0,0,0,0.15);
-    background:#fff;
-  }
-  video, canvas {
-    width:100%;
-    display:block;
-    border-radius:20px;
-    transform: scaleX(-1);
-  }
+  h1 { font-weight:700; font-size:2rem; color:#1d1d1f; margin-bottom:1rem; }
+  #container { position:relative; width:90%; max-width:720px; border-radius:20px; overflow:hidden; box-shadow:0 15px 40px rgba(0,0,0,0.15); background:#fff; }
+  video, canvas { width:100%; display:block; border-radius:20px; transform: scaleX(-1); }
   #overlay {
-    position:absolute;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:rgba(29,29,31,0.85);
-    color:#fff;
-    padding:12px 20px;
-    border-radius:50px;
-    font-weight:500;
-    font-size:1.1rem;
-    backdrop-filter:blur(5px);
+    position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+    background:rgba(29,29,31,0.85); color:#fff; padding:12px 20px; border-radius:50px;
+    font-weight:500; font-size:1.1rem; backdrop-filter:blur(5px);
+  }
+  #debug {
+    margin-top:1rem; width:90%; max-width:720px; height:150px; overflow:auto; background:#222; color:#0f0; font-family:monospace; padding:10px; border-radius:10px;
   }
 </style>
 </head>
 <body>
 
-<h1>Real-Time Hand & Finger Detection</h1>
+<h1>Hand & Finger Detection Debug</h1>
 <div id="container">
   <video id="video" autoplay muted playsinline></video>
   <canvas id="canvas"></canvas>
   <div id="overlay">Detecting...</div>
 </div>
+<div id="debug">Debug log...</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 
 <script>
-const videoElement = document.getElementById('video');
-const canvasElement = document.getElementById('canvas');
-const ctx = canvasElement.getContext('2d');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 const overlay = document.getElementById('overlay');
+const debug = document.getElementById('debug');
 
-// Initialize MediaPipe Hands
+// MediaPipe Hands
 const hands = new Hands({
-  locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
 });
-
 hands.setOptions({
   maxNumHands: 2,
   minDetectionConfidence: 0.8,
   minTrackingConfidence: 0.7
 });
 
-// Count fingers
-function countFingers(landmarks) {
-  if (!landmarks) return 0;
+// Count fingers (mirror safe)
+function countFingers(landmarks, label) {
+  if(!landmarks) return 0;
   let count = 0;
-
-  // Thumb (x comparison depends on hand)
-  if (landmarks[4].x < landmarks[3].x) count++; 
-
-  // Index
-  if (landmarks[8].y < landmarks[6].y) count++;
-  // Middle
-  if (landmarks[12].y < landmarks[10].y) count++;
-  // Ring
-  if (landmarks[16].y < landmarks[14].y) count++;
-  // Pinky
-  if (landmarks[20].y < landmarks[18].y) count++;
-
+  // Thumb: flip x for left hand
+  if(label === 'Right') count += landmarks[4].x < landmarks[3].x ? 1 : 0;
+  else count += landmarks[4].x > landmarks[3].x ? 1 : 0;
+  // Fingers: tip above PIP
+  if(landmarks[8].y < landmarks[6].y) count++;
+  if(landmarks[12].y < landmarks[10].y) count++;
+  if(landmarks[16].y < landmarks[14].y) count++;
+  if(landmarks[20].y < landmarks[18].y) count++;
   return count;
 }
 
-// Results callback
+// On results
 hands.onResults(results => {
-  canvasElement.width = videoElement.videoWidth;
-  canvasElement.height = videoElement.videoHeight;
-  ctx.clearRect(0,0,canvasElement.width,canvasElement.height);
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+  if(!results.multiHandLandmarks || results.multiHandLandmarks.length===0){
     overlay.textContent = "No hands detected";
+    debug.textContent = "No landmarks detected.";
     return;
   }
 
-  results.multiHandLandmarks.forEach((landmarks, index) => {
-    // Draw skeleton
+  let info = [];
+  results.multiHandLandmarks.forEach((landmarks, i)=>{
+    const label = results.multiHandedness[i].label;
     drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {color:'#2a9d8f', lineWidth:4});
     drawLandmarks(ctx, landmarks, {color:'#e76f51', lineWidth:2, radius:5});
-
-    // Finger count
-    const fingerCount = countFingers(landmarks);
-    const handLabel = results.multiHandedness[index].label;
-    overlay.textContent = `${handLabel} hand detected: ${fingerCount} fingers raised`;
+    const fingers = countFingers(landmarks, label);
+    info.push(`${label} hand: ${fingers} fingers`);
+    // Debug output
+    debug.textContent = landmarks.map((l,j)=>`L${j}:(${l.x.toFixed(2)},${l.y.toFixed(2)},${l.z.toFixed(2)})`).join('\n');
   });
+  overlay.textContent = info.join(' | ');
 });
 
-// Camera setup
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await hands.send({image: videoElement});
-  },
-  width: 720,
-  height: 540
+// Camera
+const camera = new Camera(video,{
+  onFrame: async()=>{await hands.send({image:video});},
+  width:720,
+  height:540
 });
 camera.start();
 </script>

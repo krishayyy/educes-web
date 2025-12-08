@@ -1,165 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Medical Quiz Game</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background: #f5f5f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    flex-direction: column;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TTA Digital Library - Login</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  #game-container {
-    width: 90%;
-    max-width: 700px;
-    background: white;
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    text-align: center;
-  }
+    /* Login Card */
+    .login-card {
+      background: #ffffff;
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
 
-  h1 { font-weight: 700; color: #333; margin-bottom: 1rem; }
-  p { margin: 1rem 0; }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
 
-  button {
-    padding: 0.8rem 1.2rem;
-    font-size: 1rem;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    background-color: #0071e3;
-    color: white;
-    margin: 0.5rem;
-    transition: transform 0.2s ease, background 0.2s ease;
-  }
+    /* Logo */
+    .login-card img {
+      max-width: 150px;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+    .login-card img:hover {
+      transform: scale(1.05);
+    }
 
-  button:hover {
-    background-color: #005bb5;
-    transform: scale(1.05);
-  }
+    /* Title */
+    .login-card h1 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #333;
+    }
 
-  #question { font-size: 1.2rem; font-weight: 500; }
-  #score { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
-  #timer { font-size: 1rem; margin-bottom: 1rem; color: #555; }
-</style>
+    /* Input */
+    .login-card input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .login-card input:focus {
+      border-color: #6c63ff;
+      box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
+    }
+
+    /* Button */
+    .login-card button {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: linear-gradient(135deg, #6c63ff, #8b79ff);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .login-card button:hover {
+      background: linear-gradient(135deg, #8b79ff, #6c63ff);
+      box-shadow: 0 8px 15px rgba(108,99,255,0.3);
+    }
+
+    /* Mobile adjustments */
+    @media(max-width: 500px){
+      .login-card {
+        padding: 2rem 1.5rem;
+      }
+      .login-card h1 {
+        font-size: 1.3rem;
+      }
+      .login-card img {
+        max-width: 120px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div id="game-container">
-  <h1>Medical Quiz Game</h1>
-  <p id="timer">Time left: 30s</p>
-  <p id="score">Score: 0</p>
-  <p id="question">Would you like to start the game?</p>
-  <div id="answers"></div>
-  <button id="start-btn">Start Game</button>
-  <button id="retry-btn" style="display:none;">Try Again</button>
-</div>
+  <div class="login-card">
+    <img src="https://thiruvalluvartamilacademy.org/wp-content/uploads/2023/02/logo.png" alt="TTA Logo">
+    <h1>Welcome to TTA Digital Library</h1>
+    <input type="text" id="studentID" placeholder="Enter 3-digit Student ID" maxlength="3">
+    <button onclick="submitLogin()">Submit</button>
+  </div>
 
-<script>
-const questions = [
-  { q: "What is the powerhouse of the cell?", a: ["Mitochondria", "Nucleus", "Ribosome"], correct: 0 },
-  { q: "Which organ pumps blood?", a: ["Heart", "Lungs", "Kidney"], correct: 0 },
-  { q: "Where is insulin produced?", a: ["Pancreas", "Liver", "Stomach"], correct: 0 },
-  { q: "Which blood cells fight infection?", a: ["White Blood Cells", "Red Blood Cells", "Platelets"], correct: 0 },
-  { q: "Which organ filters blood?", a: ["Kidney", "Heart", "Spleen"], correct: 0 },
-  { q: "Which organ stores bile?", a: ["Gallbladder", "Liver", "Pancreas"], correct: 0 },
-  { q: "What is the main function of lungs?", a: ["Gas Exchange", "Circulation", "Digestion"], correct: 0 },
-  { q: "Which part of the brain controls balance?", a: ["Cerebellum", "Frontal Lobe", "Occipital Lobe"], correct: 0 },
-  { q: "Which organ produces bile?", a: ["Liver", "Stomach", "Pancreas"], correct: 0 },
-  { q: "Which part of the eye detects light?", a: ["Retina", "Cornea", "Lens"], correct: 0 },
-  { q: "Which organ stores urine?", a: ["Bladder", "Kidney", "Urethra"], correct: 0 },
-  { q: "Which cells carry oxygen?", a: ["Red Blood Cells", "White Blood Cells", "Platelets"], correct: 0 },
-  { q: "Where is the thyroid located?", a: ["Neck", "Heart", "Brain"], correct: 0 },
-  { q: "Which organ is part of the digestive system?", a: ["Stomach", "Lungs", "Heart"], correct: 0 },
-  { q: "What is the largest organ in the human body?", a: ["Skin", "Liver", "Heart"], correct: 0 },
-  { q: "Which organ produces enzymes for digestion?", a: ["Pancreas", "Kidney", "Spleen"], correct: 0 },
-  { q: "Which system transports oxygen and nutrients?", a: ["Circulatory System", "Respiratory System", "Digestive System"], correct: 0 },
-  { q: "Which organ controls hormones?", a: ["Endocrine Glands", "Liver", "Kidney"], correct: 0 },
-  { q: "Which organ is primarily responsible for vision?", a: ["Eyes", "Brain", "Nose"], correct: 0 },
-  { q: "Which organ helps with detoxification?", a: ["Liver", "Kidney", "Lungs"], correct: 0 },
-];
-
-let currentQuestion = 0;
-let score = 0;
-let timer = 30;
-let interval;
-
-const startBtn = document.getElementById('start-btn');
-const retryBtn = document.getElementById('retry-btn');
-const questionEl = document.getElementById('question');
-const answersEl = document.getElementById('answers');
-const scoreEl = document.getElementById('score');
-const timerEl = document.getElementById('timer');
-
-function startGame() {
-  startBtn.style.display = 'none';
-  score = 0;
-  currentQuestion = 0;
-  timer = 30;
-  scoreEl.textContent = `Score: ${score}`;
-  showQuestion();
-  interval = setInterval(updateTimer, 1000);
-}
-
-function showQuestion() {
-  if(currentQuestion >= questions.length) {
-    endGame();
-    return;
-  }
-  const q = questions[currentQuestion];
-  questionEl.textContent = q.q;
-  answersEl.innerHTML = '';
-  q.a.forEach((answer, i) => {
-    const btn = document.createElement('button');
-    btn.textContent = answer;
-    btn.onclick = () => checkAnswer(i);
-    answersEl.appendChild(btn);
-  });
-}
-
-function checkAnswer(i) {
-  const q = questions[currentQuestion];
-  if(i === q.correct) {
-    score++;
-    scoreEl.textContent = `Score: ${score}`;
-  }
-  currentQuestion++;
-  showQuestion();
-}
-
-function updateTimer() {
-  timer--;
-  timerEl.textContent = `Time left: ${timer}s`;
-  if(timer <= 0) {
-    endGame();
-  }
-}
-
-function endGame() {
-  clearInterval(interval);
-  questionEl.textContent = `Time's up! You scored ${score} points.`;
-  answersEl.innerHTML = '';
-  retryBtn.style.display = 'inline-block';
-}
-
-startBtn.addEventListener('click', startGame);
-retryBtn.addEventListener('click', () => {
-  retryBtn.style.display = 'none';
-  startGame();
-});
-</script>
+  <script>
+    function submitLogin() {
+      const studentID = document.getElementById('studentID').value.trim();
+      if(studentID.length !== 3 || isNaN(studentID)) {
+        alert("Please enter a valid 3-digit Student ID.");
+        return;
+      }
+      // Redirect to home page (replace 'home.html' with your actual home page)
+      window.location.href = "home.html";
+    }
+  </script>
 
 </body>
 </html>
-
-

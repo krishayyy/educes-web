@@ -3,125 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TTA Digital Library - Login</title>
+  <title>TTA Digital Library</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* Base Reset */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+    body, html { height:100%; overflow:hidden; }
+
+    /* Animated Gradient Background */
+    body {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(120deg, #89f7fe, #66a6ff, #fbc2eb, #a18cd1);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
     }
-    body, html {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    @keyframes gradientMove {
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
     }
 
-    /* Login Card */
+    /* Glassmorphic Login Card */
     .login-card {
-      background: #ffffff;
-      padding: 2.5rem 2rem;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      animation: fadeIn 1s ease forwards;
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.1);
+      border-radius: 25px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      width:90%;
+      max-width:350px;
+      padding:2rem;
+      text-align:center;
+      color:white;
+      animation: slideIn 1s ease forwards;
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
+    @keyframes slideIn {
+      from {opacity:0; transform: translateY(40px);}
+      to {opacity:1; transform: translateY(0);}
     }
 
     /* Logo */
     .login-card img {
-      max-width: 150px;
-      margin-bottom: 1.5rem;
-      transition: transform 0.3s ease;
+      width:120px;
+      height:auto;
+      margin-bottom:1.5rem;
+      border-radius:15px;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
     }
     .login-card img:hover {
-      transform: scale(1.05);
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(255,255,255,0.6);
     }
 
     /* Title */
     .login-card h1 {
-      font-weight: 600;
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-      color: #333;
+      font-weight:600;
+      margin-bottom:2rem;
+      font-size:1.4rem;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
     /* Input */
     .login-card input {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      font-size: 1rem;
-      outline: none;
+      width:100%;
+      padding:0.9rem 1rem;
+      border:none;
+      border-radius:15px;
+      margin-bottom:1.5rem;
+      font-size:1rem;
+      outline:none;
+      background: rgba(255,255,255,0.2);
+      color:white;
+      backdrop-filter: blur(5px);
       transition: all 0.3s ease;
+      text-align:center;
+      letter-spacing: 2px;
     }
     .login-card input:focus {
-      border-color: #6c63ff;
-      box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
+      background: rgba(255,255,255,0.3);
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
     }
 
     /* Button */
     .login-card button {
-      width: 100%;
-      padding: 0.9rem 1rem;
-      background: linear-gradient(135deg, #6c63ff, #8b79ff);
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
+      width:100%;
+      padding:1rem;
+      border:none;
+      border-radius:15px;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      font-size:1rem;
+      font-weight:600;
+      color:white;
+      cursor:pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255,120,140,0.4);
     }
     .login-card button:hover {
-      background: linear-gradient(135deg, #8b79ff, #6c63ff);
-      box-shadow: 0 8px 15px rgba(108,99,255,0.3);
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      box-shadow: 0 10px 25px rgba(255,120,140,0.5);
     }
 
     /* Mobile adjustments */
-    @media(max-width: 500px){
-      .login-card {
-        padding: 2rem 1.5rem;
-      }
-      .login-card h1 {
-        font-size: 1.3rem;
-      }
-      .login-card img {
-        max-width: 120px;
-      }
+    @media(max-width:400px){
+      .login-card { padding:1.5rem; }
+      .login-card img { width:100px; }
+      .login-card h1 { font-size:1.2rem; }
     }
   </style>
 </head>
 <body>
 
   <div class="login-card">
-    <img src="https://thiruvalluvartamilacademy.org/wp-content/uploads/2023/02/logo.png" alt="TTA Logo">
+    <!-- TTA Logo or Placeholder if unavailable -->
+    <img src="https://thiruvalluvartamilacademy.org/wp-content/uploads/2023/02/logo.png" alt="TTA Logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Thiruvalluvar_statue.jpg/1200px-Thiruvalluvar_statue.jpg';">
     <h1>Welcome to TTA Digital Library</h1>
     <input type="text" id="studentID" placeholder="Enter 3-digit Student ID" maxlength="3">
     <button onclick="submitLogin()">Submit</button>
   </div>
 
   <script>
-    function submitLogin() {
-      const studentID = document.getElementById('studentID').value.trim();
-      if(studentID.length !== 3 || isNaN(studentID)) {
-        alert("Please enter a valid 3-digit Student ID.");
+    function submitLogin(){
+      const id = document.getElementById('studentID').value.trim();
+      if(id.length!==3 || isNaN(id)){
+        alert("Please enter a valid 3-digit Student ID");
         return;
       }
-      // Redirect to home page (replace 'home.html' with your actual home page)
+      // Redirect after login (replace with your home page)
       window.location.href = "home.html";
     }
   </script>

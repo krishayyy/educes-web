@@ -7,130 +7,118 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    /* Base Reset */
+    /* Reset & Base */
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
-    body, html { height:100%; overflow:hidden; }
+    body, html { height:100%; width:100%; display:flex; justify-content:center; align-items:center; background:#f5f6fa; }
 
-    /* Animated Gradient Background */
-    body {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background: linear-gradient(120deg, #89f7fe, #66a6ff, #fbc2eb, #a18cd1);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-    }
-    @keyframes gradientMove {
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
-    }
-
-    /* Glassmorphic Login Card */
-    .login-card {
-      backdrop-filter: blur(20px);
-      background: rgba(255,255,255,0.1);
-      border-radius: 25px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    /* Card Container */
+    .card {
+      background:#ffffff;
+      border-radius:20px;
+      padding:2rem;
       width:90%;
       max-width:350px;
-      padding:2rem;
       text-align:center;
-      color:white;
-      animation: slideIn 1s ease forwards;
+      box-shadow:0 15px 35px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    @keyframes slideIn {
-      from {opacity:0; transform: translateY(40px);}
-      to {opacity:1; transform: translateY(0);}
-    }
-
-    /* Logo */
-    .login-card img {
-      width:120px;
-      height:auto;
-      margin-bottom:1.5rem;
-      border-radius:15px;
-      transition: transform 0.5s ease, box-shadow 0.5s ease;
-    }
-    .login-card img:hover {
-      transform: scale(1.1);
-      box-shadow: 0 10px 30px rgba(255,255,255,0.6);
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.12);
     }
 
-    /* Title */
-    .login-card h1 {
+    /* Welcome Screen */
+    .welcome-title {
+      font-size:1.5rem;
       font-weight:600;
       margin-bottom:2rem;
-      font-size:1.4rem;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      color:#2c3e50;
     }
-
-    /* Input */
-    .login-card input {
-      width:100%;
-      padding:0.9rem 1rem;
+    .enter-btn {
+      padding:1rem 1.5rem;
       border:none;
       border-radius:15px;
-      margin-bottom:1.5rem;
-      font-size:1rem;
-      outline:none;
-      background: rgba(255,255,255,0.2);
+      background:#6c63ff;
       color:white;
-      backdrop-filter: blur(5px);
-      transition: all 0.3s ease;
-      text-align:center;
-      letter-spacing: 2px;
-    }
-    .login-card input:focus {
-      background: rgba(255,255,255,0.3);
-      box-shadow: 0 0 15px rgba(255,255,255,0.4);
-    }
-
-    /* Button */
-    .login-card button {
-      width:100%;
-      padding:1rem;
-      border:none;
-      border-radius:15px;
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
-      font-size:1rem;
       font-weight:600;
-      color:white;
+      font-size:1rem;
       cursor:pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(255,120,140,0.4);
+      width:100%;
     }
-    .login-card button:hover {
-      background: linear-gradient(135deg, #ff7eb3, #ff758c);
-      box-shadow: 0 10px 25px rgba(255,120,140,0.5);
+    .enter-btn:hover {
+      background:#574fd6;
+      box-shadow:0 8px 20px rgba(108,99,255,0.3);
     }
 
-    /* Mobile adjustments */
+    /* Login Form */
+    .login-form { display:none; flex-direction:column; }
+    .login-form input {
+      margin-bottom:1.5rem;
+      padding:0.9rem 1rem;
+      border-radius:15px;
+      border:1px solid #ddd;
+      font-size:1rem;
+      outline:none;
+      text-align:center;
+      transition: all 0.3s ease;
+    }
+    .login-form input:focus {
+      border-color:#6c63ff;
+      box-shadow:0 0 10px rgba(108,99,255,0.2);
+    }
+    .login-form button {
+      padding:0.9rem;
+      border:none;
+      border-radius:15px;
+      background:#6c63ff;
+      color:white;
+      font-weight:600;
+      cursor:pointer;
+      transition: all 0.3s ease;
+    }
+    .login-form button:hover {
+      background:#574fd6;
+      box-shadow:0 8px 20px rgba(108,99,255,0.3);
+    }
+
+    /* Mobile Adjustments */
     @media(max-width:400px){
-      .login-card { padding:1.5rem; }
-      .login-card img { width:100px; }
-      .login-card h1 { font-size:1.2rem; }
+      .card { padding:1.5rem; }
+      .welcome-title { font-size:1.3rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <!-- TTA Logo or Placeholder if unavailable -->
-    <img src="https://thiruvalluvartamilacademy.org/wp-content/uploads/2023/02/logo.png" alt="TTA Logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Thiruvalluvar_statue.jpg/1200px-Thiruvalluvar_statue.jpg';">
-    <h1>Welcome to TTA Digital Library</h1>
-    <input type="text" id="studentID" placeholder="Enter 3-digit Student ID" maxlength="3">
-    <button onclick="submitLogin()">Submit</button>
+  <div class="card">
+    <!-- Welcome Screen -->
+    <div class="welcome-screen">
+      <h1 class="welcome-title">Welcome to TTA Digital Library</h1>
+      <button class="enter-btn" onclick="showLogin()">Enter Library</button>
+    </div>
+
+    <!-- Login Form -->
+    <form class="login-form" onsubmit="login(event)">
+      <input type="text" id="studentID" placeholder="Enter 3-digit Student ID" maxlength="3">
+      <button type="submit">Log In</button>
+    </form>
   </div>
 
   <script>
-    function submitLogin(){
+    function showLogin() {
+      document.querySelector('.welcome-screen').style.display = 'none';
+      document.querySelector('.login-form').style.display = 'flex';
+    }
+
+    function login(e) {
+      e.preventDefault();
       const id = document.getElementById('studentID').value.trim();
-      if(id.length!==3 || isNaN(id)){
+      if(id.length !== 3 || isNaN(id)) {
         alert("Please enter a valid 3-digit Student ID");
         return;
       }
-      // Redirect after login (replace with your home page)
+      // Redirect to home page
       window.location.href = "home.html";
     }
   </script>

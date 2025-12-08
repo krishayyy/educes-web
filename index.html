@@ -1,114 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learn Medicine - Krishay & Sibi</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  /* Reset */
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
-  body, html { height:100%; overflow-x:hidden; scroll-behavior:smooth; background:#0d0d0f; color:#fff; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TTA Digital Library - Login</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  /* Starfield background */
-  #stars {
-    position:fixed; top:0; left:0; width:100%; height:100%; background:#0d0d0f; overflow:hidden; z-index:-2;
-  }
-  .star {
-    position:absolute; width:2px; height:2px; background:white; border-radius:50%; opacity:0.8; animation: twinkle 4s infinite alternate;
-  }
-  @keyframes twinkle { 0%{opacity:0.2;} 50%{opacity:0.8;} 100%{opacity:0.2;} }
+    /* Login Card */
+    .login-card {
+      background: #ffffff;
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
 
-  /* Hero Section */
-  #hero {
-    height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; position:relative;
-  }
-  #hero h1 { font-size:3rem; font-weight:700; letter-spacing:1px; margin-bottom:1rem; animation:fadeUp 1.2s ease forwards; opacity:0; }
-  #hero p { font-size:1.2rem; opacity:0.8; margin-bottom:2rem; animation:fadeUp 1.5s ease forwards; animation-delay:0.5s; }
-  #hero p span { font-weight:600; }
-  @keyframes fadeUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
 
-  /* Buttons */
-  .heroButtons { display:flex; gap:2rem; margin-top:2rem; flex-wrap:wrap; }
-  .heroButtons a {
-    padding:1rem 2rem; border-radius:12px; text-decoration:none; font-weight:600;
-    color:#0d0d0f; background:white; transition:0.3s;
-    box-shadow:0 10px 20px rgba(255,255,255,0.2);
-  }
-  .heroButtons a:hover { transform:scale(1.05); box-shadow:0 15px 30px rgba(255,255,255,0.3); }
+    /* Logo */
+    .login-card img {
+      max-width: 150px;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+    .login-card img:hover {
+      transform: scale(1.05);
+    }
 
-  /* Info Section */
-  #info {
-    padding:4rem 2rem; text-align:center; background:#111;
-  }
-  #info h2 { font-size:2rem; margin-bottom:1rem; }
-  #info p { max-width:800px; margin:1rem auto; line-height:1.6; opacity:0.85; }
+    /* Title */
+    .login-card h1 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #333;
+    }
 
-  /* Animate sections on scroll */
-  .fadeInSection { opacity:0; transform:translateY(50px); transition: all 1s ease; }
-  .fadeInSection.visible { opacity:1; transform:translateY(0); }
-</style>
+    /* Input */
+    .login-card input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .login-card input:focus {
+      border-color: #6c63ff;
+      box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
+    }
+
+    /* Button */
+    .login-card button {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: linear-gradient(135deg, #6c63ff, #8b79ff);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .login-card button:hover {
+      background: linear-gradient(135deg, #8b79ff, #6c63ff);
+      box-shadow: 0 8px 15px rgba(108,99,255,0.3);
+    }
+
+    /* Mobile adjustments */
+    @media(max-width: 500px){
+      .login-card {
+        padding: 2rem 1.5rem;
+      }
+      .login-card h1 {
+        font-size: 1.3rem;
+      }
+      .login-card img {
+        max-width: 120px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Stars Background -->
-<div id="stars"></div>
+  <div class="login-card">
+    <img src="https://thiruvalluvartamilacademy.org/wp-content/uploads/2023/02/logo.png" alt="TTA Logo">
+    <h1>Welcome to TTA Digital Library</h1>
+    <input type="text" id="studentID" placeholder="Enter 3-digit Student ID" maxlength="3">
+    <button onclick="submitLogin()">Submit</button>
+  </div>
 
-<!-- Hero Section -->
-<section id="hero">
-  <h1>Welcome to Learn About Medicine</h1>
-  <p>This page was created by <span>Krishay & Sibi</span></p>
-  <div class="heroButtons">
-    <a href="game.html">Medical Quiz Game</a>
-    <a href="model.html">Human Body Model</a>
-  </div>
-</section>
-
-<!-- Info Section -->
-<section id="info">
-  <div class="fadeInSection">
-    <h2>Why Learn Medicine?</h2>
-    <p>Understanding the human body is not only fascinating but essential. Our platform blends interactive learning, quizzes, and immersive diagrams to make medical education engaging and memorable.</p>
-  </div>
-  <div class="fadeInSection">
-    <h2>Interactive Quiz Game</h2>
-    <p>Test your knowledge with our timed Kahoot-style quiz. Challenge yourself, track your score, and see how fast you can answer. It’s fun, competitive, and educational.</p>
-  </div>
-  <div class="fadeInSection">
-    <h2>Human Body Model</h2>
-    <p>Explore an interactive model of the human body. Click on organs to learn their purpose, discover fun facts, and understand how your body works — all in a visually stunning interface.</p>
-  </div>
-  <div class="fadeInSection">
-    <h2>Our Mission</h2>
-    <p>We aim to make learning medicine elegant, interactive, and intuitive. Every feature is designed with care, following the highest design standards — as if it were a luxury product you’re proud to use.</p>
-  </div>
-</section>
-
-<script>
-/* Starfield Animation */
-const starsContainer = document.getElementById('stars');
-const numStars = 150;
-for(let i=0;i<numStars;i++){
-  const star = document.createElement('div');
-  star.classList.add('star');
-  star.style.top = Math.random()*100 + '%';
-  star.style.left = Math.random()*100 + '%';
-  star.style.width = Math.random()*2 + 'px';
-  star.style.height = star.style.width;
-  starsContainer.appendChild(star);
-}
-
-/* Animate sections on scroll */
-const fadeSections = document.querySelectorAll('.fadeInSection');
-window.addEventListener('scroll', () => {
-  fadeSections.forEach(section => {
-    const rect = section.getBoundingClientRect();
-    if(rect.top < window.innerHeight - 100){
-      section.classList.add('visible');
+  <script>
+    function submitLogin() {
+      const studentID = document.getElementById('studentID').value.trim();
+      if(studentID.length !== 3 || isNaN(studentID)) {
+        alert("Please enter a valid 3-digit Student ID.");
+        return;
+      }
+      // Redirect to home page (replace 'home.html' with your actual home page)
+      window.location.href = "home.html";
     }
-  });
-});
-</script>
+  </script>
 
 </body>
 </html>

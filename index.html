@@ -1,127 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TTA Digital Library</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TTA Library Login</title>
   <style>
-    /* Reset & Base */
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
-    body, html { height:100%; width:100%; display:flex; justify-content:center; align-items:center; background:#f5f6fa; }
+    * { box-sizing: border-box; }
 
-    /* Card Container */
-    .card {
-      background:#ffffff;
-      border-radius:20px;
-      padding:2rem;
-      width:90%;
-      max-width:350px;
-      text-align:center;
-      box-shadow:0 15px 35px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow:0 20px 40px rgba(0,0,0,0.12);
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #000;
+      color: #00ff9c;
+      font-family: "Courier New", Courier, monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Welcome Screen */
-    .welcome-title {
-      font-size:1.5rem;
-      font-weight:600;
-      margin-bottom:2rem;
-      color:#2c3e50;
-    }
-    .enter-btn {
-      padding:1rem 1.5rem;
-      border:none;
-      border-radius:15px;
-      background:#6c63ff;
-      color:white;
-      font-weight:600;
-      font-size:1rem;
-      cursor:pointer;
-      transition: all 0.3s ease;
-      width:100%;
-    }
-    .enter-btn:hover {
-      background:#574fd6;
-      box-shadow:0 8px 20px rgba(108,99,255,0.3);
+    .terminal {
+      width: 90%;
+      max-width: 700px;
+      border: 2px solid #00ff9c;
+      padding: 30px;
+      box-shadow: 0 0 25px rgba(0, 255, 156, 0.25);
     }
 
-    /* Login Form */
-    .login-form { display:none; flex-direction:column; }
-    .login-form input {
-      margin-bottom:1.5rem;
-      padding:0.9rem 1rem;
-      border-radius:15px;
-      border:1px solid #ddd;
-      font-size:1rem;
-      outline:none;
-      text-align:center;
-      transition: all 0.3s ease;
-    }
-    .login-form input:focus {
-      border-color:#6c63ff;
-      box-shadow:0 0 10px rgba(108,99,255,0.2);
-    }
-    .login-form button {
-      padding:0.9rem;
-      border:none;
-      border-radius:15px;
-      background:#6c63ff;
-      color:white;
-      font-weight:600;
-      cursor:pointer;
-      transition: all 0.3s ease;
-    }
-    .login-form button:hover {
-      background:#574fd6;
-      box-shadow:0 8px 20px rgba(108,99,255,0.3);
+    .title {
+      font-size: 22px;
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: 2px;
     }
 
-    /* Mobile Adjustments */
-    @media(max-width:400px){
-      .card { padding:1.5rem; }
-      .welcome-title { font-size:1.3rem; }
+    .line {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .prompt {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .prompt span {
+      margin-right: 10px;
+    }
+
+    input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #00ff9c;
+      font-family: inherit;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    input::placeholder {
+      color: rgba(0, 255, 156, 0.4);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background: #00ff9c;
+      margin-left: 5px;
+      animation: blink 1s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .error {
+      color: #ff3b3b;
+      margin-top: 15px;
+      display: none;
     }
   </style>
 </head>
 <body>
+  <div class="terminal">
+    <div class="title">TTA LIBRARY ACCESS TERMINAL</div>
 
-  <div class="card">
-    <!-- Welcome Screen -->
-    <div class="welcome-screen">
-      <h1 class="welcome-title">Welcome to TTA Digital Library</h1>
-      <button class="enter-btn" onclick="showLogin()">Enter Library</button>
-    </div>
+    <div class="line">Initializing secure connection...</div>
+    <div class="line">Authorization required.</div>
+    <div class="line">ENTER PASSWORD:</div>
 
-    <!-- Login Form -->
-    <form class="login-form" onsubmit="login(event)">
-      <input type="text" id="studentID" placeholder="Enter 3-digit Student ID" maxlength="3">
-      <button type="submit">Log In</button>
+    <form id="loginForm" class="prompt">
+      <span>&gt;</span>
+      <input
+        type="password"
+        id="password"
+        autocomplete="off"
+        autofocus
+        placeholder="********"
+      />
+      <div class="cursor"></div>
     </form>
+
+    <div class="error" id="error">ACCESS DENIED</div>
   </div>
 
   <script>
-    function showLogin() {
-      document.querySelector('.welcome-screen').style.display = 'none';
-      document.querySelector('.login-form').style.display = 'flex';
-    }
+    const CORRECT_PASSWORD = "tamiliscool"; // demo only
 
-    function login(e) {
+    const form = document.getElementById("loginForm");
+    const input = document.getElementById("password");
+    const error = document.getElementById("error");
+
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const id = document.getElementById('studentID').value.trim();
-      if(id.length !== 3 || isNaN(id)) {
-        alert("Please enter a valid 3-digit Student ID");
-        return;
-      }
-      // Redirect to home page
-      window.location.href = "home.html";
-    }
-  </script>
 
+      if (input.value === CORRECT_PASSWORD) {
+        document.body.innerHTML = `
+          <div style="color:#00ff9c;font-family:Courier New;text-align:center;">
+            <h1>ACCESS GRANTED</h1>
+            <p>Loading Librarian Dashboard...</p>
+          </div>`;
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1500);
+      } else {
+        error.style.display = "block";
+        input.value = "";
+      }
+    });
+  </script>
 </body>
 </html>

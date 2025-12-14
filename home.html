@@ -1,229 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TTA Library Dashboard</title>
-  <style>
-    /* Reset */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTA Library - Home</title>
+<style>
+  /* Reset */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body, html { width: 100%; height: 100%; font-family: 'Helvetica Neue', sans-serif; background: #f5f5f5; }
 
-    body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #333; }
+  /* Splash Screen */
+  #splash { position: fixed; width: 100%; height: 100%; background: linear-gradient(135deg, #004085, #007bff); display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; font-size: 2rem; z-index: 9999; }
+  #logo { width: 150px; height: 150px; margin-bottom: 20px; transform: scale(0); animation: unfold 1.5s forwards; }
+  #welcomeText { opacity: 0; animation: fadeIn 2s 1.5s forwards; }
 
-    header { background-color: #004085; color: white; padding: 20px; text-align: center; font-size: 24px; }
+  @keyframes unfold {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
 
-    nav { display: flex; justify-content: center; background-color: #e9ecef; padding: 10px; }
-    nav button { margin: 0 10px; padding: 10px 20px; border: none; background: #007bff; color: white; border-radius: 5px; cursor: pointer; font-size: 16px; }
-    nav button.active { background-color: #0056b3; }
+  /* Dashboard */
+  #dashboard { display: none; padding: 40px; max-width: 1200px; margin: auto; }
+  header { text-align: center; font-size: 2rem; margin-bottom: 30px; }
+  nav { display: flex; justify-content: center; margin-bottom: 30px; }
+  nav a { margin: 0 15px; text-decoration: none; font-weight: bold; color: #007bff; font-size: 1.2rem; transition: color 0.3s; }
+  nav a:hover { color: #004085; }
+  .action-btn { padding: 15px 30px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; margin: 0 10px; }
+  .checkout { background-color: #28a745; color: white; }
+  .checkin { background-color: #ffc107; color: white; }
 
-    .container { padding: 20px; max-width: 1200px; margin: auto; }
+  /* Popup Modal */
+  .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000; }
+  .modal-content { background: white; padding: 30px; border-radius: 15px; width: 400px; max-width: 90%; text-align: center; position: relative; }
+  .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
+  input { width: 80%; padding: 10px; margin: 15px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; }
+  .modal-step { display: none; }
+  .modal-step.active { display: block; }
+  .modal-buttons button { margin: 10px; }
 
-    .section { display: none; }
-    .section.active { display: block; }
-
-    .form-group { margin-bottom: 15px; display: flex; flex-wrap: wrap; align-items: center; }
-    .form-group label { width: 150px; font-weight: bold; }
-    .form-group input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
-
-    button.action-btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px; }
-    button.checkout { background-color: #28a745; color: white; }
-    button.checkin { background-color: #ffc107; color: white; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    table th, table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-    table th { background-color: #007bff; color: white; }
-    table tr:nth-child(even) { background-color: #f2f2f2; }
-
-    .alert { margin-top: 15px; padding: 10px; border-radius: 5px; display: none; }
-    .alert.success { background-color: #28a745; color: white; }
-    .alert.error { background-color: #dc3545; color: white; }
-
-    input:focus { outline: none; border-color: #007bff; }
-
-  </style>
+</style>
 </head>
 <body>
-  <header>TTA Library — Librarian Dashboard</header>
 
+<!-- Splash Screen -->
+<div id="splash">
+  <img src="tta_logo.png" alt="TTA Logo" id="logo">
+  <div id="welcomeText">Welcome to TTA Library</div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <header>Would you like to check in or check out a book?</header>
   <nav>
-    <button class="tab-btn active" data-tab="loaned">Currently Loaned Out</button>
-    <button class="tab-btn" data-tab="history">History</button>
-    <button class="tab-btn" data-tab="lookup">Student Lookup</button>
+    <a href="home.html">Home</a>
+    <a href="studentcheck.html">Student Check</a>
+    <a href="booksout.html">Books Out</a>
+    <a href="history.html">History</a>
   </nav>
+  <div style="text-align:center; margin-top:50px;">
+    <button class="action-btn checkin" id="openCheckIn">Check In</button>
+    <button class="action-btn checkout" id="openCheckOut">Check Out</button>
+  </div>
+</div>
 
-  <div class="container">
+<!-- Popup Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeModal">&times;</span>
 
-    <!-- Currently Loaned Out -->
-    <div id="loaned" class="section active">
-      <h2>Currently Loaned Out Books</h2>
-      <table id="loanedTable">
-        <thead>
-          <tr><th>Book ID</th><th>Title</th><th>Student Name</th><th>Student ID</th><th>Checkout Date</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- History -->
-    <div id="history" class="section">
-      <h2>All Transactions</h2>
-      <table id="historyTable">
-        <thead>
-          <tr><th>Book ID</th><th>Title</th><th>Student Name</th><th>Student ID</th><th>Action</th><th>Timestamp</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- Student Lookup -->
-    <div id="lookup" class="section">
-      <h2>Student Lookup</h2>
-      <div class="form-group">
-        <label for="studentIdInput">Student ID:</label>
-        <input type="text" id="studentIdInput" placeholder="Enter student ID">
-        <button id="searchStudent" class="action-btn checkout">Search</button>
+    <!-- Step 1: Enter Student ID -->
+    <div class="modal-step" id="step1">
+      <h2>Enter Student ID</h2>
+      <input type="text" id="studentIdInput" placeholder="Student ID">
+      <div class="modal-buttons">
+        <button id="nextToScan">Next</button>
       </div>
-      <h3>Currently Borrowed Books</h3>
-      <table id="studentCurrentTable">
-        <thead>
-          <tr><th>Book ID</th><th>Title</th><th>Checkout Date</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <h3>Borrowing History</h3>
-      <table id="studentHistoryTable">
-        <thead>
-          <tr><th>Book ID</th><th>Title</th><th>Action</th><th>Timestamp</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </div>
 
-    <!-- Scanner / Action Inputs -->
-    <div class="form-group" style="margin-top: 30px;">
-      <label for="bookInput">Scan / Enter Book ID:</label>
-      <input type="text" id="bookInput" placeholder="Scan book QR code" autofocus>
-    </div>
-    <div class="form-group">
-      <label for="studentInput">Student ID:</label>
-      <input type="text" id="studentInput" placeholder="Enter student ID">
-    </div>
-    <div>
-      <button class="action-btn checkout" id="checkoutBtn">Check Out</button>
-      <button class="action-btn checkin" id="checkinBtn">Check In</button>
+    <!-- Step 2: Scan Book -->
+    <div class="modal-step" id="step2">
+      <h2>Scan / Enter Book ID</h2>
+      <input type="text" id="bookInput" placeholder="Book QR code">
+      <div class="modal-buttons">
+        <button id="nextToReceipt">Next</button>
+      </div>
     </div>
 
-    <div class="alert" id="alertBox"></div>
+    <!-- Step 3: Receipt -->
+    <div class="modal-step" id="step3">
+      <h2>Transaction Complete</h2>
+      <div id="receiptText">Book checked out successfully!</div>
+      <div class="modal-buttons">
+        <button id="undoBtn">Undo</button>
+        <button id="closeReceipt">Close</button>
+      </div>
+    </div>
 
   </div>
+</div>
 
-  <script>
-    // Tab switching
-    const tabs = document.querySelectorAll('.tab-btn');
-    const sections = document.querySelectorAll('.section');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        sections.forEach(s => s.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-      });
-    });
+<script>
+// Splash screen animation
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  }, 3500); // 3.5s splash animation
+});
 
-    // Dummy data (replace with backend DB later)
-    const books = [
-      { book_id: 'TAM-001', title: 'Thirukkural Vol 1', status: 'available', current_student_id: '', current_student_name: '', checkout_date: '' },
-      { book_id: 'TAM-002', title: 'Tamil Grammar Basics', status: 'checked_out', current_student_id: 'S1001', current_student_name: 'Arjun', checkout_date: '2025-12-14' }
-    ];
+// Modal logic
+const modal = document.getElementById('modal');
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const step3 = document.getElementById('step3');
 
-    const transactions = [
-      { book_id: 'TAM-002', title: 'Tamil Grammar Basics', student_id: 'S1001', student_name: 'Arjun', action: 'checkout', timestamp: '2025-12-14' }
-    ];
+function openModal() {
+  modal.style.display = 'flex';
+  step1.classList.add('active');
+  step2.classList.remove('active');
+  step3.classList.remove('active');
+}
 
-    const alertBox = document.getElementById('alertBox');
+function closeModal() {
+  modal.style.display = 'none';
+  step1.classList.remove('active');
+  step2.classList.remove('active');
+  step3.classList.remove('active');
+  document.getElementById('studentIdInput').value = '';
+  document.getElementById('bookInput').value = '';
+}
 
-    function refreshTables() {
-      // Loaned Table
-      const loanedBody = document.querySelector('#loanedTable tbody');
-      loanedBody.innerHTML = '';
-      books.filter(b => b.status === 'checked_out').forEach(b => {
-        loanedBody.innerHTML += `<tr><td>${b.book_id}</td><td>${b.title}</td><td>${b.current_student_name}</td><td>${b.current_student_id}</td><td>${b.checkout_date}</td></tr>`;
-      });
+document.getElementById('openCheckIn').addEventListener('click', openModal);
+document.getElementById('openCheckOut').addEventListener('click', openModal);
+document.getElementById('closeModal').addEventListener('click', closeModal);
 
-      // History Table
-      const historyBody = document.querySelector('#historyTable tbody');
-      historyBody.innerHTML = '';
-      transactions.forEach(t => {
-        historyBody.innerHTML += `<tr><td>${t.book_id}</td><td>${t.title}</td><td>${t.student_name}</td><td>${t.student_id}</td><td>${t.action}</td><td>${t.timestamp}</td></tr>`;
-      });
-    }
+// Step transitions
+document.getElementById('nextToScan').addEventListener('click', () => {
+  step1.classList.remove('active');
+  step2.classList.add('active');
+});
+document.getElementById('nextToReceipt').addEventListener('click', () => {
+  step2.classList.remove('active');
+  step3.classList.add('active');
+});
+document.getElementById('closeReceipt').addEventListener('click', closeModal);
+document.getElementById('undoBtn').addEventListener('click', () => {
+  step3.classList.remove('active');
+  step2.classList.add('active');
+});
+</script>
 
-    refreshTables();
-
-    function showAlert(message, type) {
-      alertBox.innerText = message;
-      alertBox.className = 'alert ' + type;
-      alertBox.style.display = 'block';
-      setTimeout(() => alertBox.style.display = 'none', 3000);
-    }
-
-    // Check Out
-    document.getElementById('checkoutBtn').addEventListener('click', () => {
-      const bookId = document.getElementById('bookInput').value;
-      const studentId = document.getElementById('studentInput').value;
-      const studentName = document.getElementById('studentInput').value; // Replace with name input if available
-
-      const book = books.find(b => b.book_id === bookId);
-      if (!book) return showAlert('Book not found', 'error');
-      if (book.status === 'checked_out') return showAlert('Book already checked out', 'error');
-
-      book.status = 'checked_out';
-      book.current_student_id = studentId;
-      book.current_student_name = studentName;
-      book.checkout_date = new Date().toISOString().split('T')[0];
-
-      transactions.push({ book_id: bookId, title: book.title, student_id: studentId, student_name: studentName, action: 'checkout', timestamp: new Date().toISOString() });
-
-      refreshTables();
-      showAlert('Book checked out successfully', 'success');
-    });
-
-    // Check In
-    document.getElementById('checkinBtn').addEventListener('click', () => {
-      const bookId = document.getElementById('bookInput').value;
-      const book = books.find(b => b.book_id === bookId);
-      if (!book) return showAlert('Book not found', 'error');
-      if (book.status === 'available') return showAlert('Book is already available', 'error');
-
-      book.status = 'available';
-      book.current_student_id = '';
-      book.current_student_name = '';
-      book.checkout_date = '';
-
-      transactions.push({ book_id: bookId, title: book.title, student_id: '', student_name: '', action: 'return', timestamp: new Date().toISOString() });
-
-      refreshTables();
-      showAlert('Book checked in successfully', 'success');
-    });
-
-    // Student Lookup
-    document.getElementById('searchStudent').addEventListener('click', () => {
-      const studentId = document.getElementById('studentIdInput').value;
-      const currentTable = document.querySelector('#studentCurrentTable tbody');
-      const historyTable = document.querySelector('#studentHistoryTable tbody');
-
-      currentTable.innerHTML = '';
-      historyTable.innerHTML = '';
-
-      books.filter(b => b.current_student_id === studentId).forEach(b => {
-        currentTable.innerHTML += `<tr><td>${b.book_id}</td><td>${b.title}</td><td>${b.checkout_date}</td></tr>`;
-      });
-
-      transactions.filter(t => t.student_id === studentId).forEach(t => {
-        historyTable.innerHTML += `<tr><td>${t.book_id}</td><td>${t.title}</td><td>${t.action}</td><td>${t.timestamp}</td></tr>`;
-      });
-    });
-
-  </script>
 </body>
 </html>

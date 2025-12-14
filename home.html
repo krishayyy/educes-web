@@ -3,128 +3,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TTA Digital Library - Login</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>TTA Library Dashboard</title>
   <style>
-    /* Reset & Base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body, html {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    /* Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Login Card */
-    .login-card {
-      background: #ffffff;
-      padding: 2.5rem 2rem;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      animation: fadeIn 1s ease forwards;
-    }
+    body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #333; }
 
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
+    header { background-color: #004085; color: white; padding: 20px; text-align: center; font-size: 24px; }
 
-    /* Logo */
-    .login-card img {
-      max-width: 150px;
-      margin-bottom: 1.5rem;
-      transition: transform 0.3s ease;
-    }
-    .login-card img:hover {
-      transform: scale(1.05);
-    }
+    nav { display: flex; justify-content: center; background-color: #e9ecef; padding: 10px; }
+    nav button { margin: 0 10px; padding: 10px 20px; border: none; background: #007bff; color: white; border-radius: 5px; cursor: pointer; font-size: 16px; }
+    nav button.active { background-color: #0056b3; }
 
-    /* Title */
-    .login-card h1 {
-      font-weight: 600;
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-      color: #333;
-    }
+    .container { padding: 20px; max-width: 1200px; margin: auto; }
 
-    /* Input */
-    .login-card input {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      font-size: 1rem;
-      outline: none;
-      transition: all 0.3s ease;
-    }
-    .login-card input:focus {
-      border-color: #6c63ff;
-      box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
-    }
+    .section { display: none; }
+    .section.active { display: block; }
 
-    /* Button */
-    .login-card button {
-      width: 100%;
-      padding: 0.9rem 1rem;
-      background: linear-gradient(135deg, #6c63ff, #8b79ff);
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .login-card button:hover {
-      background: linear-gradient(135deg, #8b79ff, #6c63ff);
-      box-shadow: 0 8px 15px rgba(108,99,255,0.3);
-    }
+    .form-group { margin-bottom: 15px; display: flex; flex-wrap: wrap; align-items: center; }
+    .form-group label { width: 150px; font-weight: bold; }
+    .form-group input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
 
-    /* Mobile adjustments */
-    @media(max-width: 500px){
-      .login-card {
-        padding: 2rem 1.5rem;
-      }
-      .login-card h1 {
-        font-size: 1.3rem;
-      }
-      .login-card img {
-        max-width: 120px;
-      }
-    }
+    button.action-btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px; }
+    button.checkout { background-color: #28a745; color: white; }
+    button.checkin { background-color: #ffc107; color: white; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table th, table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    table th { background-color: #007bff; color: white; }
+    table tr:nth-child(even) { background-color: #f2f2f2; }
+
+    .alert { margin-top: 15px; padding: 10px; border-radius: 5px; display: none; }
+    .alert.success { background-color: #28a745; color: white; }
+    .alert.error { background-color: #dc3545; color: white; }
+
+    input:focus { outline: none; border-color: #007bff; }
+
   </style>
 </head>
 <body>
+  <header>TTA Library — Librarian Dashboard</header>
 
-  <div class="login-card">
-    <img src="https://thiruvalluvartamilacademy.org/wp-content/uploads/2023/02/logo.png" alt="TTA Logo">
-    <h1>Welcome to TTA Digital Library</h1>
-    <input type="text" id="studentID" placeholder="Enter 3-digit Student ID" maxlength="3">
-    <button onclick="submitLogin()">Submit</button>
+  <nav>
+    <button class="tab-btn active" data-tab="loaned">Currently Loaned Out</button>
+    <button class="tab-btn" data-tab="history">History</button>
+    <button class="tab-btn" data-tab="lookup">Student Lookup</button>
+  </nav>
+
+  <div class="container">
+
+    <!-- Currently Loaned Out -->
+    <div id="loaned" class="section active">
+      <h2>Currently Loaned Out Books</h2>
+      <table id="loanedTable">
+        <thead>
+          <tr><th>Book ID</th><th>Title</th><th>Student Name</th><th>Student ID</th><th>Checkout Date</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- History -->
+    <div id="history" class="section">
+      <h2>All Transactions</h2>
+      <table id="historyTable">
+        <thead>
+          <tr><th>Book ID</th><th>Title</th><th>Student Name</th><th>Student ID</th><th>Action</th><th>Timestamp</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Student Lookup -->
+    <div id="lookup" class="section">
+      <h2>Student Lookup</h2>
+      <div class="form-group">
+        <label for="studentIdInput">Student ID:</label>
+        <input type="text" id="studentIdInput" placeholder="Enter student ID">
+        <button id="searchStudent" class="action-btn checkout">Search</button>
+      </div>
+      <h3>Currently Borrowed Books</h3>
+      <table id="studentCurrentTable">
+        <thead>
+          <tr><th>Book ID</th><th>Title</th><th>Checkout Date</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <h3>Borrowing History</h3>
+      <table id="studentHistoryTable">
+        <thead>
+          <tr><th>Book ID</th><th>Title</th><th>Action</th><th>Timestamp</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Scanner / Action Inputs -->
+    <div class="form-group" style="margin-top: 30px;">
+      <label for="bookInput">Scan / Enter Book ID:</label>
+      <input type="text" id="bookInput" placeholder="Scan book QR code" autofocus>
+    </div>
+    <div class="form-group">
+      <label for="studentInput">Student ID:</label>
+      <input type="text" id="studentInput" placeholder="Enter student ID">
+    </div>
+    <div>
+      <button class="action-btn checkout" id="checkoutBtn">Check Out</button>
+      <button class="action-btn checkin" id="checkinBtn">Check In</button>
+    </div>
+
+    <div class="alert" id="alertBox"></div>
+
   </div>
 
   <script>
-    function submitLogin() {
-      const studentID = document.getElementById('studentID').value.trim();
-      if(studentID.length !== 3 || isNaN(studentID)) {
-        alert("Please enter a valid 3-digit Student ID.");
-        return;
-      }
-      // Redirect to home page (replace 'home.html' with your actual home page)
-      window.location.href = "home.html";
-    }
-  </script>
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab-btn');
+    const sections = document.querySelectorAll('.section');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
 
+    // Dummy data (replace with backend DB later)
+    const books = [
+      { book_id: 'TAM-001', title: 'Thirukkural Vol 1', status: 'available', current_student_id: '', current_student_name: '', checkout_date: '' },
+      { book_id: 'TAM-002', title: 'Tamil Grammar Basics', status: 'checked_out', current_student_id: 'S1001', current_student_name: 'Arjun', checkout_date: '2025-12-14' }
+    ];
+
+    const transactions = [
+      { book_id: 'TAM-002', title: 'Tamil Grammar Basics', student_id: 'S1001', student_name: 'Arjun', action: 'checkout', timestamp: '2025-12-14' }
+    ];
+
+    const alertBox = document.getElementById('alertBox');
+
+    function refreshTables() {
+      // Loaned Table
+      const loanedBody = document.querySelector('#loanedTable tbody');
+      loanedBody.innerHTML = '';
+      books.filter(b => b.status === 'checked_out').forEach(b => {
+        loanedBody.innerHTML += `<tr><td>${b.book_id}</td><td>${b.title}</td><td>${b.current_student_name}</td><td>${b.current_student_id}</td><td>${b.checkout_date}</td></tr>`;
+      });
+
+      // History Table
+      const historyBody = document.querySelector('#historyTable tbody');
+      historyBody.innerHTML = '';
+      transactions.forEach(t => {
+        historyBody.innerHTML += `<tr><td>${t.book_id}</td><td>${t.title}</td><td>${t.student_name}</td><td>${t.student_id}</td><td>${t.action}</td><td>${t.timestamp}</td></tr>`;
+      });
+    }
+
+    refreshTables();
+
+    function showAlert(message, type) {
+      alertBox.innerText = message;
+      alertBox.className = 'alert ' + type;
+      alertBox.style.display = 'block';
+      setTimeout(() => alertBox.style.display = 'none', 3000);
+    }
+
+    // Check Out
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      const bookId = document.getElementById('bookInput').value;
+      const studentId = document.getElementById('studentInput').value;
+      const studentName = document.getElementById('studentInput').value; // Replace with name input if available
+
+      const book = books.find(b => b.book_id === bookId);
+      if (!book) return showAlert('Book not found', 'error');
+      if (book.status === 'checked_out') return showAlert('Book already checked out', 'error');
+
+      book.status = 'checked_out';
+      book.current_student_id = studentId;
+      book.current_student_name = studentName;
+      book.checkout_date = new Date().toISOString().split('T')[0];
+
+      transactions.push({ book_id: bookId, title: book.title, student_id: studentId, student_name: studentName, action: 'checkout', timestamp: new Date().toISOString() });
+
+      refreshTables();
+      showAlert('Book checked out successfully', 'success');
+    });
+
+    // Check In
+    document.getElementById('checkinBtn').addEventListener('click', () => {
+      const bookId = document.getElementById('bookInput').value;
+      const book = books.find(b => b.book_id === bookId);
+      if (!book) return showAlert('Book not found', 'error');
+      if (book.status === 'available') return showAlert('Book is already available', 'error');
+
+      book.status = 'available';
+      book.current_student_id = '';
+      book.current_student_name = '';
+      book.checkout_date = '';
+
+      transactions.push({ book_id: bookId, title: book.title, student_id: '', student_name: '', action: 'return', timestamp: new Date().toISOString() });
+
+      refreshTables();
+      showAlert('Book checked in successfully', 'success');
+    });
+
+    // Student Lookup
+    document.getElementById('searchStudent').addEventListener('click', () => {
+      const studentId = document.getElementById('studentIdInput').value;
+      const currentTable = document.querySelector('#studentCurrentTable tbody');
+      const historyTable = document.querySelector('#studentHistoryTable tbody');
+
+      currentTable.innerHTML = '';
+      historyTable.innerHTML = '';
+
+      books.filter(b => b.current_student_id === studentId).forEach(b => {
+        currentTable.innerHTML += `<tr><td>${b.book_id}</td><td>${b.title}</td><td>${b.checkout_date}</td></tr>`;
+      });
+
+      transactions.filter(t => t.student_id === studentId).forEach(t => {
+        historyTable.innerHTML += `<tr><td>${t.book_id}</td><td>${t.title}</td><td>${t.action}</td><td>${t.timestamp}</td></tr>`;
+      });
+    });
+
+  </script>
 </body>
 </html>

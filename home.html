@@ -3,298 +3,281 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Party Imposter Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.14.0/gsap.min.js"></script>
+<title>TTA Library - Home</title>
 <style>
-    body {
-        font-family: 'Roboto', sans-serif;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #6a11cb, #2575fc);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-    }
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    .container {
-        width: 90%;
-        max-width: 800px;
-        background: rgba(0,0,0,0.7);
-        border-radius: 20px;
-        padding: 30px;
-        text-align: center;
-        box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        position: relative;
-    }
-    h1 {
-        margin-bottom: 10px;
-        font-size: 2.2em;
-        color: #ffeb3b;
-        text-shadow: 0 0 10px #ffeb3b;
-    }
-    button {
-        padding: 12px 25px;
-        margin: 10px;
-        border: none;
-        border-radius: 15px;
-        background: #ffeb3b;
-        color: #000;
-        font-weight: bold;
-        font-size: 1em;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    }
-    input, select {
-        padding: 10px;
-        border-radius: 12px;
-        border: none;
-        margin: 5px;
-        font-size: 1em;
-        text-align: center;
-    }
-    .hidden { display: none; }
-    .word-box {
-        background: rgba(255,255,255,0.2);
-        padding: 25px;
-        border-radius: 20px;
-        margin-top: 30px;
-        font-size: 1.7em;
-        color: #fff;
-        text-shadow: 0 0 10px #000;
-        min-height: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-    .player-icon {
-        display: inline-block;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background-color: #ffeb3b;
-        color: #000;
-        line-height: 60px;
-        margin: 5px;
-        font-weight: bold;
-        font-size: 1.2em;
-        user-select: none;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 0;
-    }
+  /* Reset */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body, html { width: 100%; height: 100%; font-family: 'Helvetica Neue', sans-serif; background: #e8f0fe; overflow: hidden; }
+
+  /* Splash Screen */
+  #splash {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f0f8ff, #d0e4ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    perspective: 1000px;
+  }
+
+  #logo {
+    width: 180px;
+    height: 180px;
+    margin-bottom: 20px;
+    transform: scale(0);
+    animation: logoZoom 3s forwards;
+  }
+
+  #welcomeText {
+    font-size: 3rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #004085, #007bff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transform: rotateX(20deg) translateY(30px);
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    animation: textUnfold 3s 1.5s forwards;
+  }
+
+  @keyframes logoZoom {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity:1; }
+  }
+
+  @keyframes textUnfold {
+    0% { opacity: 0; transform: rotateX(20deg) translateY(30px); }
+    60% { opacity: 1; transform: rotateX(-5deg) translateY(-5px); }
+    100% { opacity: 1; transform: rotateX(0deg) translateY(0); }
+  }
+
+  /* Dashboard */
+  #dashboard {
+    display: none;
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+    background: linear-gradient(180deg, #ffffff, #f0f4ff);
+    min-height: 100vh;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  header {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 50px;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlide 1s 0.5s forwards;
+  }
+
+  @keyframes fadeSlide {
+    0% { opacity:0; transform: translateY(-20px);}
+    100% { opacity:1; transform: translateY(0);}
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+
+  nav a {
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+    font-size: 1.2rem;
+    transition: color 0.3s, transform 0.3s;
+  }
+
+  nav a:hover { color: #004085; transform: scale(1.05); }
+
+  .action-btn {
+    padding: 20px 50px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .checkout { background-color: #28a745; color: white; animation: fadeSlideBtn 1s 1s forwards; }
+  .checkin { background-color: #ffc107; color: white; animation: fadeSlideBtn 1s 1.2s forwards; }
+
+  .action-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+
+  @keyframes fadeSlideBtn {
+    0% { opacity:0; transform: translateY(20px); }
+    100% { opacity:1; transform: translateY(0); }
+  }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  }
+
+  .modal-content {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 90%;
+    text-align: center;
+    position: relative;
+    transform: scale(0.8);
+    opacity: 0;
+    animation: modalOpen 0.4s forwards;
+  }
+
+  @keyframes modalOpen {
+    0% { transform: scale(0.8); opacity:0; }
+    100% { transform: scale(1); opacity:1; }
+  }
+
+  .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; }
+  input { width: 80%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem; }
+  .modal-step { display: none; }
+  .modal-step.active { display: block; }
+  .modal-buttons button { margin: 10px; padding: 10px 25px; border-radius: 10px; border:none; cursor:pointer; font-weight:bold; transition: 0.3s; }
+  .modal-buttons button:hover { opacity: 0.9; }
+
+  /* Receipt Buttons */
+  #undoBtn { background-color: #dc3545; color:white; }
+  #closeReceipt { background-color: #007bff; color:white; }
 </style>
 </head>
 <body>
 
-<canvas id="confettiCanvas"></canvas>
+<!-- Splash Screen -->
+<div id="splash">
+  <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="TTA Logo" id="logo">
+  <div id="welcomeText">Welcome to TTA Library</div>
+</div>
 
-<div class="container" id="optionsScreen">
-    <h1>Party Imposter Pro</h1>
-    <p>Select Category:</p>
-    <select id="categorySelect"></select>
-    <div>
-        <input type="text" id="customWord" placeholder="Optional Starting Word">
+<!-- Dashboard -->
+<div id="dashboard">
+  <header>TTA Library Dashboard</header>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="studentcheck.html">Student Check</a>
+    <a href="booksout.html">Books Out</a>
+    <a href="history.html">History</a>
+  </nav>
+  <div style="text-align:center; margin-top:50px;">
+    <button class="action-btn checkin" id="openCheckIn">Check In</button>
+    <button class="action-btn checkout" id="openCheckOut">Check Out</button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeModal">&times;</span>
+
+    <!-- Step 1: Enter Student ID -->
+    <div class="modal-step" id="step1">
+      <h2>Enter Student ID</h2>
+      <input type="text" id="studentIdInput" placeholder="Student ID">
+      <div class="modal-buttons">
+        <button id="nextToScan">Next</button>
+      </div>
     </div>
-    <button id="nextToPlayers">Next</button>
-</div>
 
-<div class="container hidden" id="playerSetupScreen">
-    <h1>Player Setup</h1>
-    <div id="playerInputs"></div>
-    <button id="addPlayer">Add Player</button>
-    <button id="startGame">Start Game</button>
-</div>
+    <!-- Step 2: Scan Book -->
+    <div class="modal-step" id="step2">
+      <h2>Scan / Enter Book ID</h2>
+      <input type="text" id="bookInput" placeholder="Book QR code">
+      <div class="modal-buttons">
+        <button id="nextToReceipt">Next</button>
+      </div>
+    </div>
 
-<div class="container hidden" id="roleRevealScreen">
-    <h1>Role Reveal</h1>
-    <div id="roleText" class="word-box"></div>
-    <button id="nextPlayer">Next Player</button>
-</div>
-
-<div class="container hidden" id="endScreen">
-    <h1>Round Ended!</h1>
-    <div id="imposterReveal" class="word-box"></div>
-    <button id="restartGame">Play Again</button>
+    <!-- Step 3: Receipt -->
+    <div class="modal-step" id="step3">
+      <h2>Transaction Complete</h2>
+      <div id="receiptText">Book checked out successfully!</div>
+      <div class="modal-buttons">
+        <button id="undoBtn">Undo</button>
+        <button id="closeReceipt">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-/************ GAME DATA ************/
-const categories = {
-    "Animals": ["Dog","Cat","Elephant","Lion","Tiger","Bear","Wolf","Fox","Rabbit","Deer","Horse","Cow","Sheep","Pig","Chicken","Duck","Goose","Frog","Snake","Turtle","Whale","Dolphin","Shark","Penguin","Giraffe","Zebra","Monkey","Gorilla","Kangaroo","Koala","Panda","Leopard","Cheetah","Owl","Eagle","Crow","Parrot","Squirrel","Mouse","Rat","Camel","Hippopotamus"],
-    "Food": ["Bread","Rice","Cheese","Milk","Egg","Butter","Apple","Banana","Orange","Tomato","Potato","Carrot","Chicken","Beef","Fish","Pasta","Pizza","Sandwich","Cake","Cookie"],
-    "Movies": ["The Godfather","The Dark Knight","Forrest Gump","Pulp Fiction","The Shawshank Redemption","Titanic","Star Wars","The Lord of the Rings","Avengers: Endgame","Jurassic Park"],
-    "Famous People": ["Tom Hanks","Leonardo DiCaprio","Brad Pitt","Angelina Jolie","Dwayne Johnson","Scarlett Johansson","Robert Downey Jr.","Will Smith","Johnny Depp","Tom Holland","Zendaya","Chris Hemsworth","Chris Evans","Margot Robbie","Timothée Chalamet"],
-    "Sports": ["Soccer","Basketball","Baseball","Tennis","Golf","Swimming","Running","Boxing","Volleyball","Hockey"],
-    "Objects": ["Chair","Table","Phone","Laptop","Pen","Pencil","Book","Ball","Key","Bottle","Cup","Bag","Shoes","Glasses","Watch","Lamp","Pillow","Blanket","Door","Window"],
-    "Technology": ["Computer","Smartphone","Tablet","TV","Camera","Headphones","Keyboard","Mouse","Printer","Internet","WiFi","Software","App","Robot","Drone","Console","Gamepad","Smartwatch","Battery","USB"],
-    "Books": ["Harry Potter","The Lord of the Rings","The Hunger Games","Percy Jackson","To Kill a Mockingbird","The Great Gatsby","The Chronicles of Narnia","The Maze Runner","Divergent","The Da Vinci Code"],
-    "Music": ["Michael Jackson","Beyoncé","Drake","Ariana Grande","Taylor Swift","Ed Sheeran","Billie Eilish","Justin Bieber","Rihanna","Selena Gomez"]
-};
-
-/************ DOM ELEMENTS ************/
-const categorySelect = document.getElementById('categorySelect');
-for (let cat in categories) {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    categorySelect.appendChild(option);
-}
-
-const optionsScreen = document.getElementById('optionsScreen');
-const playerSetupScreen = document.getElementById('playerSetupScreen');
-const roleRevealScreen = document.getElementById('roleRevealScreen');
-const endScreen = document.getElementById('endScreen');
-
-const playerInputs = document.getElementById('playerInputs');
-const addPlayerBtn = document.getElementById('addPlayer');
-const startGameBtn = document.getElementById('startGame');
-
-let players = [];
-let currentPlayerIndex = 0;
-let imposterIndex = 0;
-let secretWord = "";
-let startingWord = "";
-
-/************ PLAYER SETUP ************/
-addPlayerBtn.addEventListener('click', () => {
-    const input = document.createElement('input');
-    input.placeholder = `Player ${players.length + 1} Name`;
-    playerInputs.appendChild(input);
-    players.push({name: "", icon: String.fromCharCode(65 + players.length)});
+// Splash animation to dashboard
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').style.transition = 'opacity 1s';
+    document.getElementById('splash').style.opacity = 0;
+    setTimeout(() => {
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }, 1000);
+  }, 4000);
 });
 
-document.getElementById('nextToPlayers').addEventListener('click', () => {
-    optionsScreen.classList.add('hidden');
-    playerSetupScreen.classList.remove('hidden');
+// Modal logic
+const modal = document.getElementById('modal');
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const step3 = document.getElementById('step3');
+
+function openModal() {
+  modal.style.display = 'flex';
+  step1.classList.add('active');
+  step2.classList.remove('active');
+  step3.classList.remove('active');
+}
+
+function closeModal() {
+  modal.style.display = 'none';
+  step1.classList.remove('active');
+  step2.classList.remove('active');
+  step3.classList.remove('active');
+  document.getElementById('studentIdInput').value = '';
+  document.getElementById('bookInput').value = '';
+}
+
+document.getElementById('openCheckIn').addEventListener('click', openModal);
+document.getElementById('openCheckOut').addEventListener('click', openModal);
+document.getElementById('closeModal').addEventListener('click', closeModal);
+
+document.getElementById('nextToScan').addEventListener('click', () => {
+  step1.classList.remove('active');
+  step2.classList.add('active');
 });
 
-startGameBtn.addEventListener('click', () => {
-    const inputs = playerInputs.querySelectorAll('input');
-    inputs.forEach((inp, idx) => players[idx].name = inp.value || `Player ${idx+1}`);
-
-    imposterIndex = Math.floor(Math.random() * players.length);
-
-    const selectedCategory = categorySelect.value;
-    const words = categories[selectedCategory];
-    secretWord = words[Math.floor(Math.random() * words.length)];
-
-    const customWordInput = document.getElementById('customWord').value.trim();
-    startingWord = customWordInput || "Hint";
-
-    playerSetupScreen.classList.add('hidden');
-    currentPlayerIndex = 0;
-    showPlayerRole();
+document.getElementById('nextToReceipt').addEventListener('click', () => {
+  step2.classList.remove('active');
+  step3.classList.add('active');
 });
 
-/************ ROLE REVEAL ************/
-const roleText = document.getElementById('roleText');
-function showPlayerRole() {
-    const player = players[currentPlayerIndex];
-    roleRevealScreen.classList.remove('hidden');
-    roleText.innerHTML = "";
-
-    if (currentPlayerIndex === imposterIndex) {
-        roleText.textContent = `Player ${player.icon}: You are the Imposter`;
-    } else {
-        roleText.innerHTML = `Player ${player.icon}: Your word is "<strong>${secretWord}</strong>"<br>Starting Word: "<em>${startingWord}</em>"`;
-    }
-
-    gsap.from(roleText, {opacity:0, y:-50, scale:0.8, duration:0.6, ease:"back.out(1.7)"});
-}
-
-document.getElementById('nextPlayer').addEventListener('click', () => {
-    currentPlayerIndex++;
-    if (currentPlayerIndex >= players.length) {
-        roleRevealScreen.classList.add('hidden');
-        endScreen.classList.remove('hidden');
-        imposterReveal.textContent = `The Imposter was Player ${players[imposterIndex].icon}!\nWord was: "${secretWord}"`;
-        triggerConfetti();
-    } else {
-        showPlayerRole();
-    }
-});
-
-document.getElementById('restartGame').addEventListener('click', () => {
-    endScreen.classList.add('hidden');
-    optionsScreen.classList.remove('hidden');
-    playerInputs.innerHTML = "";
-    players = [];
-});
-
-/************ CONFETTI ************/
-const canvas = document.getElementById('confettiCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let confettiPieces = [];
-for(let i=0;i<200;i++){
-    confettiPieces.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*canvas.height-1000,
-        r: Math.random()*6+4,
-        d: Math.random()*200+100,
-        color: `hsl(${Math.random()*360}, 100%, 50%)`,
-        tilt: Math.random()*10-10,
-        tiltAngleIncrement: Math.random()*0.07+0.05
-    });
-}
-
-function drawConfetti(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0;i<confettiPieces.length;i++){
-        const p=confettiPieces[i];
-        ctx.beginPath();
-        ctx.lineWidth=p.r/2;
-        ctx.strokeStyle=p.color;
-        ctx.moveTo(p.x+p.tilt+p.r/3,p.y);
-        ctx.lineTo(p.x+p.tilt,p.y+p.tilt+ p.r/2);
-        ctx.stroke();
-    }
-    updateConfetti();
-}
-
-function updateConfetti(){
-    for(let i=0;i<confettiPieces.length;i++){
-        const p=confettiPieces[i];
-        p.tiltAngle+=p.tiltAngleIncrement;
-        p.y += (Math.cos(0.01+p.d/100)+1+p.r/2)/2;
-        p.tilt = Math.sin(p.tiltAngle-p.d/3)*15;
-        if(p.y>canvas.height) p.y = -20;
-    }
-    requestAnimationFrame(drawConfetti);
-}
-
-function triggerConfetti(){
-    for(let i=0;i<confettiPieces.length;i++){
-        confettiPieces[i].y = Math.random()*canvas.height-1000;
-    }
-    drawConfetti();
-}
-
-window.addEventListener('resize',()=>{
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+document.getElementById('closeReceipt').addEventListener('click', closeModal);
+document.getElementById('undoBtn').addEventListener('click', () => {
+  step3.classList.remove('active');
+  step2.classList.add('active');
 });
 </script>
+
 </body>
 </html>

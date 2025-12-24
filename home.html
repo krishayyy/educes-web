@@ -67,6 +67,7 @@
     border-radius: 25px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     overflow: hidden;
+    position: relative;
   }
 
   header {
@@ -164,31 +165,89 @@
   #undoBtn { background-color: #dc3545; color:white; }
   #closeReceipt { background-color: #007bff; color:white; }
 
-  /* Mini Library */
-  #miniLibrary {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
+  /* Cinematic Library Background */
+  .library-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 15px;
+    padding: 50px;
+    z-index: -1;
+    perspective: 1200px;
+    background: linear-gradient(180deg, #f0f4ff, #d0e4ff);
+    overflow: hidden;
   }
 
-  #miniLibrary .book {
-    width: 80px;
-    height: 120px;
+  .library-bg .book {
+    position: relative;
+    background: linear-gradient(135deg, #87cefa, #1e90ff);
     border-radius: 5px;
     cursor: pointer;
-    transform: scale(1);
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
   }
-  #miniLibrary .book:hover {
-    transform: scale(1.2);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-  }
-  .pink { background: linear-gradient(135deg, #ffb6c1, #ff69b4); }
-  .blue { background: linear-gradient(135deg, #87cefa, #1e90ff); }
-  .purple { background: linear-gradient(135deg, #dda0dd, #800080); }
 
+  .library-bg .book span {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  }
+
+  .library-bg .book:hover {
+    transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+  }
+
+  .library-bg .book.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 60vw;
+    height: 90vh;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 100;
+    border-radius: 10px;
+    transition: transform 1s ease, width 1s ease, height 1s ease;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+  }
+
+  /* Password Overlay */
+  #passwordOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+  }
+
+  #passwordBox {
+    color: white;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 15px;
+  }
+
+  #passwordBox input {
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    margin-top: 15px;
+    width: 220px;
+  }
 </style>
 </head>
 <body>
@@ -212,25 +271,41 @@
     <button class="action-btn checkin" id="openCheckIn">Check In</button>
     <button class="action-btn checkout" id="openCheckOut">Check Out</button>
   </div>
-
-  <!-- Mini Library -->
-  <div id="miniLibrary">
-    <div class="book pink" data-color="pink"></div>
-    <div class="book blue" data-color="blue"></div>
-    <div class="book purple" data-color="purple"></div>
-  </div>
 </div>
 
-<!-- Book Password Modal -->
-<div class="modal" id="bookModal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeBookModal">&times;</span>
-    <h2>Enter Password to Open</h2>
-    <input type="password" id="bookPassword" placeholder="Password">
+<!-- Cinematic Library Background -->
+<div class="library-bg" id="library">
+  <div class="book" data-number="01"><span>01</span></div>
+  <div class="book" data-number="02"><span>02</span></div>
+  <div class="book" data-number="03"><span>03</span></div>
+  <div class="book" data-number="04"><span>04</span></div>
+  <div class="book" data-number="05"><span>05</span></div>
+  <div class="book" data-number="06"><span>06</span></div>
+  <div class="book" data-number="07"><span>07</span></div>
+  <div class="book" data-number="08"><span>08</span></div>
+  <div class="book" data-number="09"><span>09</span></div>
+  <div class="book" data-number="10"><span>10</span></div>
+  <div class="book" data-number="11"><span>11</span></div>
+  <div class="book" data-number="12"><span>12</span></div>
+  <div class="book" data-number="13"><span>13</span></div>
+  <div class="book" data-number="14"><span>14</span></div>
+  <div class="book" data-number="15"><span>15</span></div>
+  <div class="book" data-number="16"><span>16</span></div>
+  <div class="book" data-number="17"><span>17</span></div>
+  <div class="book" data-number="18"><span>18</span></div>
+  <div class="book" data-number="19"><span>19</span></div>
+  <div class="book" data-number="20"><span>20</span></div>
+</div>
+
+<!-- Password Overlay -->
+<div id="passwordOverlay">
+  <div id="passwordBox">
+    <h2>Enter Password</h2>
+    <input type="password" placeholder="Password" id="libraryPassword">
     <div class="modal-buttons">
-      <button id="submitBookPassword">Submit</button>
+      <button id="submitLibraryPassword">Submit</button>
     </div>
-    <div id="bookError" style="color:red; margin-top:10px; display:none;">Incorrect password!</div>
+    <div id="libraryError" style="color:red; margin-top:10px; display:none;">Incorrect password!</div>
   </div>
 </div>
 
@@ -239,7 +314,6 @@
   <div class="modal-content">
     <span class="close-btn" id="closeModal">&times;</span>
 
-    <!-- Step 1: Enter Student ID -->
     <div class="modal-step" id="step1">
       <h2>Enter Student ID</h2>
       <input type="text" id="studentIdInput" placeholder="Student ID">
@@ -248,7 +322,6 @@
       </div>
     </div>
 
-    <!-- Step 2: Scan Book -->
     <div class="modal-step" id="step2">
       <h2>Scan / Enter Book ID</h2>
       <input type="text" id="bookInput" placeholder="Book QR code">
@@ -257,7 +330,6 @@
       </div>
     </div>
 
-    <!-- Step 3: Receipt -->
     <div class="modal-step" id="step3">
       <h2>Transaction Complete</h2>
       <div id="receiptText">Book checked out successfully!</div>
@@ -294,7 +366,6 @@
     step2.classList.remove('active');
     step3.classList.remove('active');
   }
-
   function closeModal() {
     modal.style.display = 'none';
     step1.classList.remove('active');
@@ -312,47 +383,47 @@
     step1.classList.remove('active');
     step2.classList.add('active');
   });
-
   document.getElementById('nextToReceipt').addEventListener('click', () => {
     step2.classList.remove('active');
     step3.classList.add('active');
   });
-
   document.getElementById('closeReceipt').addEventListener('click', closeModal);
   document.getElementById('undoBtn').addEventListener('click', () => {
     step3.classList.remove('active');
     step2.classList.add('active');
   });
 
-  // Mini Library book logic
-  const books = document.querySelectorAll('#miniLibrary .book');
-  const bookModal = document.getElementById('bookModal');
-  const closeBookModal = document.getElementById('closeBookModal');
-  const submitBookPassword = document.getElementById('submitBookPassword');
-  const bookPassword = document.getElementById('bookPassword');
-  const bookError = document.getElementById('bookError');
+  // Library books logic
+  const libraryBooks = document.querySelectorAll('.library-bg .book');
+  const overlay = document.getElementById('passwordOverlay');
+  const libraryPassword = document.getElementById('libraryPassword');
+  const submitLibraryPassword = document.getElementById('submitLibraryPassword');
+  const libraryError = document.getElementById('libraryError');
 
-  books.forEach(book => {
+  libraryBooks.forEach(book => {
     book.addEventListener('click', () => {
-      if (book.dataset.color === 'blue') {
-        bookModal.style.display = 'flex';
-        bookPassword.value = '';
-        bookError.style.display = 'none';
+      if (book.dataset.number === "06") {
+        book.classList.add('zoomed');
+        setTimeout(() => { overlay.style.display = "flex"; }, 1000);
       } else {
-        alert('This book is just for show!');
+        book.style.transform = "scale(1.05) rotateY(5deg)";
+        setTimeout(() => { book.style.transform = ""; }, 500);
       }
     });
   });
 
-  closeBookModal.addEventListener('click', () => {
-    bookModal.style.display = 'none';
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.style.display = 'none';
+      document.querySelector('.library-bg .zoomed').classList.remove('zoomed');
+    }
   });
 
-  submitBookPassword.addEventListener('click', () => {
-    if (bookPassword.value === 'fun') {
-      window.location.href = 'etc.html';
+  submitLibraryPassword.addEventListener('click', () => {
+    if (libraryPassword.value === "fun") {
+      window.location.href = "etc.html";
     } else {
-      bookError.style.display = 'block';
+      libraryError.style.display = "block";
     }
   });
 </script>

@@ -163,6 +163,32 @@
   /* Receipt Buttons */
   #undoBtn { background-color: #dc3545; color:white; }
   #closeReceipt { background-color: #007bff; color:white; }
+
+  /* Mini Library */
+  #miniLibrary {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  #miniLibrary .book {
+    width: 80px;
+    height: 120px;
+    border-radius: 5px;
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  #miniLibrary .book:hover {
+    transform: scale(1.2);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+  }
+  .pink { background: linear-gradient(135deg, #ffb6c1, #ff69b4); }
+  .blue { background: linear-gradient(135deg, #87cefa, #1e90ff); }
+  .purple { background: linear-gradient(135deg, #dda0dd, #800080); }
+
 </style>
 </head>
 <body>
@@ -186,9 +212,29 @@
     <button class="action-btn checkin" id="openCheckIn">Check In</button>
     <button class="action-btn checkout" id="openCheckOut">Check Out</button>
   </div>
+
+  <!-- Mini Library -->
+  <div id="miniLibrary">
+    <div class="book pink" data-color="pink"></div>
+    <div class="book blue" data-color="blue"></div>
+    <div class="book purple" data-color="purple"></div>
+  </div>
 </div>
 
-<!-- Modal -->
+<!-- Book Password Modal -->
+<div class="modal" id="bookModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeBookModal">&times;</span>
+    <h2>Enter Password to Open</h2>
+    <input type="password" id="bookPassword" placeholder="Password">
+    <div class="modal-buttons">
+      <button id="submitBookPassword">Submit</button>
+    </div>
+    <div id="bookError" style="color:red; margin-top:10px; display:none;">Incorrect password!</div>
+  </div>
+</div>
+
+<!-- Check In/Out Modal -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close-btn" id="closeModal">&times;</span>
@@ -224,59 +270,91 @@
 </div>
 
 <script>
-// Splash animation to dashboard
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('splash').style.transition = 'opacity 1s';
-    document.getElementById('splash').style.opacity = 0;
+  // Splash animation
+  window.addEventListener('load', () => {
     setTimeout(() => {
-      document.getElementById('splash').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-    }, 1000);
-  }, 4000);
-});
+      document.getElementById('splash').style.transition = 'opacity 1s';
+      document.getElementById('splash').style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      }, 1000);
+    }, 4000);
+  });
 
-// Modal logic
-const modal = document.getElementById('modal');
-const step1 = document.getElementById('step1');
-const step2 = document.getElementById('step2');
-const step3 = document.getElementById('step3');
+  // Check In/Out modal
+  const modal = document.getElementById('modal');
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const step3 = document.getElementById('step3');
 
-function openModal() {
-  modal.style.display = 'flex';
-  step1.classList.add('active');
-  step2.classList.remove('active');
-  step3.classList.remove('active');
-}
+  function openModal() {
+    modal.style.display = 'flex';
+    step1.classList.add('active');
+    step2.classList.remove('active');
+    step3.classList.remove('active');
+  }
 
-function closeModal() {
-  modal.style.display = 'none';
-  step1.classList.remove('active');
-  step2.classList.remove('active');
-  step3.classList.remove('active');
-  document.getElementById('studentIdInput').value = '';
-  document.getElementById('bookInput').value = '';
-}
+  function closeModal() {
+    modal.style.display = 'none';
+    step1.classList.remove('active');
+    step2.classList.remove('active');
+    step3.classList.remove('active');
+    document.getElementById('studentIdInput').value = '';
+    document.getElementById('bookInput').value = '';
+  }
 
-document.getElementById('openCheckIn').addEventListener('click', openModal);
-document.getElementById('openCheckOut').addEventListener('click', openModal);
-document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('openCheckIn').addEventListener('click', openModal);
+  document.getElementById('openCheckOut').addEventListener('click', openModal);
+  document.getElementById('closeModal').addEventListener('click', closeModal);
 
-document.getElementById('nextToScan').addEventListener('click', () => {
-  step1.classList.remove('active');
-  step2.classList.add('active');
-});
+  document.getElementById('nextToScan').addEventListener('click', () => {
+    step1.classList.remove('active');
+    step2.classList.add('active');
+  });
 
-document.getElementById('nextToReceipt').addEventListener('click', () => {
-  step2.classList.remove('active');
-  step3.classList.add('active');
-});
+  document.getElementById('nextToReceipt').addEventListener('click', () => {
+    step2.classList.remove('active');
+    step3.classList.add('active');
+  });
 
-document.getElementById('closeReceipt').addEventListener('click', closeModal);
-document.getElementById('undoBtn').addEventListener('click', () => {
-  step3.classList.remove('active');
-  step2.classList.add('active');
-});
+  document.getElementById('closeReceipt').addEventListener('click', closeModal);
+  document.getElementById('undoBtn').addEventListener('click', () => {
+    step3.classList.remove('active');
+    step2.classList.add('active');
+  });
+
+  // Mini Library book logic
+  const books = document.querySelectorAll('#miniLibrary .book');
+  const bookModal = document.getElementById('bookModal');
+  const closeBookModal = document.getElementById('closeBookModal');
+  const submitBookPassword = document.getElementById('submitBookPassword');
+  const bookPassword = document.getElementById('bookPassword');
+  const bookError = document.getElementById('bookError');
+
+  books.forEach(book => {
+    book.addEventListener('click', () => {
+      if (book.dataset.color === 'blue') {
+        bookModal.style.display = 'flex';
+        bookPassword.value = '';
+        bookError.style.display = 'none';
+      } else {
+        alert('This book is just for show!');
+      }
+    });
+  });
+
+  closeBookModal.addEventListener('click', () => {
+    bookModal.style.display = 'none';
+  });
+
+  submitBookPassword.addEventListener('click', () => {
+    if (bookPassword.value === 'fun') {
+      window.location.href = 'etc.html';
+    } else {
+      bookError.style.display = 'block';
+    }
+  });
 </script>
 
 </body>

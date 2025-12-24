@@ -1,123 +1,300 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Six-Seven Camera Counter</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Party Imposter Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.14.0/gsap.min.js"></script>
+<style>
     body {
-      text-align: center;
-      font-family: Arial;
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
     }
-    video, canvas {
-      transform: scaleX(-1);
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
-    #count {
-      font-size: 60px;
+    .container {
+        width: 90%;
+        max-width: 800px;
+        background: rgba(0,0,0,0.7);
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        position: relative;
     }
-    #timer {
-      font-size: 30px;
+    h1 {
+        margin-bottom: 10px;
+        font-size: 2.2em;
+        color: #ffeb3b;
+        text-shadow: 0 0 10px #ffeb3b;
     }
-  </style>
+    button {
+        padding: 12px 25px;
+        margin: 10px;
+        border: none;
+        border-radius: 15px;
+        background: #ffeb3b;
+        color: #000;
+        font-weight: bold;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    input, select {
+        padding: 10px;
+        border-radius: 12px;
+        border: none;
+        margin: 5px;
+        font-size: 1em;
+        text-align: center;
+    }
+    .hidden { display: none; }
+    .word-box {
+        background: rgba(255,255,255,0.2);
+        padding: 25px;
+        border-radius: 20px;
+        margin-top: 30px;
+        font-size: 1.7em;
+        color: #fff;
+        text-shadow: 0 0 10px #000;
+        min-height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .player-icon {
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #ffeb3b;
+        color: #000;
+        line-height: 60px;
+        margin: 5px;
+        font-weight: bold;
+        font-size: 1.2em;
+        user-select: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
+</style>
 </head>
 <body>
 
-<h1>Six-Seven Camera Challenge</h1>
-<div id="timer">Time: 30</div>
-<div id="count">0</div>
-<video id="video" autoplay playsinline></video>
-<canvas id="canvas"></canvas>
+<canvas id="confettiCanvas"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<div class="container" id="optionsScreen">
+    <h1>Party Imposter Pro</h1>
+    <p>Select Category:</p>
+    <select id="categorySelect"></select>
+    <div>
+        <input type="text" id="customWord" placeholder="Optional Starting Word">
+    </div>
+    <button id="nextToPlayers">Next</button>
+</div>
+
+<div class="container hidden" id="playerSetupScreen">
+    <h1>Player Setup</h1>
+    <div id="playerInputs"></div>
+    <button id="addPlayer">Add Player</button>
+    <button id="startGame">Start Game</button>
+</div>
+
+<div class="container hidden" id="roleRevealScreen">
+    <h1>Role Reveal</h1>
+    <div id="roleText" class="word-box"></div>
+    <button id="nextPlayer">Next Player</button>
+</div>
+
+<div class="container hidden" id="endScreen">
+    <h1>Round Ended!</h1>
+    <div id="imposterReveal" class="word-box"></div>
+    <button id="restartGame">Play Again</button>
+</div>
 
 <script>
-const video = document.getElementById("video");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+/************ GAME DATA ************/
+const categories = {
+    "Animals": ["Dog","Cat","Elephant","Lion","Tiger","Bear","Wolf","Fox","Rabbit","Deer","Horse","Cow","Sheep","Pig","Chicken","Duck","Goose","Frog","Snake","Turtle","Whale","Dolphin","Shark","Penguin","Giraffe","Zebra","Monkey","Gorilla","Kangaroo","Koala","Panda","Leopard","Cheetah","Owl","Eagle","Crow","Parrot","Squirrel","Mouse","Rat","Camel","Hippopotamus"],
+    "Food": ["Bread","Rice","Cheese","Milk","Egg","Butter","Apple","Banana","Orange","Tomato","Potato","Carrot","Chicken","Beef","Fish","Pasta","Pizza","Sandwich","Cake","Cookie"],
+    "Movies": ["The Godfather","The Dark Knight","Forrest Gump","Pulp Fiction","The Shawshank Redemption","Titanic","Star Wars","The Lord of the Rings","Avengers: Endgame","Jurassic Park"],
+    "Famous People": ["Tom Hanks","Leonardo DiCaprio","Brad Pitt","Angelina Jolie","Dwayne Johnson","Scarlett Johansson","Robert Downey Jr.","Will Smith","Johnny Depp","Tom Holland","Zendaya","Chris Hemsworth","Chris Evans","Margot Robbie","Timothée Chalamet"],
+    "Sports": ["Soccer","Basketball","Baseball","Tennis","Golf","Swimming","Running","Boxing","Volleyball","Hockey"],
+    "Objects": ["Chair","Table","Phone","Laptop","Pen","Pencil","Book","Ball","Key","Bottle","Cup","Bag","Shoes","Glasses","Watch","Lamp","Pillow","Blanket","Door","Window"],
+    "Technology": ["Computer","Smartphone","Tablet","TV","Camera","Headphones","Keyboard","Mouse","Printer","Internet","WiFi","Software","App","Robot","Drone","Console","Gamepad","Smartwatch","Battery","USB"],
+    "Books": ["Harry Potter","The Lord of the Rings","The Hunger Games","Percy Jackson","To Kill a Mockingbird","The Great Gatsby","The Chronicles of Narnia","The Maze Runner","Divergent","The Da Vinci Code"],
+    "Music": ["Michael Jackson","Beyoncé","Drake","Ariana Grande","Taylor Swift","Ed Sheeran","Billie Eilish","Justin Bieber","Rihanna","Selena Gomez"]
+};
 
-let count = 0;
-let time = 30;
-let running = false;
-let lastDirection = null;
-
-let lastLeftY = null;
-let lastRightY = null;
-
-const hands = new Hands({
-  locateFile: file =>
-    `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
-});
-
-hands.setOptions({
-  maxNumHands: 2,
-  minDetectionConfidence: 0.7,
-  minTrackingConfidence: 0.7
-});
-
-hands.onResults(results => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (!running) return;
-  if (results.multiHandLandmarks.length !== 2) return;
-
-  const left = results.multiHandLandmarks[0][0].y;
-  const right = results.multiHandLandmarks[1][0].y;
-
-  if (lastLeftY !== null && lastRightY !== null) {
-    const leftUp = left < lastLeftY;
-    const rightUp = right < lastRightY;
-
-    if (leftUp && !rightUp && lastDirection !== "leftUp") {
-      count++;
-      lastDirection = "leftUp";
-    }
-
-    if (rightUp && !leftUp && lastDirection !== "rightUp") {
-      count++;
-      lastDirection = "rightUp";
-    }
-
-    document.getElementById("count").textContent = count;
-  }
-
-  lastLeftY = left;
-  lastRightY = right;
-});
-
-const camera = new Camera(video, {
-  onFrame: async () => {
-    await hands.send({ image: video });
-  },
-  width: 640,
-  height: 480
-});
-
-camera.start();
-
-canvas.width = 640;
-canvas.height = 480;
-
-function startTimer() {
-  running = true;
-  count = 0;
-  time = 30;
-  lastDirection = null;
-  document.getElementById("count").textContent = 0;
-  document.getElementById("timer").textContent = "Time: 30";
-
-  const interval = setInterval(() => {
-    time--;
-    document.getElementById("timer").textContent = "Time: " + time;
-
-    if (time === 0) {
-      running = false;
-      clearInterval(interval);
-      alert("Time's up! Your Six-Seven score: " + count);
-    }
-  }, 1000);
+/************ DOM ELEMENTS ************/
+const categorySelect = document.getElementById('categorySelect');
+for (let cat in categories) {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    categorySelect.appendChild(option);
 }
 
-startTimer();
-</script>
+const optionsScreen = document.getElementById('optionsScreen');
+const playerSetupScreen = document.getElementById('playerSetupScreen');
+const roleRevealScreen = document.getElementById('roleRevealScreen');
+const endScreen = document.getElementById('endScreen');
 
+const playerInputs = document.getElementById('playerInputs');
+const addPlayerBtn = document.getElementById('addPlayer');
+const startGameBtn = document.getElementById('startGame');
+
+let players = [];
+let currentPlayerIndex = 0;
+let imposterIndex = 0;
+let secretWord = "";
+let startingWord = "";
+
+/************ PLAYER SETUP ************/
+addPlayerBtn.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.placeholder = `Player ${players.length + 1} Name`;
+    playerInputs.appendChild(input);
+    players.push({name: "", icon: String.fromCharCode(65 + players.length)});
+});
+
+document.getElementById('nextToPlayers').addEventListener('click', () => {
+    optionsScreen.classList.add('hidden');
+    playerSetupScreen.classList.remove('hidden');
+});
+
+startGameBtn.addEventListener('click', () => {
+    const inputs = playerInputs.querySelectorAll('input');
+    inputs.forEach((inp, idx) => players[idx].name = inp.value || `Player ${idx+1}`);
+
+    imposterIndex = Math.floor(Math.random() * players.length);
+
+    const selectedCategory = categorySelect.value;
+    const words = categories[selectedCategory];
+    secretWord = words[Math.floor(Math.random() * words.length)];
+
+    const customWordInput = document.getElementById('customWord').value.trim();
+    startingWord = customWordInput || "Hint";
+
+    playerSetupScreen.classList.add('hidden');
+    currentPlayerIndex = 0;
+    showPlayerRole();
+});
+
+/************ ROLE REVEAL ************/
+const roleText = document.getElementById('roleText');
+function showPlayerRole() {
+    const player = players[currentPlayerIndex];
+    roleRevealScreen.classList.remove('hidden');
+    roleText.innerHTML = "";
+
+    if (currentPlayerIndex === imposterIndex) {
+        roleText.textContent = `Player ${player.icon}: You are the Imposter`;
+    } else {
+        roleText.innerHTML = `Player ${player.icon}: Your word is "<strong>${secretWord}</strong>"<br>Starting Word: "<em>${startingWord}</em>"`;
+    }
+
+    gsap.from(roleText, {opacity:0, y:-50, scale:0.8, duration:0.6, ease:"back.out(1.7)"});
+}
+
+document.getElementById('nextPlayer').addEventListener('click', () => {
+    currentPlayerIndex++;
+    if (currentPlayerIndex >= players.length) {
+        roleRevealScreen.classList.add('hidden');
+        endScreen.classList.remove('hidden');
+        imposterReveal.textContent = `The Imposter was Player ${players[imposterIndex].icon}!\nWord was: "${secretWord}"`;
+        triggerConfetti();
+    } else {
+        showPlayerRole();
+    }
+});
+
+document.getElementById('restartGame').addEventListener('click', () => {
+    endScreen.classList.add('hidden');
+    optionsScreen.classList.remove('hidden');
+    playerInputs.innerHTML = "";
+    players = [];
+});
+
+/************ CONFETTI ************/
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confettiPieces = [];
+for(let i=0;i<200;i++){
+    confettiPieces.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height-1000,
+        r: Math.random()*6+4,
+        d: Math.random()*200+100,
+        color: `hsl(${Math.random()*360}, 100%, 50%)`,
+        tilt: Math.random()*10-10,
+        tiltAngleIncrement: Math.random()*0.07+0.05
+    });
+}
+
+function drawConfetti(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<confettiPieces.length;i++){
+        const p=confettiPieces[i];
+        ctx.beginPath();
+        ctx.lineWidth=p.r/2;
+        ctx.strokeStyle=p.color;
+        ctx.moveTo(p.x+p.tilt+p.r/3,p.y);
+        ctx.lineTo(p.x+p.tilt,p.y+p.tilt+ p.r/2);
+        ctx.stroke();
+    }
+    updateConfetti();
+}
+
+function updateConfetti(){
+    for(let i=0;i<confettiPieces.length;i++){
+        const p=confettiPieces[i];
+        p.tiltAngle+=p.tiltAngleIncrement;
+        p.y += (Math.cos(0.01+p.d/100)+1+p.r/2)/2;
+        p.tilt = Math.sin(p.tiltAngle-p.d/3)*15;
+        if(p.y>canvas.height) p.y = -20;
+    }
+    requestAnimationFrame(drawConfetti);
+}
+
+function triggerConfetti(){
+    for(let i=0;i<confettiPieces.length;i++){
+        confettiPieces[i].y = Math.random()*canvas.height-1000;
+    }
+    drawConfetti();
+}
+
+window.addEventListener('resize',()=>{
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+</script>
 </body>
 </html>

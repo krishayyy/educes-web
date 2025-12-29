@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>TTA Library</title>
 
 <style>
@@ -15,138 +15,139 @@
 
 html, body {
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #f4f6f8;
-  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+  background: #0b0d10;
+  color: #e5e7eb;
+  overflow: hidden;
 }
 
 /* ---------- SPLASH ---------- */
 #splash {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, #eef3ff, #dbe7ff);
+  background: radial-gradient(circle at top, #111827, #020617);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 1000;
 }
 
 #logo {
-  width: 160px;
-  transform: scale(0.7);
+  width: 170px;
   opacity: 0;
-  animation: logoIn 2.2s ease forwards;
+  transform: scale(0.85);
+  animation: logoReveal 2.4s ease forwards;
 }
 
 #welcomeText {
-  margin-top: 24px;
+  margin-top: 28px;
   font-size: 2.2rem;
   font-weight: 700;
-  color: #1e3a8a;
+  letter-spacing: -0.5px;
   opacity: 0;
-  animation: textIn 1.2s ease forwards;
+  animation: textReveal 1.4s ease forwards;
   animation-delay: 1.6s;
 }
 
-@keyframes logoIn {
-  to { transform: scale(1); opacity: 1; }
+@keyframes logoReveal {
+  to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes textIn {
+@keyframes textReveal {
   to { opacity: 1; }
 }
 
-/* ---------- DASHBOARD ---------- */
-#dashboard {
+/* ---------- APP SHELL ---------- */
+#app {
   display: none;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 48px 32px;
+  height: 100vh;
+  width: 100vw;
+  padding: 48px;
 }
 
-header {
+/* ---------- HEADER ---------- */
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 36px;
+  margin-bottom: 60px;
 }
 
-header h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-nav a {
-  margin-left: 24px;
-  text-decoration: none;
-  font-size: 0.95rem;
+.header h1 {
+  font-size: 1.4rem;
   font-weight: 600;
-  color: #374151;
+  letter-spacing: 0.3px;
 }
 
-nav a:hover {
-  color: #2563eb;
-}
-
-/* ---------- CARDS ---------- */
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 28px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-
-.card h2 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-/* ---------- ACTIONS ---------- */
+/* ---------- ACTION AREA ---------- */
 .actions {
   display: flex;
-  gap: 16px;
+  gap: 28px;
 }
 
+/* ---------- BUTTONS ---------- */
 .btn {
-  appearance: none;
-  border-radius: 8px;
-  padding: 12px 28px;
-  font-size: 0.95rem;
+  min-width: 200px;
+  padding: 18px 36px;
+  font-size: 1rem;
   font-weight: 600;
-  border: 1px solid transparent;
+  border-radius: 14px;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  border: none;
+
+  background: rgba(255,255,255,0.06);
+  color: #f9fafb;
+
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
-/* Primary */
-.btn-primary {
-  background: #2563eb;
-  color: white;
+.btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.1);
+  box-shadow:
+    0 28px 70px rgba(0,0,0,0.75),
+    inset 0 1px 0 rgba(255,255,255,0.12);
 }
 
-.btn-primary:hover {
-  background: #1d4ed8;
-  box-shadow: 0 6px 16px rgba(37,99,235,0.3);
+.btn:active {
+  transform: translateY(0);
 }
 
-/* Secondary */
-.btn-secondary {
-  background: #f9fafb;
-  color: #1f2937;
-  border: 1px solid #d1d5db;
+/* Primary emphasis */
+.btn.primary {
+  background: linear-gradient(135deg, #1f2937, #020617);
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
-.btn-secondary:hover {
-  background: #f3f4f6;
+/* ---------- SUBTLE AMBIENT MOTION ---------- */
+.glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at 30% 20%, rgba(59,130,246,0.12), transparent 50%);
+  pointer-events: none;
+  animation: slowDrift 18s linear infinite;
+}
+
+@keyframes slowDrift {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(8%); }
+  100% { transform: translateX(0); }
 }
 
 /* ---------- MODAL ---------- */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.75);
   display: none;
   align-items: center;
   justify-content: center;
@@ -154,39 +155,33 @@ nav a:hover {
 }
 
 .modal-box {
-  background: #ffffff;
   width: 420px;
-  border-radius: 14px;
-  padding: 28px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+  padding: 36px;
+  border-radius: 18px;
+  background: #020617;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.8);
 }
 
-.modal-box h3 {
-  font-size: 1.2rem;
-  margin-bottom: 18px;
+.modal-box h2 {
+  margin-bottom: 20px;
+  font-size: 1.3rem;
 }
 
 .modal-box input {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 18px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  padding: 14px;
+  border-radius: 10px;
+  background: #020617;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
   font-size: 0.95rem;
 }
 
 .modal-actions {
+  margin-top: 26px;
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-}
-
-/* ---------- FOOTER ---------- */
-footer {
-  margin-top: 60px;
-  font-size: 0.85rem;
-  color: #6b7280;
-  text-align: center;
+  gap: 14px;
 }
 </style>
 </head>
@@ -196,81 +191,66 @@ footer {
 <!-- SPLASH -->
 <div id="splash">
   <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo">
-  <div id="welcomeText">Welcome to TTA Library</div>
+  <div id="welcomeText">TTA Library</div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <header>
-    <h1>TTA Library</h1>
-    <nav>
-      <a href="home.html">Home</a>
-      <a href="studentcheck.html">Student Check</a>
-      <a href="booksout.html">Books Out</a>
-      <a href="history.html">History</a>
-    </nav>
-  </header>
+<!-- APP -->
+<div id="app">
+  <div class="glow"></div>
 
-  <div class="card">
-    <h2>Quick Actions</h2>
-    <div class="actions">
-      <button class="btn btn-secondary" id="checkIn">Check In</button>
-      <button class="btn btn-primary" id="checkOut">Check Out</button>
-    </div>
+  <div class="header">
+    <h1>Library Operations</h1>
   </div>
 
-  <footer>
-    © TTA Library System
-  </footer>
+  <div class="actions">
+    <button class="btn" id="checkIn">Check In</button>
+    <button class="btn primary" id="checkOut">Check Out</button>
+  </div>
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h3 id="modalTitle">Enter Student ID</h3>
-    <input type="text" id="modalInput" placeholder="Student ID">
+    <h2 id="modalTitle">Enter Student ID</h2>
+    <input id="modalInput" placeholder="Student ID">
     <div class="modal-actions">
-      <button class="btn btn-secondary" id="closeModal">Cancel</button>
-      <button class="btn btn-primary" id="nextStep">Next</button>
+      <button class="btn" id="closeModal">Cancel</button>
+      <button class="btn primary" id="nextStep">Continue</button>
     </div>
   </div>
 </div>
 
 <script>
-/* SPLASH */
-window.onload = () => {
+/* Splash */
+setTimeout(() => {
+  document.getElementById("splash").style.opacity = "0";
   setTimeout(() => {
-    document.getElementById("splash").style.opacity = "0";
-    setTimeout(() => {
-      document.getElementById("splash").remove();
-      document.getElementById("dashboard").style.display = "block";
-    }, 800);
-  }, 3200);
-};
+    document.getElementById("splash").remove();
+    document.getElementById("app").style.display = "block";
+  }, 900);
+}, 3200);
 
-/* MODAL FLOW */
+/* Modal logic */
 const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modalTitle");
-const modalInput = document.getElementById("modalInput");
+const title = document.getElementById("modalTitle");
+const input = document.getElementById("modalInput");
 let step = 0;
 
-function openModal(type) {
+function openModal() {
   step = 0;
-  modalTitle.textContent = "Enter Student ID";
-  modalInput.placeholder = "Student ID";
-  modalInput.value = "";
+  title.textContent = "Enter Student ID";
+  input.value = "";
   modal.style.display = "flex";
 }
 
-document.getElementById("checkIn").onclick = () => openModal("in");
-document.getElementById("checkOut").onclick = () => openModal("out");
+document.getElementById("checkIn").onclick = openModal;
+document.getElementById("checkOut").onclick = openModal;
 
 document.getElementById("nextStep").onclick = () => {
   if (step === 0) {
     step = 1;
-    modalTitle.textContent = "Enter Book ID";
-    modalInput.placeholder = "Book ID";
-    modalInput.value = "";
+    title.textContent = "Enter Book ID";
+    input.value = "";
   } else {
     modal.style.display = "none";
   }
@@ -283,3 +263,4 @@ document.getElementById("closeModal").onclick = () => {
 
 </body>
 </html>
+

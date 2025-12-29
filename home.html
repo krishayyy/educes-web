@@ -3,429 +3,282 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TTA Library - Home</title>
+<title>TTA Library</title>
+
 <style>
-  /* Reset */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body, html { width: 100%; height: 100%; font-family: 'Helvetica Neue', sans-serif; background: #e8f0fe; overflow: hidden; }
+/* ---------- RESET ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  /* Splash Screen */
-  #splash {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #f0f8ff, #d0e4ff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 9999;
-    perspective: 1000px;
-  }
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f4f6f8;
+  color: #1f2937;
+}
 
-  #logo {
-    width: 180px;
-    height: 180px;
-    margin-bottom: 20px;
-    transform: scale(0);
-    animation: logoZoom 3s forwards;
-  }
+/* ---------- SPLASH ---------- */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #eef3ff, #dbe7ff);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  #welcomeText {
-    font-size: 3rem;
-    font-weight: bold;
-    background: linear-gradient(90deg, #004085, #007bff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    opacity: 0;
-    transform: rotateX(20deg) translateY(30px);
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-    animation: textUnfold 3s 1.5s forwards;
-  }
+#logo {
+  width: 160px;
+  transform: scale(0.7);
+  opacity: 0;
+  animation: logoIn 2.2s ease forwards;
+}
 
-  @keyframes logoZoom {
-    0% { transform: scale(0); opacity: 0; }
-    60% { transform: scale(1.2); opacity: 1; }
-    100% { transform: scale(1); opacity:1; }
-  }
+#welcomeText {
+  margin-top: 24px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  opacity: 0;
+  animation: textIn 1.2s ease forwards;
+  animation-delay: 1.6s;
+}
 
-  @keyframes textUnfold {
-    0% { opacity: 0; transform: rotateX(20deg) translateY(30px); }
-    60% { opacity: 1; transform: rotateX(-5deg) translateY(-5px); }
-    100% { opacity: 1; transform: rotateX(0deg) translateY(0); }
-  }
+@keyframes logoIn {
+  to { transform: scale(1); opacity: 1; }
+}
 
-  /* Dashboard */
-  #dashboard {
-    display: none;
-    padding: 60px 40px;
-    max-width: 1200px;
-    margin: auto;
-    text-align: center;
-    background: linear-gradient(180deg, #ffffff, #f0f4ff);
-    min-height: 100vh;
-    border-radius: 25px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    overflow: hidden;
-    position: relative;
-  }
+@keyframes textIn {
+  to { opacity: 1; }
+}
 
-  header {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 50px;
-    opacity: 0;
-    transform: translateY(-20px);
-    animation: fadeSlide 1s 0.5s forwards;
-  }
+/* ---------- DASHBOARD ---------- */
+#dashboard {
+  display: none;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
 
-  @keyframes fadeSlide {
-    0% { opacity:0; transform: translateY(-20px);}
-    100% { opacity:1; transform: translateY(0);}
-  }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 36px;
+}
 
-  nav {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 50px;
-  }
+header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
 
-  nav a {
-    margin: 0 20px;
-    text-decoration: none;
-    font-weight: bold;
-    color: #007bff;
-    font-size: 1.2rem;
-    transition: color 0.3s, transform 0.3s;
-  }
+nav a {
+  margin-left: 24px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+}
 
-  nav a:hover { color: #004085; transform: scale(1.05); }
+nav a:hover {
+  color: #2563eb;
+}
 
-  .action-btn {
-    padding: 20px 50px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateY(20px);
-  }
+/* ---------- CARDS ---------- */
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
 
-  .checkout { background-color: #28a745; color: white; animation: fadeSlideBtn 1s 1s forwards; }
-  .checkin { background-color: #ffc107; color: white; animation: fadeSlideBtn 1s 1.2s forwards; }
+.card h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
 
-  .action-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+/* ---------- ACTIONS ---------- */
+.actions {
+  display: flex;
+  gap: 16px;
+}
 
-  @keyframes fadeSlideBtn {
-    0% { opacity:0; transform: translateY(20px); }
-    100% { opacity:1; transform: translateY(0); }
-  }
+.btn {
+  appearance: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
 
-  /* Modal */
-  .modal {
-    position: fixed;
-    top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-  }
+/* Primary */
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
 
-  .modal-content {
-    background: #fff;
-    padding: 40px;
-    border-radius: 20px;
-    width: 450px;
-    max-width: 90%;
-    text-align: center;
-    position: relative;
-    transform: scale(0.8);
-    opacity: 0;
-    animation: modalOpen 0.4s forwards;
-  }
+.btn-primary:hover {
+  background: #1d4ed8;
+  box-shadow: 0 6px 16px rgba(37,99,235,0.3);
+}
 
-  @keyframes modalOpen {
-    0% { transform: scale(0.8); opacity:0; }
-    100% { transform: scale(1); opacity:1; }
-  }
+/* Secondary */
+.btn-secondary {
+  background: #f9fafb;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+}
 
-  .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; }
-  input { width: 80%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem; }
-  .modal-step { display: none; }
-  .modal-step.active { display: block; }
-  .modal-buttons button { margin: 10px; padding: 10px 25px; border-radius: 10px; border:none; cursor:pointer; font-weight:bold; transition: 0.3s; }
-  .modal-buttons button:hover { opacity: 0.9; }
+.btn-secondary:hover {
+  background: #f3f4f6;
+}
 
-  /* Receipt Buttons */
-  #undoBtn { background-color: #dc3545; color:white; }
-  #closeReceipt { background-color: #007bff; color:white; }
+/* ---------- MODAL ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
 
-  /* Cinematic Library Background */
-  .library-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 15px;
-    padding: 50px;
-    z-index: -1;
-    perspective: 1200px;
-    background: linear-gradient(180deg, #f0f4ff, #d0e4ff);
-    overflow: hidden;
-  }
+.modal-box {
+  background: #ffffff;
+  width: 420px;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+}
 
-  .library-bg .book {
-    position: relative;
-    background: linear-gradient(135deg, #87cefa, #1e90ff);
-    border-radius: 5px;
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease, box-shadow 0.6s ease;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-  }
+.modal-box h3 {
+  font-size: 1.2rem;
+  margin-bottom: 18px;
+}
 
-  .library-bg .book span {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-  }
+.modal-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
 
-  .library-bg .book:hover {
-    transform: rotateY(10deg) rotateX(5deg) scale(1.05);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-  }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
 
-  .library-bg .book.zoomed {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 60vw;
-    height: 90vh;
-    transform: translate(-50%, -50%) scale(1);
-    z-index: 100;
-    border-radius: 10px;
-    transition: transform 1s ease, width 1s ease, height 1s ease;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-  }
-
-  /* Password Overlay */
-  #passwordOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
-  }
-
-  #passwordBox {
-    color: white;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    padding: 40px;
-    border-radius: 15px;
-  }
-
-  #passwordBox input {
-    padding: 12px 20px;
-    font-size: 18px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    margin-top: 15px;
-    width: 220px;
-  }
+/* ---------- FOOTER ---------- */
+footer {
+  margin-top: 60px;
+  font-size: 0.85rem;
+  color: #6b7280;
+  text-align: center;
+}
 </style>
 </head>
+
 <body>
 
-<!-- Splash Screen -->
+<!-- SPLASH -->
 <div id="splash">
-  <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="TTA Logo" id="logo">
+  <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo">
   <div id="welcomeText">Welcome to TTA Library</div>
 </div>
 
-<!-- Dashboard -->
+<!-- DASHBOARD -->
 <div id="dashboard">
-  <header>TTA Library Dashboard</header>
-  <nav>
-    <a href="home.html">Home</a>
-    <a href="studentcheck.html">Student Check</a>
-    <a href="booksout.html">Books Out</a>
-    <a href="history.html">History</a>
-  </nav>
-  <div style="text-align:center; margin-top:50px;">
-    <button class="action-btn checkin" id="openCheckIn">Check In</button>
-    <button class="action-btn checkout" id="openCheckOut">Check Out</button>
-  </div>
-</div>
+  <header>
+    <h1>TTA Library</h1>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="studentcheck.html">Student Check</a>
+      <a href="booksout.html">Books Out</a>
+      <a href="history.html">History</a>
+    </nav>
+  </header>
 
-<!-- Cinematic Library Background -->
-<div class="library-bg" id="library">
-  <div class="book" data-number="01"><span>01</span></div>
-  <div class="book" data-number="02"><span>02</span></div>
-  <div class="book" data-number="03"><span>03</span></div>
-  <div class="book" data-number="04"><span>04</span></div>
-  <div class="book" data-number="05"><span>05</span></div>
-  <div class="book" data-number="06"><span>06</span></div>
-  <div class="book" data-number="07"><span>07</span></div>
-  <div class="book" data-number="08"><span>08</span></div>
-  <div class="book" data-number="09"><span>09</span></div>
-  <div class="book" data-number="10"><span>10</span></div>
-  <div class="book" data-number="11"><span>11</span></div>
-  <div class="book" data-number="12"><span>12</span></div>
-  <div class="book" data-number="13"><span>13</span></div>
-  <div class="book" data-number="14"><span>14</span></div>
-  <div class="book" data-number="15"><span>15</span></div>
-  <div class="book" data-number="16"><span>16</span></div>
-  <div class="book" data-number="17"><span>17</span></div>
-  <div class="book" data-number="18"><span>18</span></div>
-  <div class="book" data-number="19"><span>19</span></div>
-  <div class="book" data-number="20"><span>20</span></div>
-</div>
-
-<!-- Password Overlay -->
-<div id="passwordOverlay">
-  <div id="passwordBox">
-    <h2>Enter Password</h2>
-    <input type="password" placeholder="Password" id="libraryPassword">
-    <div class="modal-buttons">
-      <button id="submitLibraryPassword">Submit</button>
+  <div class="card">
+    <h2>Quick Actions</h2>
+    <div class="actions">
+      <button class="btn btn-secondary" id="checkIn">Check In</button>
+      <button class="btn btn-primary" id="checkOut">Check Out</button>
     </div>
-    <div id="libraryError" style="color:red; margin-top:10px; display:none;">Incorrect password!</div>
   </div>
+
+  <footer>
+    © TTA Library System
+  </footer>
 </div>
 
-<!-- Check In/Out Modal -->
+<!-- MODAL -->
 <div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeModal">&times;</span>
-
-    <div class="modal-step" id="step1">
-      <h2>Enter Student ID</h2>
-      <input type="text" id="studentIdInput" placeholder="Student ID">
-      <div class="modal-buttons">
-        <button id="nextToScan">Next</button>
-      </div>
-    </div>
-
-    <div class="modal-step" id="step2">
-      <h2>Scan / Enter Book ID</h2>
-      <input type="text" id="bookInput" placeholder="Book QR code">
-      <div class="modal-buttons">
-        <button id="nextToReceipt">Next</button>
-      </div>
-    </div>
-
-    <div class="modal-step" id="step3">
-      <h2>Transaction Complete</h2>
-      <div id="receiptText">Book checked out successfully!</div>
-      <div class="modal-buttons">
-        <button id="undoBtn">Undo</button>
-        <button id="closeReceipt">Close</button>
-      </div>
+  <div class="modal-box">
+    <h3 id="modalTitle">Enter Student ID</h3>
+    <input type="text" id="modalInput" placeholder="Student ID">
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="closeModal">Cancel</button>
+      <button class="btn btn-primary" id="nextStep">Next</button>
     </div>
   </div>
 </div>
 
 <script>
-  // Splash animation
-  window.addEventListener('load', () => {
+/* SPLASH */
+window.onload = () => {
+  setTimeout(() => {
+    document.getElementById("splash").style.opacity = "0";
     setTimeout(() => {
-      document.getElementById('splash').style.transition = 'opacity 1s';
-      document.getElementById('splash').style.opacity = 0;
-      setTimeout(() => {
-        document.getElementById('splash').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-      }, 1000);
-    }, 4000);
-  });
+      document.getElementById("splash").remove();
+      document.getElementById("dashboard").style.display = "block";
+    }, 800);
+  }, 3200);
+};
 
-  // Check In/Out modal
-  const modal = document.getElementById('modal');
-  const step1 = document.getElementById('step1');
-  const step2 = document.getElementById('step2');
-  const step3 = document.getElementById('step3');
+/* MODAL FLOW */
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalInput = document.getElementById("modalInput");
+let step = 0;
 
-  function openModal() {
-    modal.style.display = 'flex';
-    step1.classList.add('active');
-    step2.classList.remove('active');
-    step3.classList.remove('active');
+function openModal(type) {
+  step = 0;
+  modalTitle.textContent = "Enter Student ID";
+  modalInput.placeholder = "Student ID";
+  modalInput.value = "";
+  modal.style.display = "flex";
+}
+
+document.getElementById("checkIn").onclick = () => openModal("in");
+document.getElementById("checkOut").onclick = () => openModal("out");
+
+document.getElementById("nextStep").onclick = () => {
+  if (step === 0) {
+    step = 1;
+    modalTitle.textContent = "Enter Book ID";
+    modalInput.placeholder = "Book ID";
+    modalInput.value = "";
+  } else {
+    modal.style.display = "none";
   }
-  function closeModal() {
-    modal.style.display = 'none';
-    step1.classList.remove('active');
-    step2.classList.remove('active');
-    step3.classList.remove('active');
-    document.getElementById('studentIdInput').value = '';
-    document.getElementById('bookInput').value = '';
-  }
+};
 
-  document.getElementById('openCheckIn').addEventListener('click', openModal);
-  document.getElementById('openCheckOut').addEventListener('click', openModal);
-  document.getElementById('closeModal').addEventListener('click', closeModal);
-
-  document.getElementById('nextToScan').addEventListener('click', () => {
-    step1.classList.remove('active');
-    step2.classList.add('active');
-  });
-  document.getElementById('nextToReceipt').addEventListener('click', () => {
-    step2.classList.remove('active');
-    step3.classList.add('active');
-  });
-  document.getElementById('closeReceipt').addEventListener('click', closeModal);
-  document.getElementById('undoBtn').addEventListener('click', () => {
-    step3.classList.remove('active');
-    step2.classList.add('active');
-  });
-
-  // Library books logic
-  const libraryBooks = document.querySelectorAll('.library-bg .book');
-  const overlay = document.getElementById('passwordOverlay');
-  const libraryPassword = document.getElementById('libraryPassword');
-  const submitLibraryPassword = document.getElementById('submitLibraryPassword');
-  const libraryError = document.getElementById('libraryError');
-
-  libraryBooks.forEach(book => {
-    book.addEventListener('click', () => {
-      if (book.dataset.number === "06") {
-        book.classList.add('zoomed');
-        setTimeout(() => { overlay.style.display = "flex"; }, 1000);
-      } else {
-        book.style.transform = "scale(1.05) rotateY(5deg)";
-        setTimeout(() => { book.style.transform = ""; }, 500);
-      }
-    });
-  });
-
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      overlay.style.display = 'none';
-      document.querySelector('.library-bg .zoomed').classList.remove('zoomed');
-    }
-  });
-
-  submitLibraryPassword.addEventListener('click', () => {
-    if (libraryPassword.value === "fun") {
-      window.location.href = "etc.html";
-    } else {
-      libraryError.style.display = "block";
-    }
-  });
+document.getElementById("closeModal").onclick = () => {
+  modal.style.display = "none";
+};
 </script>
 
 </body>

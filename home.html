@@ -66,7 +66,6 @@ html, body {
   display: none;
   height: 100vh;
   width: 100vw;
-  position: relative;
   overflow: hidden;
 }
 
@@ -78,18 +77,12 @@ html, body {
   height: 68px;
   padding: 0 40px;
   background: #111827;
-  color: white;
-  z-index: 50;
 }
 
 .logo img {
   height: 36px;
-  width: auto;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
 }
-
-.logo img:hover { transform: translateY(-1px); opacity: 0.85; }
 
 .nav {
   display: flex;
@@ -104,7 +97,6 @@ html, body {
   cursor: pointer;
   position: relative;
   padding: 8px 4px;
-  transition: color 0.2s ease;
 }
 
 .nav-btn::after {
@@ -118,26 +110,18 @@ html, body {
   transition: width 0.3s ease;
 }
 
-.nav-btn:hover::after { width: 100%; }
+.nav-btn:hover::after {
+  width: 100%;
+}
 
-/* ---------------- MAIN CONTENT ---------------- */
+/* ---------------- MAIN ---------------- */
 .content {
-  flex: 1;
   padding: 48px;
   height: calc(100% - 68px);
-  overflow: auto;
   position: relative;
 }
 
 /* ---------------- DASHBOARD ---------------- */
-.page {
-  display: none;
-  animation: fadeUp 0.4s ease forwards;
-  position: relative;
-}
-
-.page.active { display: block; }
-
 .actions {
   margin-top: 40px;
   display: flex;
@@ -150,31 +134,31 @@ html, body {
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   font-weight: 600;
 }
 
-.action:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
-
-.primary { background: #111827; color: #fff; }
-.secondary { background: #e5e7eb; color: #111827; }
-
-/* ---------------- DASHBOARD LOGO ---------------- */
-.dashboard-logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.06;
-  pointer-events: none;
-  animation: logoFloat 1.5s ease forwards;
+.primary {
+  background: #111827;
+  color: white;
 }
 
-.dashboard-logo img { height: 120px; }
+.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
 
-@keyframes logoFloat {
-  from { opacity: 0; transform: translate(-50%, -40%); }
-  to { opacity: 0.06; transform: translate(-50%, -50%); }
+.dashboard-logo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.dashboard-logo img {
+  height: 120px;
 }
 
 /* ---------------- MODAL ---------------- */
@@ -193,10 +177,11 @@ html, body {
   padding: 36px;
   border-radius: 18px;
   background: #020617;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.8);
 }
 
-.modal-box h2 { margin-bottom: 20px; font-size: 1.3rem; }
+.modal-box h2 {
+  margin-bottom: 20px;
+}
 
 .modal-box input {
   width: 100%;
@@ -205,7 +190,6 @@ html, body {
   background: #020617;
   border: 1px solid rgba(255,255,255,0.15);
   color: white;
-  font-size: 0.95rem;
 }
 
 .modal-actions {
@@ -214,12 +198,6 @@ html, body {
   justify-content: flex-end;
   gap: 14px;
 }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 </style>
 </head>
 
@@ -227,15 +205,18 @@ html, body {
 
 <!-- SPLASH -->
 <div id="splash">
-  <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="TTA Logo" id="logo">
+  <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo">
   <div id="welcomeText">Welcome to TTA Library</div>
 </div>
 
 <!-- APP -->
 <div id="app">
-  <!-- Top bar -->
+
+  <!-- TOP BAR -->
   <header class="topbar">
-    <div class="logo"><img src="https://www.catamilacademy.org/images/tha_logo.png" alt="TTA Logo"></div>
+    <div class="logo">
+      <img src="https://www.catamilacademy.org/images/tha_logo.png">
+    </div>
     <nav class="nav">
       <button class="nav-btn" data-page="dashboard">Dashboard</button>
       <button class="nav-btn" data-page="studentcheck">Student Check</button>
@@ -244,24 +225,18 @@ html, body {
     </nav>
   </header>
 
-  <!-- Main content -->
+  <!-- MAIN -->
   <main class="content">
-    <!-- Dashboard -->
-    <section class="page active" id="dashboard">
-      <div class="dashboard-logo"><img src="https://www.catamilacademy.org/images/tha_logo.png" alt="TTA Logo"></div>
-      <div class="actions">
-        <button class="action primary" id="openCheckIn">Check In</button>
-        <button class="action secondary" id="openCheckOut">Check Out</button>
-      </div>
-    </section>
+    <div class="dashboard-logo">
+      <img src="https://www.catamilacademy.org/images/tha_logo.png">
+    </div>
 
-    <!-- Student Check -->
-    <section class="page" id="studentcheck"></section>
-    <!-- Books Out -->
-    <section class="page" id="booksout"></section>
-    <!-- History -->
-    <section class="page" id="history"></section>
+    <div class="actions">
+      <button class="action primary" id="openCheckIn">Check In</button>
+      <button class="action secondary" id="openCheckOut">Check Out</button>
+    </div>
   </main>
+
 </div>
 
 <!-- MODAL -->
@@ -277,50 +252,63 @@ html, body {
 </div>
 
 <script>
-// Splash -> app
-window.addEventListener('load', () => {
+// Splash screen
+window.addEventListener("load", () => {
   setTimeout(() => {
-    const splash = document.getElementById('splash');
-    splash.style.transition = 'opacity 1s';
-    splash.style.opacity = 0;
+    document.getElementById("splash").style.opacity = 0;
     setTimeout(() => {
-      splash.remove();
-      document.getElementById('app').style.display = 'block';
+      document.getElementById("splash").remove();
+      document.getElementById("app").style.display = "block";
     }, 1000);
   }, 4000);
 });
 
-// Page nav
-const navBtns = document.querySelectorAll('.nav-btn');
-const pages = document.querySelectorAll('.page');
+// NAVIGATION REDIRECTS
+document.querySelectorAll(".nav-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const page = btn.dataset.page;
 
-navBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const target = btn.dataset.page;
-    pages.forEach(p => p.classList.remove('active'));
-    document.getElementById(target).classList.add('active');
+    if (page === "dashboard") location.href = "index.html";
+    if (page === "studentcheck") location.href = "studentcheck.html";
+    if (page === "booksout") location.href = "booksout.html";
+    if (page === "history") location.href = "history.html";
   });
 });
 
-// Modal logic
+// MODAL LOGIC
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const modalInput = document.getElementById("modalInput");
 let step = 0;
 
 document.getElementById("openCheckIn").onclick = () => {
-  step = 0; modalTitle.textContent="Enter Student ID"; modalInput.value=""; modal.style.display="flex";
+  step = 0;
+  modalTitle.textContent = "Enter Student ID";
+  modalInput.value = "";
+  modal.style.display = "flex";
 };
+
 document.getElementById("openCheckOut").onclick = () => {
-  step = 0; modalTitle.textContent="Enter Student ID"; modalInput.value=""; modal.style.display="flex";
+  step = 0;
+  modalTitle.textContent = "Enter Student ID";
+  modalInput.value = "";
+  modal.style.display = "flex";
 };
 
 document.getElementById("nextStep").onclick = () => {
-  if(step===0){ step=1; modalTitle.textContent="Enter Book ID"; modalInput.value=""; }
-  else{ modal.style.display="none"; }
+  if (step === 0) {
+    step = 1;
+    modalTitle.textContent = "Enter Book ID";
+    modalInput.value = "";
+  } else {
+    modal.style.display = "none";
+  }
 };
 
-document.getElementById("closeModal").onclick = () => { modal.style.display="none"; };
+document.getElementById("closeModal").onclick = () => {
+  modal.style.display = "none";
+};
 </script>
+
 </body>
 </html>

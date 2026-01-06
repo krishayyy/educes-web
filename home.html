@@ -1,213 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TTA Library - Premium</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Educe Library</title>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-<!-- QR Scanner -->
-<script src="https://unpkg.com/html5-qrcode"></script>
-
-<style>
-/* ---------------- RESET ---------------- */
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', system-ui, sans-serif; }
-html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
-
-/* ---------------- SPLASH ---------------- */
-#splash {
-  position:fixed; inset:0;
-  background: radial-gradient(circle at top,#111827,#020617);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1000;
-}
-#logo { width:180px; transform:scale(0); animation:logoZoom 3s forwards; }
-#welcomeText {
-  margin-top:28px; font-size:3rem; font-weight:bold;
-  background:linear-gradient(90deg,#004085,#007bff);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  opacity:0; animation:textUnfold 3s 1.5s forwards;
-}
-@keyframes logoZoom { 0%{transform:scale(0);opacity:0;} 60%{transform:scale(1.2);opacity:1;} 100%{transform:scale(1);opacity:1;} }
-@keyframes textUnfold { 0%{opacity:0;transform:rotateX(20deg) translateY(30px);} 100%{opacity:1;transform:rotateX(0deg) translateY(0);} }
-
-/* ---------------- APP ---------------- */
-#app { display:none; height:100vh; width:100vw; overflow:hidden; }
-
-/* ---------------- TOP BAR ---------------- */
-.topbar { display:flex; align-items:center; height:68px; padding:0 40px; background:#111827; }
-.logo { display:flex; align-items:center; gap:12px; }
-.logo img { height:36px; cursor:pointer; }
-.nav { display:flex; gap:16px; }
-.nav-btn { background:none; border:none; font-size:0.95rem; color:#e5e7eb; cursor:pointer; padding:8px 4px; position:relative; }
-.nav-btn::after { content:""; position:absolute; bottom:0; left:0; width:0%; height:2px; background:#007bff; transition:width 0.3s ease; }
-.nav-btn:hover::after { width:100%; }
-
-/* ---------------- MAIN ---------------- */
-.content { padding:48px; height:calc(100% - 68px); position:relative; }
-
-/* ---------------- ACTION BUTTONS ---------------- */
-.actions { margin-top:40px; display:flex; gap:20px; }
-.action { padding:16px 36px; border-radius:14px; border:none; font-size:1rem; cursor:pointer; font-weight:600; }
-.primary { background:#111827; color:white; }
-.secondary { background:#e5e7eb; color:#111827; }
-
-/* ---------------- MODAL ---------------- */
-.modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; align-items:center; justify-content:center; z-index:2000; }
-.modal-box { width:420px; padding:36px; border-radius:18px; background:#020617; }
-.modal-box h2 { margin-bottom:20px; }
-.modal-box input { width:100%; padding:14px; border-radius:10px; background:#020617; border:1px solid rgba(255,255,255,0.15); color:white; }
-.modal-actions { margin-top:26px; display:flex; justify-content:flex-end; gap:14px; }
-
-/* ---------------- QR SCANNER MODAL ---------------- */
-#qrModal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:3000; }
-#qrScanner { width:400px; }
-</style>
-</head>
-<body>
-
-<!-- SPLASH -->
-<div id="splash">
-  <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo">
-  <div id="welcomeText">Welcome to TTA Library</div>
-</div>
-
-<!-- APP -->
-<div id="app">
-
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <div class="logo">
-      <img src="https://www.catamilacademy.org/images/tha_logo.png">
-      <button class="nav-btn" onclick="window.location.href='studentcheck.html'">Students</button>
-      <button class="nav-btn" onclick="window.location.href='booksout.html'">Books Out</button>
-      <button class="nav-btn" onclick="window.location.href='history.html'">History</button>
-    </div>
-  </header>
-
-  <!-- MAIN -->
-  <main class="content">
-    <div class="actions">
-      <button class="action primary" id="openCheckIn">Check In/Out</button>
-      <button class="action secondary" id="openQR">Scan QR</button>
-    </div>
-  </main>
-
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <h2 id="modalTitle">Enter Student ID</h2>
-    <input id="modalInput" placeholder="Student ID">
-    <div class="modal-actions">
-      <button class="action secondary" id="closeModal">Cancel</button>
-      <button class="action primary" id="nextStep">Continue</button>
-    </div>
-  </div>
-</div>
-
-<!-- QR MODAL -->
-<div class="modal" id="qrModal">
-  <div class="modal-box">
-    <h2>Scan Book QR</h2>
-    <div id="qrScanner"></div>
-    <div class="modal-actions">
-      <button class="action secondary" id="closeQR">Close</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ---------------- SPLASH ----------------
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.getElementById("splash").remove();
-    document.getElementById("app").style.display = "block";
-  }, 4000);
-});
-
-// ---------------- FIREBASE INIT ----------------
-const firebaseConfig = {
+window.firebaseApp = initializeApp({
   apiKey: "AIzaSyCqCPpNb0beFJui-qpShYqwgb6e5IS7PyU",
   authDomain: "tta-library.firebaseapp.com",
   projectId: "tta-library",
   storageBucket: "tta-library.firebasestorage.app",
   messagingSenderId: "803320543492",
-  appId: "1:803320543492:web:5e1b19fcac2fe3846e7851",
-  measurementId: "G-E988D3Z7ZQ"
+  appId: "1:803320543492:web:5e1b19fcac2fe3846e7851"
+});
+
+window.db = getFirestore(firebaseApp);
+</script>
+
+<!-- QR -->
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}
+body{height:100vh;background:#0b0d10;color:#e5e7eb}
+
+/* Splash */
+#splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+background:radial-gradient(circle at top,#111827,#020617);z-index:1000}
+#splash img{width:160px;animation:zoom 2.5s forwards}
+#splash h1{margin-top:24px;font-size:2.5rem;background:linear-gradient(90deg,#007bff,#00c2ff);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:fade 2s 1.2s forwards}
+@keyframes zoom{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fade{to{opacity:1}}
+
+/* App */
+#app{display:none;height:100%}
+
+/* Topbar */
+header{height:68px;background:#111827;display:flex;align-items:center;padding:0 40px;gap:32px}
+header img{height:34px}
+nav{display:flex;gap:24px}
+nav button{background:none;border:none;color:#e5e7eb;font-size:.95rem;cursor:pointer;position:relative}
+nav button::after{content:"";position:absolute;bottom:-6px;left:0;width:0;height:2px;background:#007bff;transition:.3s}
+nav button:hover::after{width:100%}
+
+/* Main */
+main{padding:56px}
+.actions{display:flex;gap:24px}
+.action{padding:18px 44px;border-radius:16px;font-size:1.05rem;font-weight:600;border:none;cursor:pointer}
+.primary{background:#007bff;color:white}
+.secondary{background:#e5e7eb;color:#111827}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:2000}
+.box{background:#020617;padding:36px;border-radius:18px;width:420px}
+.box h2{margin-bottom:18px}
+.box input{width:100%;padding:14px;border-radius:12px;border:1px solid #2a2f3a;background:#020617;color:white}
+.box .row{margin-top:24px;display:flex;justify-content:flex-end;gap:12px}
+
+/* QR */
+#qr{width:320px;margin-top:20px}
+</style>
+</head>
+
+<body>
+
+<div id="splash">
+  <img src="https://www.catamilacademy.org/images/tha_logo.png">
+  <h1>Welcome to Educe Library</h1>
+</div>
+
+<div id="app">
+<header>
+  <img src="https://www.catamilacademy.org/images/tha_logo.png">
+  <nav>
+    <button onclick="location.href='studentcheck.html'">Student Check</button>
+    <button onclick="location.href='booksout.html'">Books Out</button>
+    <button onclick="location.href='history.html'">History</button>
+  </nav>
+</header>
+
+<main>
+  <div class="actions">
+    <button class="action primary" onclick="startFlow('checkout')">Check Out Book</button>
+    <button class="action secondary" onclick="startFlow('return')">Return Book</button>
+  </div>
+</main>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="box">
+    <h2 id="title"></h2>
+    <input id="input" placeholder="">
+    <div id="qr"></div>
+    <div class="row">
+      <button class="action secondary" onclick="closeModal()">Cancel</button>
+      <button class="action primary" onclick="next()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { doc, getDoc, setDoc, updateDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+let mode="",step=0,student="",book="",scanner;
+
+window.startFlow = m => {
+  mode=m; step=0;
+  document.getElementById("title").innerText="Enter Student ID";
+  document.getElementById("input").value="";
+  document.getElementById("qr").innerHTML="";
+  document.getElementById("modal").style.display="flex";
 };
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
 
-// ---------------- MODAL LOGIC ----------------
-const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modalTitle");
-const modalInput = document.getElementById("modalInput");
-let step = 0;
-let currentStudentID = "";
-let currentBookID = "";
-
-document.getElementById("openCheckIn").onclick = () => {
-  step = 0;
-  modalTitle.textContent = "Enter Student ID";
-  modalInput.value = "";
-  modal.style.display = "flex";
-};
-
-document.getElementById("nextStep").onclick = async () => {
-  const inputValue = modalInput.value.trim();
-  if (step === 0) {
-    currentStudentID = inputValue;
-    step = 1;
-    modalTitle.textContent = "Enter Book ID";
-    modalInput.value = "";
-  } else if (step === 1) {
-    currentBookID = inputValue;
-    const bookRef = db.collection("books").doc(currentBookID);
-    const doc = await bookRef.get();
-    if (!doc.exists) { alert("Book not found!"); return; }
-    const bookData = doc.data();
-    let action;
-    if (bookData.status === "available") {
-      await bookRef.update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
-      action = "checked out";
-    } else {
-      await bookRef.update({ status:"available", checkedOutBy:"", timestamp:new Date() });
-      action = "returned";
-    }
-    // Log history
-    await db.collection("history").add({ studentID: currentStudentID, bookID: currentBookID, action, timestamp:new Date() });
-    alert(`Book ${currentBookID} ${action}!`);
-    modal.style.display = "none";
+window.next = async () => {
+  const val=document.getElementById("input").value.trim();
+  if(step===0){
+    student=val; step=1;
+    document.getElementById("title").innerText="Scan Book QR or Enter Book ID";
+    startQR();
+  } else {
+    book=val;
+    await process();
   }
 };
 
-document.getElementById("closeModal").onclick = () => { modal.style.display="none"; };
+function startQR(){
+  scanner=new Html5Qrcode("qr");
+  scanner.start({facingMode:"environment"},{fps:10,qrbox:220},code=>{
+    book=code; scanner.stop(); process();
+  });
+}
 
-// ---------------- QR SCANNER ----------------
-const qrModal = document.getElementById("qrModal");
-document.getElementById("openQR").onclick = () => {
-  qrModal.style.display = "flex";
-  const html5QrCode = new Html5Qrcode("qrScanner");
-  html5QrCode.start(
-    { facingMode: "environment" },
-    { fps:10, qrbox:250 },
-    qrCodeMessage => {
-      currentBookID = qrCodeMessage.trim();
-      qrModal.style.display="none";
-      html5QrCode.stop();
-      modalTitle.textContent = "Enter Student ID";
-      modalInput.value="";
-      modal.style.display="flex";
-      step = 1;
-    },
-    errorMessage => { /* ignore errors */ }
-  );
+async function process(){
+  const ref=doc(db,"books",book);
+  const snap=await getDoc(ref);
+
+  if(mode==="checkout"){
+    if(snap.exists() && snap.data().status==="out"){alert("Book already out");return;}
+    await setDoc(ref,{status:"out",checkedOutBy:student,updatedAt:serverTimestamp()});
+    await addDoc(collection(db,"history"),{studentId:student,bookId:book,action:"checkout",timestamp:serverTimestamp()});
+  } else {
+    if(!snap.exists() || snap.data().status==="available"){alert("Book already returned");return;}
+    await updateDoc(ref,{status:"available",checkedOutBy:"",updatedAt:serverTimestamp()});
+    await addDoc(collection(db,"history"),{studentId:student,bookId:book,action:"return",timestamp:serverTimestamp()});
+  }
+
+  closeModal();
+  alert("Success");
+}
+
+window.closeModal=()=>{
+  document.getElementById("modal").style.display="none";
+  if(scanner) scanner.stop().catch(()=>{});
 };
-document.getElementById("closeQR").onclick = () => { qrModal.style.display="none"; };
+
+window.onload=()=>setTimeout(()=>{
+  document.getElementById("splash").remove();
+  document.getElementById("app").style.display="block";
+},3000);
 </script>
 
 </body>

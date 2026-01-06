@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EDUCE Library</title>
+<title>Educes Library</title>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
@@ -13,76 +13,57 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
-/* ---------------- RESET ---------------- */
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', system-ui, sans-serif; }
+/* ---------- RESET ---------- */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
 html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 
-/* ---------------- SPLASH ---------------- */
-#splash {
-  position:fixed; inset:0;
-  background: radial-gradient(circle at top,#111827,#020617);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1000;
-}
-#logo { width:180px; transform:scale(0); animation:logoZoom 3s forwards; }
-#welcomeText {
-  margin-top:28px; font-size:3rem; font-weight:bold;
-  background:linear-gradient(90deg,#004085,#007bff);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  opacity:0; animation:textUnfold 3s 1.5s forwards;
-}
-@keyframes logoZoom { 0%{transform:scale(0);opacity:0;} 60%{transform:scale(1.2);opacity:1;} 100%{transform:scale(1);opacity:1;} }
-@keyframes textUnfold { 0%{opacity:0;transform:rotateX(20deg) translateY(30px);} 100%{opacity:1;transform:rotateX(0deg) translateY(0);} }
+/* ---------- SPLASH ---------- */
+#splash { position:fixed; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; background:radial-gradient(circle,#111827,#020617); z-index:1000; }
+#splash img { width:180px; transform:scale(0); animation:logoZoom 2s forwards; }
+#welcomeText { margin-top:20px; font-size:2.5rem; font-weight:bold; background:linear-gradient(90deg,#004085,#007bff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; opacity:0; animation:textUnfold 2s 1s forwards; }
+@keyframes logoZoom {0%{transform:scale(0);opacity:0;} 60%{transform:scale(1.2);opacity:1;} 100%{transform:scale(1);opacity:1;}}
+@keyframes textUnfold {0%{opacity:0; transform:translateY(30px);}100%{opacity:1; transform:translateY(0);}}
 
-/* ---------------- APP ---------------- */
-#app { display:none; height:100vh; width:100vw; overflow:hidden; }
+/* ---------- APP ---------- */
+#app { display:none; height:100vh; width:100vw; }
 
-/* ---------------- TOP BAR ---------------- */
-.topbar { display:flex; align-items:center; height:68px; padding:0 40px; background:#111827; }
-.logo { display:flex; align-items:center; gap:12px; }
-.logo img { height:36px; cursor:pointer; }
-.nav { display:flex; gap:16px; margin-left:auto; }
-.nav-btn { background:none; border:none; font-size:0.95rem; color:#e5e7eb; cursor:pointer; padding:8px 4px; position:relative; }
-.nav-btn::after { content:""; position:absolute; bottom:0; left:0; width:0%; height:2px; background:#007bff; transition:width 0.3s ease; }
+/* ---------- TOPBAR ---------- */
+.topbar { display:flex; justify-content:space-between; align-items:center; height:68px; padding:0 40px; background:#111827; }
+.topbar .logo img { height:36px; cursor:pointer; }
+.nav { display:flex; gap:24px; }
+.nav-btn { background:none; border:none; color:#e5e7eb; font-size:1rem; cursor:pointer; position:relative; padding:8px 4px; }
+.nav-btn::after { content:""; position:absolute; bottom:0; left:0; width:0%; height:2px; background:#007bff; transition:width 0.3s; }
 .nav-btn:hover::after { width:100%; }
 
-/* ---------------- MAIN ---------------- */
-.content { padding:48px; height:calc(100% - 68px); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:20px; }
-
-/* ---------------- ACTION BUTTONS ---------------- */
-.actions { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
-.action { padding:18px 40px; border-radius:14px; border:none; font-size:1.1rem; cursor:pointer; font-weight:600; transition:all 0.2s ease; }
-.action:hover { transform:scale(1.05); }
-.primary { background:#007bff; color:white; }
+/* ---------- MAIN ---------- */
+.content { height:calc(100% - 68px); display:flex; justify-content:center; align-items:center; gap:30px; flex-wrap:wrap; }
+.action { padding:20px 48px; font-size:1.2rem; font-weight:600; border-radius:14px; cursor:pointer; border:none; }
+.primary { background:#111827; color:white; }
 .secondary { background:#e5e7eb; color:#111827; }
 
-/* ---------------- MODAL ---------------- */
-.modal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:2000; }
-.modal-box { width:420px; padding:36px; border-radius:18px; background:#020617; display:flex; flex-direction:column; gap:16px; }
-.modal-box h2 { margin-bottom:8px; }
-.modal-box p { color:#00ff9c; font-weight:600; }
-.modal-box input { width:100%; padding:14px; border-radius:10px; background:#020617; border:1px solid rgba(255,255,255,0.15); color:white; }
-.modal-actions { margin-top:16px; display:flex; justify-content:flex-end; gap:12px; }
-
-/* ---------------- QR SCANNER ---------------- */
-#qrScanner { width:100%; height:300px; }
+/* ---------- MODAL ---------- */
+.modal, #qrModal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index:2000; }
+.modal-box { width:400px; padding:32px; border-radius:16px; background:#020617; display:flex; flex-direction:column; gap:16px; }
+.modal-box h2 { font-size:1.2rem; font-weight:600; }
+.modal-box input { padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.2); background:#020617; color:white; font-size:1rem; }
+.modal-actions { display:flex; justify-content:flex-end; gap:12px; }
+.message { margin-top:8px; font-size:0.95rem; color:#00ff9c; min-height:18px; }
+#qrScanner { width:100%; }
 </style>
 </head>
 <body>
 
 <!-- SPLASH -->
 <div id="splash">
-  <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo">
-  <div id="welcomeText">Welcome to EDUCE Library</div>
+  <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="Logo">
+  <div id="welcomeText">Welcome to Educes Library</div>
 </div>
 
 <!-- APP -->
 <div id="app">
-
-  <!-- TOP BAR -->
   <header class="topbar">
     <div class="logo">
-      <img src="https://www.catamilacademy.org/images/tha_logo.png">
-      <span style="color:white;font-weight:600;">EDUCE Library</span>
+      <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="Logo">
     </div>
     <nav class="nav">
       <button class="nav-btn" onclick="window.location.href='studentcheck.html'">Student Check</button>
@@ -91,22 +72,18 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
     </nav>
   </header>
 
-  <!-- MAIN -->
   <main class="content">
-    <div class="actions">
-      <button class="action primary" id="openCheckIn">Check In/Out</button>
-      <button class="action secondary" id="openQR">Scan QR</button>
-    </div>
+    <button class="action primary" id="checkOutBtn">Check Out Book</button>
+    <button class="action secondary" id="returnBtn">Return Book</button>
   </main>
-
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
     <h2 id="modalTitle">Enter Student ID</h2>
-    <p id="studentName"></p>
     <input id="modalInput" placeholder="Student ID">
+    <div class="message" id="modalMessage"></div>
     <div class="modal-actions">
       <button class="action secondary" id="closeModal">Cancel</button>
       <button class="action primary" id="nextStep">Continue</button>
@@ -130,15 +107,10 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
-// ---------------- SPLASH ----------------
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.getElementById("splash").remove();
-    document.getElementById("app").style.display = "flex";
-  }, 3500);
-});
+// ---------- SPLASH ----------
+window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").remove();document.getElementById("app").style.display="block";},2500);});
 
-// ---------------- FIREBASE INIT ----------------
+// ---------- FIREBASE ----------
 const firebaseConfig = {
   apiKey: "AIzaSyCqCPpNb0beFJui-qpShYqwgb6e5IS7PyU",
   authDomain: "tta-library.firebaseapp.com",
@@ -151,91 +123,81 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ---------------- GLOBAL ----------------
-let step = 0;
+// ---------- GLOBAL ----------
 let currentStudentID = "";
-let currentStudentName = "";
 let currentBookID = "";
+let actionType = "";
 
-// ---------------- MODAL LOGIC ----------------
+// ---------- MODALS ----------
 const modal = document.getElementById("modal");
+const qrModal = document.getElementById("qrModal");
 const modalTitle = document.getElementById("modalTitle");
 const modalInput = document.getElementById("modalInput");
-const studentNameDisplay = document.getElementById("studentName");
+const modalMessage = document.getElementById("modalMessage");
 
-document.getElementById("openCheckIn").onclick = () => {
-  step = 0;
+function openStudentModal(action){
+  actionType = action;
   modalTitle.textContent = "Enter Student ID";
   modalInput.value = "";
-  studentNameDisplay.textContent = "";
+  modalMessage.textContent = "";
   modal.style.display = "flex";
-};
+}
+function closeModal(){ modal.style.display="none"; }
 
-document.getElementById("nextStep").onclick = async () => {
-  const inputValue = modalInput.value.trim();
-  
-  if(step === 0){
-    // Verify student exists
-    const studentDoc = await db.collection("students").doc(inputValue).get();
-    if(!studentDoc.exists){
-      alert("Invalid Student ID!");
-      return;
-    }
-    currentStudentID = inputValue;
-    currentStudentName = studentDoc.data().name || "Unknown Name";
-    studentNameDisplay.textContent = `Student: ${currentStudentName}`;
-    step = 1;
-    modalTitle.textContent = "Enter Book ID";
-    modalInput.value = "";
-    modalInput.focus();
-  } else if(step === 1){
-    currentBookID = inputValue;
-    const bookRef = db.collection("books").doc(currentBookID);
-    const bookDoc = await bookRef.get();
-    if(!bookDoc.exists){ alert("Book not found!"); return; }
+// ---------- BUTTONS ----------
+document.getElementById("checkOutBtn").onclick = ()=>openStudentModal("checkout");
+document.getElementById("returnBtn").onclick = ()=>openStudentModal("return");
+document.getElementById("closeModal").onclick = closeModal;
 
-    const bookData = bookDoc.data();
-    let action;
-    if(bookData.status === "available"){
-      await bookRef.update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
-      action = "checked out";
-    } else {
-      await bookRef.update({ status:"available", checkedOutBy:"", timestamp:new Date() });
-      action = "returned";
-    }
+// ---------- NEXT STEP ----------
+document.getElementById("nextStep").onclick = async ()=>{
+  const studentID = modalInput.value.trim();
+  if(!studentID){ modalMessage.textContent="Please enter Student ID."; return; }
 
-    // Log history
-    await db.collection("history").add({ studentID:currentStudentID, studentName:currentStudentName, bookID:currentBookID, action, timestamp:new Date() });
-    alert(`Book ${currentBookID} ${action} by ${currentStudentName}!`);
-    modal.style.display = "none";
-  }
-};
+  // Check valid student
+  const studentDoc = await db.collection("students").doc(studentID).get();
+  if(!studentDoc.exists){ modalMessage.textContent="Student ID not found."; return; }
 
-document.getElementById("closeModal").onclick = () => { modal.style.display = "none"; };
+  currentStudentID = studentID;
+  modal.style.display="none";
+  openQRModal();
+}
 
-// ---------------- QR SCANNER ----------------
-const qrModal = document.getElementById("qrModal");
-document.getElementById("openQR").onclick = () => {
-  qrModal.style.display = "flex";
+// ---------- QR ----------
+function openQRModal(){
+  qrModal.style.display="flex";
   const html5QrCode = new Html5Qrcode("qrScanner");
   html5QrCode.start(
     { facingMode:"environment" },
     { fps:10, qrbox:250 },
-    qrCodeMessage => {
+    async qrCodeMessage=>{
       currentBookID = qrCodeMessage.trim();
-      qrModal.style.display = "none";
-      html5QrCode.stop();
-      step = 0;
-      modalTitle.textContent = "Enter Student ID";
-      modalInput.value = "";
-      studentNameDisplay.textContent = "";
-      modal.style.display = "flex";
-    },
-    errorMessage => { /* ignore */ }
-  );
-};
 
-document.getElementById("closeQR").onclick = () => { qrModal.style.display = "none"; };
+      const bookRef = db.collection("books").doc(currentBookID);
+      const bookDoc = await bookRef.get();
+      if(!bookDoc.exists){
+        alert("Book not found!"); html5QrCode.stop(); qrModal.style.display="none"; return;
+      }
+
+      if(actionType==="checkout" && bookDoc.data().status==="available"){
+        await bookRef.update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
+        await db.collection("history").add({ studentID:currentStudentID, bookID:currentBookID, action:"checked out", timestamp:new Date() });
+        alert(`${currentStudentID} checked out ${currentBookID}`);
+      } else if(actionType==="return" && bookDoc.data().status==="checked out"){
+        await bookRef.update({ status:"available", checkedOutBy:"", timestamp:new Date() });
+        await db.collection("history").add({ studentID:currentStudentID, bookID:currentBookID, action:"returned", timestamp:new Date() });
+        alert(`${currentStudentID} returned ${currentBookID}`);
+      } else {
+        alert("Action not allowed!"); 
+      }
+
+      html5QrCode.stop();
+      qrModal.style.display="none";
+    },
+    errorMessage =>{}
+  );
+}
+document.getElementById("closeQR").onclick=()=>{ qrModal.style.display="none"; }
 </script>
 
 </body>

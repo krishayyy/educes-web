@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tamil School Library</title>
+<title>EDUCE Library</title>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
@@ -13,57 +13,76 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
-/* ---------- RESET ---------- */
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+/* ---------------- RESET ---------------- */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', system-ui, sans-serif; }
 html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 
-/* ---------- SPLASH ---------- */
-#splash { position:fixed; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; background:radial-gradient(circle,#111827,#020617); z-index:1000; }
-#splash img { width:180px; transform:scale(0); animation:logoZoom 2s forwards; }
-#welcomeText { margin-top:20px; font-size:2.5rem; font-weight:bold; background:linear-gradient(90deg,#004085,#007bff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; opacity:0; animation:textUnfold 2s 1s forwards; }
-@keyframes logoZoom {0%{transform:scale(0);opacity:0;} 60%{transform:scale(1.2);opacity:1;} 100%{transform:scale(1);opacity:1;}}
-@keyframes textUnfold {0%{opacity:0; transform:translateY(30px);}100%{opacity:1; transform:translateY(0);}}
+/* ---------------- SPLASH ---------------- */
+#splash {
+  position:fixed; inset:0;
+  background: radial-gradient(circle at top,#111827,#020617);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1000;
+}
+#logo { width:180px; transform:scale(0); animation:logoZoom 2.5s forwards; }
+#welcomeText {
+  margin-top:24px; font-size:2.5rem; font-weight:bold;
+  background:linear-gradient(90deg,#007bff,#00c2ff);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  opacity:0; animation:textUnfold 2s 1.2s forwards;
+}
+@keyframes logoZoom { 0%{transform:scale(.2);opacity:0} 100%{transform:scale(1);opacity:1} }
+@keyframes textUnfold { 0%{opacity:0;transform:translateY(20px)} 100%{opacity:1;transform:translateY(0)} }
 
-/* ---------- APP ---------- */
-#app { display:none; height:100vh; width:100vw; }
+/* ---------------- APP ---------------- */
+#app { display:none; height:100vh; width:100vw; overflow:hidden; }
 
-/* ---------- TOPBAR ---------- */
-.topbar { display:flex; justify-content:space-between; align-items:center; height:68px; padding:0 40px; background:#111827; }
-.topbar .logo img { height:36px; cursor:pointer; }
-.nav { display:flex; gap:24px; }
-.nav-btn { background:none; border:none; color:#e5e7eb; font-size:1rem; cursor:pointer; position:relative; padding:8px 4px; }
-.nav-btn::after { content:""; position:absolute; bottom:0; left:0; width:0%; height:2px; background:#007bff; transition:width 0.3s; }
+/* ---------------- TOP BAR ---------------- */
+.topbar { display:flex; align-items:center; height:68px; padding:0 40px; background:#111827; }
+.logo { display:flex; align-items:center; gap:12px; }
+.logo img { height:36px; }
+.nav { display:flex; gap:16px; margin-left:auto; }
+.nav-btn { background:none; border:none; font-size:0.95rem; color:#e5e7eb; cursor:pointer; padding:8px 4px; position:relative; }
+.nav-btn::after { content:""; position:absolute; bottom:0; left:0; width:0%; height:2px; background:#007bff; transition:width 0.3s ease; }
 .nav-btn:hover::after { width:100%; }
 
-/* ---------- MAIN ---------- */
-.content { height:calc(100% - 68px); display:flex; justify-content:center; align-items:center; gap:30px; flex-wrap:wrap; }
-.action { padding:20px 48px; font-size:1.2rem; font-weight:600; border-radius:14px; cursor:pointer; border:none; }
-.primary { background:#111827; color:white; }
+/* ---------------- MAIN ---------------- */
+.content { padding:48px; height:calc(100% - 68px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; }
+
+/* ---------------- ACTION BUTTONS ---------------- */
+.actions { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.action { padding:18px 40px; border-radius:14px; border:none; font-size:1.1rem; cursor:pointer; font-weight:600; transition:all 0.2s ease; }
+.action:hover { transform:scale(1.05); }
+.primary { background:#007bff; color:white; }
 .secondary { background:#e5e7eb; color:#111827; }
 
-/* ---------- MODAL ---------- */
-.modal, #qrModal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index:2000; }
-.modal-box { width:400px; padding:32px; border-radius:16px; background:#020617; display:flex; flex-direction:column; gap:16px; }
-.modal-box h2 { font-size:1.2rem; font-weight:600; }
-.modal-box input { padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.2); background:#020617; color:white; font-size:1rem; }
-.modal-actions { display:flex; justify-content:flex-end; gap:12px; }
-.message { margin-top:8px; font-size:0.95rem; color:#00ff9c; min-height:18px; }
-#qrScanner { width:100%; }
+/* ---------------- MODAL ---------------- */
+.modal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:2000; }
+.modal-box { width:420px; padding:36px; border-radius:18px; background:#020617; display:flex; flex-direction:column; gap:16px; }
+.modal-box h2 { margin-bottom:8px; }
+.modal-box p { color:#00ff9c; font-weight:600; }
+.modal-box input { width:100%; padding:14px; border-radius:10px; background:#020617; border:1px solid rgba(255,255,255,0.15); color:white; }
+.modal-actions { margin-top:16px; display:flex; justify-content:flex-end; gap:12px; }
+
+/* ---------------- QR SCANNER ---------------- */
+#qrScanner { width:100%; height:300px; }
 </style>
 </head>
 <body>
 
 <!-- SPLASH -->
 <div id="splash">
-  <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="Logo">
-  <div id="welcomeText">Welcome to Tamil School Library</div>
+  <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo">
+  <div id="welcomeText">Welcome to EDUCE Library</div>
 </div>
 
 <!-- APP -->
 <div id="app">
+
+  <!-- TOP BAR -->
   <header class="topbar">
     <div class="logo">
-      <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="Logo">
+      <img src="https://www.catamilacademy.org/images/tha_logo.png">
+      <span style="color:white;font-weight:600;">EDUCE Library</span>
     </div>
     <nav class="nav">
       <button class="nav-btn" onclick="window.location.href='studentcheck.html'">Student Check</button>
@@ -72,18 +91,23 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
     </nav>
   </header>
 
+  <!-- MAIN -->
   <main class="content">
-    <button class="action primary" id="checkOutBtn">Check Out Book</button>
-    <button class="action secondary" id="returnBtn">Return Book</button>
+    <div class="actions">
+      <button class="action primary" id="checkoutBtn">Check Out</button>
+      <button class="action secondary" id="returnBtn">Return</button>
+      <button class="action secondary" id="openQR">Scan QR</button>
+    </div>
   </main>
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h2 id="modalTitle">Enter Student ID</h2>
-    <input id="modalInput" placeholder="Student ID">
-    <div class="message" id="modalMessage"></div>
+    <h2 id="modalTitle"></h2>
+    <p id="studentName"></p>
+    <p id="bookInfo"></p>
+    <input id="modalInput" placeholder="">
     <div class="modal-actions">
       <button class="action secondary" id="closeModal">Cancel</button>
       <button class="action primary" id="nextStep">Continue</button>
@@ -103,88 +127,142 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 </div>
 
 <script>
-// ---------- SPLASH ----------
-window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").remove();document.getElementById("app").style.display="block";},2500);});
+// ---------------- SPLASH ----------------
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.getElementById("splash").remove();
+    document.getElementById("app").style.display = "flex";
+  }, 3000);
+});
 
-// ---------- FIREBASE ----------
+// ---------------- FIREBASE INIT ----------------
 const firebaseConfig = {
   apiKey: "AIzaSyCqCPpNb0beFJui-qpShYqwgb6e5IS7PyU",
   authDomain: "tta-library.firebaseapp.com",
   projectId: "tta-library",
   storageBucket: "tta-library.firebasestorage.app",
   messagingSenderId: "803320543492",
-  appId: "1:803320543492:web:5e1b19fcac2fe3846e7851",
-  measurementId: "G-E988D3Z7ZQ"
+  appId: "1:803320543492:web:5e1b19fcac2fe3846e7851"
 };
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ---------- GLOBAL ----------
-let currentStudentID="", currentBookID="", actionType="";
+// ---------------- GLOBAL STATE ----------------
+let currentMode = ""; // "checkout" or "return"
+let step = 0;
+let currentStudentID = "";
+let currentStudentName = "";
+let currentBookID = "";
+let currentBookTitle = "";
+let scanner = null;
 
-// ---------- MODALS ----------
-const modal=document.getElementById("modal"), qrModal=document.getElementById("qrModal");
-const modalTitle=document.getElementById("modalTitle"), modalInput=document.getElementById("modalInput");
-const modalMessage=document.getElementById("modalMessage");
+// ---------------- MODAL ELEMENTS ----------------
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalInput = document.getElementById("modalInput");
+const studentNameDisplay = document.getElementById("studentName");
+const bookInfoDisplay = document.getElementById("bookInfo");
 
-function openStudentModal(action){
-  actionType=action;
-  modalTitle.textContent="Enter Student ID";
-  modalInput.value="";
-  modalMessage.textContent="";
-  modal.style.display="flex";
-}
-function closeModal(){ modal.style.display="none"; }
-
-// ---------- BUTTONS ----------
-document.getElementById("checkOutBtn").onclick=()=>openStudentModal("checkout");
-document.getElementById("returnBtn").onclick=()=>openStudentModal("return");
-document.getElementById("closeModal").onclick=closeModal;
-
-// ---------- NEXT STEP ----------
-document.getElementById("nextStep").onclick=async ()=>{
-  const studentID=modalInput.value.trim();
-  if(!studentID){ modalMessage.textContent="Please enter Student ID."; return; }
-
-  const studentDoc=await db.collection("students").doc(studentID).get();
-  if(!studentDoc.exists){ modalMessage.textContent="Student ID not found."; return; }
-
-  currentStudentID=studentID;
-  modal.style.display="none";
-  openQRModal();
+// ---------------- MODAL FUNCTIONS ----------------
+function openModal(mode) {
+  currentMode = mode;
+  step = 0;
+  currentStudentID = "";
+  currentStudentName = "";
+  currentBookID = "";
+  currentBookTitle = "";
+  modalTitle.textContent = "Enter Student ID";
+  modalInput.placeholder = "Student ID";
+  modalInput.value = "";
+  studentNameDisplay.textContent = "";
+  bookInfoDisplay.textContent = "";
+  modal.style.display = "flex";
+  modalInput.focus();
 }
 
-// ---------- QR ----------
-function openQRModal(){
-  qrModal.style.display="flex";
-  const html5QrCode=new Html5Qrcode("qrScanner");
-  html5QrCode.start(
+async function nextStep() {
+  const value = modalInput.value.trim();
+  
+  if(step === 0){
+    // Verify Student
+    const studentDoc = await db.collection("students").doc(value).get();
+    if(!studentDoc.exists){ alert("Invalid Student ID!"); return; }
+    currentStudentID = value;
+    currentStudentName = studentDoc.data().name || "Unknown";
+    studentNameDisplay.textContent = `Student: ${currentStudentName}`;
+    step = 1;
+    modalTitle.textContent = "Enter Book ID";
+    modalInput.placeholder = "Book ID or scan QR";
+    modalInput.value = "";
+  } else if(step === 1){
+    // Verify Book
+    const bookDoc = await db.collection("books").doc(value).get();
+    if(!bookDoc.exists){ alert("Book not found!"); return; }
+    currentBookID = value;
+    currentBookTitle = bookDoc.data().title || "Unknown";
+    bookInfoDisplay.textContent = `Book: ${currentBookTitle}`;
+    
+    // Determine action
+    if(currentMode === "checkout"){
+      if(bookDoc.data().status !== "available"){
+        alert("Book is already checked out!"); return;
+      }
+      await db.collection("books").doc(currentBookID).update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
+      await db.collection("history").add({ studentID:currentStudentID, studentName:currentStudentName, bookID:currentBookID, bookTitle:currentBookTitle, action:"checkout", timestamp:new Date() });
+      alert(`✅ ${currentStudentName} checked out "${currentBookTitle}"`);
+    } else if(currentMode === "return"){
+      if(bookDoc.data().status !== "checked out" || bookDoc.data().checkedOutBy !== currentStudentID){
+        alert("Book is not checked out by this student!"); return;
+      }
+      await db.collection("books").doc(currentBookID).update({ status:"available", checkedOutBy:"", timestamp:new Date() });
+      await db.collection("history").add({ studentID:currentStudentID, studentName:currentStudentName, bookID:currentBookID, bookTitle:currentBookTitle, action:"return", timestamp:new Date() });
+      alert(`✅ ${currentStudentName} returned "${currentBookTitle}"`);
+    }
+    closeModal();
+  }
+}
+
+function closeModal(){
+  modal.style.display = "none";
+  modalInput.value = "";
+  studentNameDisplay.textContent = "";
+  bookInfoDisplay.textContent = "";
+  step = 0;
+}
+
+// ---------------- EVENT LISTENERS ----------------
+document.getElementById("checkoutBtn").onclick = () => openModal("checkout");
+document.getElementById("returnBtn").onclick = () => openModal("return");
+document.getElementById("nextStep").onclick = nextStep;
+document.getElementById("closeModal").onclick = closeModal;
+
+// ---------------- QR SCANNER ----------------
+const qrModal = document.getElementById("qrModal");
+document.getElementById("openQR").onclick = () => {
+  qrModal.style.display = "flex";
+  if(scanner) scanner.stop().catch(()=>{});
+  scanner = new Html5Qrcode("qrScanner");
+  scanner.start(
     { facingMode:"environment" },
     { fps:10, qrbox:250 },
-    async qrCodeMessage=>{
-      currentBookID=qrCodeMessage.trim();
-      const bookRef=db.collection("books").doc(currentBookID);
-      const bookDoc=await bookRef.get();
-      if(!bookDoc.exists){ alert("Book not found!"); html5QrCode.stop(); qrModal.style.display="none"; return; }
-
-      if(actionType==="checkout" && bookDoc.data().status==="available"){
-        await bookRef.update({status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date()});
-        await db.collection("history").add({studentID:currentStudentID, bookID:currentBookID, action:"checked out", timestamp:new Date()});
-        alert(`${currentStudentID} checked out ${currentBookID}`);
-      } else if(actionType==="return" && bookDoc.data().status==="checked out"){
-        await bookRef.update({status:"available", checkedOutBy:"", timestamp:new Date()});
-        await db.collection("history").add({studentID:currentStudentID, bookID:currentBookID, action:"returned", timestamp:new Date()});
-        alert(`${currentStudentID} returned ${currentBookID}`);
-      } else { alert("Action not allowed!"); }
-
-      html5QrCode.stop();
-      qrModal.style.display="none";
+    async (decodedText) => {
+      qrModal.style.display = "none";
+      scanner.stop();
+      currentBookID = decodedText.trim();
+      if(step === 0){
+        alert("Please enter Student ID first!"); 
+      } else {
+        modalInput.value = currentBookID;
+        nextStep();
+      }
     },
-    errorMessage=>{}
+    errorMessage => {}
   );
-}
-document.getElementById("closeQR").onclick=()=>{ qrModal.style.display="none"; }
+};
+document.getElementById("closeQR").onclick = () => { 
+  qrModal.style.display = "none"; 
+  if(scanner) scanner.stop().catch(()=>{});
+};
 </script>
-
 </body>
 </html>

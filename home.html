@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Educes Library</title>
+<title>Tamil School Library</title>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
@@ -56,7 +56,7 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 <!-- SPLASH -->
 <div id="splash">
   <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="Logo">
-  <div id="welcomeText">Welcome to Educes Library</div>
+  <div id="welcomeText">Welcome to Tamil School Library</div>
 </div>
 
 <!-- APP -->
@@ -102,10 +102,6 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
-
 <script>
 // ---------- SPLASH ----------
 window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").remove();document.getElementById("app").style.display="block";},2500);});
@@ -124,41 +120,36 @@ const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // ---------- GLOBAL ----------
-let currentStudentID = "";
-let currentBookID = "";
-let actionType = "";
+let currentStudentID="", currentBookID="", actionType="";
 
 // ---------- MODALS ----------
-const modal = document.getElementById("modal");
-const qrModal = document.getElementById("qrModal");
-const modalTitle = document.getElementById("modalTitle");
-const modalInput = document.getElementById("modalInput");
-const modalMessage = document.getElementById("modalMessage");
+const modal=document.getElementById("modal"), qrModal=document.getElementById("qrModal");
+const modalTitle=document.getElementById("modalTitle"), modalInput=document.getElementById("modalInput");
+const modalMessage=document.getElementById("modalMessage");
 
 function openStudentModal(action){
-  actionType = action;
-  modalTitle.textContent = "Enter Student ID";
-  modalInput.value = "";
-  modalMessage.textContent = "";
-  modal.style.display = "flex";
+  actionType=action;
+  modalTitle.textContent="Enter Student ID";
+  modalInput.value="";
+  modalMessage.textContent="";
+  modal.style.display="flex";
 }
 function closeModal(){ modal.style.display="none"; }
 
 // ---------- BUTTONS ----------
-document.getElementById("checkOutBtn").onclick = ()=>openStudentModal("checkout");
-document.getElementById("returnBtn").onclick = ()=>openStudentModal("return");
-document.getElementById("closeModal").onclick = closeModal;
+document.getElementById("checkOutBtn").onclick=()=>openStudentModal("checkout");
+document.getElementById("returnBtn").onclick=()=>openStudentModal("return");
+document.getElementById("closeModal").onclick=closeModal;
 
 // ---------- NEXT STEP ----------
-document.getElementById("nextStep").onclick = async ()=>{
-  const studentID = modalInput.value.trim();
+document.getElementById("nextStep").onclick=async ()=>{
+  const studentID=modalInput.value.trim();
   if(!studentID){ modalMessage.textContent="Please enter Student ID."; return; }
 
-  // Check valid student
-  const studentDoc = await db.collection("students").doc(studentID).get();
+  const studentDoc=await db.collection("students").doc(studentID).get();
   if(!studentDoc.exists){ modalMessage.textContent="Student ID not found."; return; }
 
-  currentStudentID = studentID;
+  currentStudentID=studentID;
   modal.style.display="none";
   openQRModal();
 }
@@ -166,35 +157,30 @@ document.getElementById("nextStep").onclick = async ()=>{
 // ---------- QR ----------
 function openQRModal(){
   qrModal.style.display="flex";
-  const html5QrCode = new Html5Qrcode("qrScanner");
+  const html5QrCode=new Html5Qrcode("qrScanner");
   html5QrCode.start(
     { facingMode:"environment" },
     { fps:10, qrbox:250 },
     async qrCodeMessage=>{
-      currentBookID = qrCodeMessage.trim();
-
-      const bookRef = db.collection("books").doc(currentBookID);
-      const bookDoc = await bookRef.get();
-      if(!bookDoc.exists){
-        alert("Book not found!"); html5QrCode.stop(); qrModal.style.display="none"; return;
-      }
+      currentBookID=qrCodeMessage.trim();
+      const bookRef=db.collection("books").doc(currentBookID);
+      const bookDoc=await bookRef.get();
+      if(!bookDoc.exists){ alert("Book not found!"); html5QrCode.stop(); qrModal.style.display="none"; return; }
 
       if(actionType==="checkout" && bookDoc.data().status==="available"){
-        await bookRef.update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
-        await db.collection("history").add({ studentID:currentStudentID, bookID:currentBookID, action:"checked out", timestamp:new Date() });
+        await bookRef.update({status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date()});
+        await db.collection("history").add({studentID:currentStudentID, bookID:currentBookID, action:"checked out", timestamp:new Date()});
         alert(`${currentStudentID} checked out ${currentBookID}`);
       } else if(actionType==="return" && bookDoc.data().status==="checked out"){
-        await bookRef.update({ status:"available", checkedOutBy:"", timestamp:new Date() });
-        await db.collection("history").add({ studentID:currentStudentID, bookID:currentBookID, action:"returned", timestamp:new Date() });
+        await bookRef.update({status:"available", checkedOutBy:"", timestamp:new Date()});
+        await db.collection("history").add({studentID:currentStudentID, bookID:currentBookID, action:"returned", timestamp:new Date()});
         alert(`${currentStudentID} returned ${currentBookID}`);
-      } else {
-        alert("Action not allowed!"); 
-      }
+      } else { alert("Action not allowed!"); }
 
       html5QrCode.stop();
       qrModal.style.display="none";
     },
-    errorMessage =>{}
+    errorMessage=>{}
   );
 }
 document.getElementById("closeQR").onclick=()=>{ qrModal.style.display="none"; }

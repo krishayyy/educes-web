@@ -1,214 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TTA Library - Premium</title>
+  <meta charset="UTF-8" />
+  <title>TTA Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+  <!-- QR Scanner -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
-<!-- QR Scanner -->
-<script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    * { box-sizing: border-box; }
 
-<style>
-/* ---------------- RESET ---------------- */
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', system-ui, sans-serif; }
-html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
+    body {
+      margin: 0;
+      background: #000;
+      color: #00ff9c;
+      font-family: "Courier New", monospace;
+    }
 
-/* ---------------- SPLASH ---------------- */
-#splash {
-  position:fixed; inset:0;
-  background: radial-gradient(circle at top,#111827,#020617);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1000;
-}
-#logo { width:180px; transform:scale(0); animation:logoZoom 3s forwards; }
-#welcomeText {
-  margin-top:28px; font-size:3rem; font-weight:bold;
-  background:linear-gradient(90deg,#004085,#007bff);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  opacity:0; animation:textUnfold 3s 1.5s forwards;
-}
-@keyframes logoZoom { 0%{transform:scale(0);opacity:0;} 60%{transform:scale(1.2);opacity:1;} 100%{transform:scale(1);opacity:1;} }
-@keyframes textUnfold { 0%{opacity:0;transform:rotateX(20deg) translateY(30px);} 100%{opacity:1;transform:rotateX(0deg) translateY(0);} }
+    /* TOP BAR */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 25px;
+      border-bottom: 1px solid #00ff9c;
+    }
 
-/* ---------------- APP ---------------- */
-#app { display:none; height:100vh; width:100vw; overflow:hidden; }
+    .logo {
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
 
-/* ---------------- TOP BAR ---------------- */
-.topbar { display:flex; align-items:center; height:68px; padding:0 40px; background:#111827; }
-.logo { display:flex; align-items:center; gap:12px; }
-.logo img { height:36px; cursor:pointer; }
-.nav { display:flex; gap:16px; }
-.nav-btn { background:none; border:none; font-size:0.95rem; color:#e5e7eb; cursor:pointer; padding:8px 4px; position:relative; }
-.nav-btn::after { content:""; position:absolute; bottom:0; left:0; width:0%; height:2px; background:#007bff; transition:width 0.3s ease; }
-.nav-btn:hover::after { width:100%; }
+    .nav {
+      display: flex;
+      gap: 25px;
+    }
 
-/* ---------------- MAIN ---------------- */
-.content { padding:48px; height:calc(100% - 68px); position:relative; }
+    .nav a {
+      color: #00ff9c;
+      text-decoration: none;
+      font-size: 14px;
+    }
 
-/* ---------------- ACTION BUTTONS ---------------- */
-.actions { margin-top:40px; display:flex; gap:20px; }
-.action { padding:16px 36px; border-radius:14px; border:none; font-size:1rem; cursor:pointer; font-weight:600; }
-.primary { background:#111827; color:white; }
-.secondary { background:#e5e7eb; color:#111827; }
+    .nav a:hover {
+      text-decoration: underline;
+    }
 
-/* ---------------- MODAL ---------------- */
-.modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; align-items:center; justify-content:center; z-index:2000; }
-.modal-box { width:420px; padding:36px; border-radius:18px; background:#020617; }
-.modal-box h2 { margin-bottom:20px; }
-.modal-box input { width:100%; padding:14px; border-radius:10px; background:#020617; border:1px solid rgba(255,255,255,0.15); color:white; }
-.modal-actions { margin-top:26px; display:flex; justify-content:flex-end; gap:14px; }
+    /* MAIN */
+    .container {
+      padding: 40px;
+      text-align: center;
+    }
 
-/* ---------------- QR SCANNER MODAL ---------------- */
-#qrModal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:3000; }
-#qrScanner { width:400px; }
-</style>
+    h1 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    #reader {
+      width: 320px;
+      margin: 30px auto;
+      border: 2px solid #00ff9c;
+      padding: 10px;
+    }
+
+    .status {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .success { color: #00ff9c; }
+    .error { color: #ff4d4d; }
+  </style>
 </head>
 <body>
 
-<!-- SPLASH -->
-<div id="splash">
-  <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo">
-  <div id="welcomeText">Welcome to TTA Library</div>
-</div>
-
-<!-- APP -->
-<div id="app">
-
   <!-- TOP BAR -->
-  <header class="topbar">
-    <div class="logo">
-      <img src="https://www.catamilacademy.org/images/tha_logo.png">
-      <button class="nav-btn" onclick="window.location.href='studentcheck.html'">Students</button>
-      <button class="nav-btn" onclick="window.location.href='booksout.html'">Books Out</button>
-      <button class="nav-btn" onclick="window.location.href='history.html'">History</button>
+  <div class="top-bar">
+    <div class="logo">TTA LIBRARY</div>
+
+    <!-- RIGHT SIDE BUTTONS -->
+    <div class="nav">
+      <a href="students.html">Student Check</a>
+      <a href="books.html">Books</a>
+      <a href="history.html">History</a>
     </div>
-  </header>
+  </div>
 
   <!-- MAIN -->
-  <main class="content">
-    <div class="actions">
-      <button class="action primary" id="openCheckIn">Check In/Out</button>
-      <button class="action secondary" id="openQR">Scan QR</button>
-    </div>
-  </main>
+  <div class="container">
+    <h1>Scan Book QR Code</h1>
+    <p>Camera access required</p>
 
-</div>
+    <div id="reader"></div>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <h2 id="modalTitle">Enter Student ID</h2>
-    <input id="modalInput" placeholder="Student ID">
-    <div class="modal-actions">
-      <button class="action secondary" id="closeModal">Cancel</button>
-      <button class="action primary" id="nextStep">Continue</button>
-    </div>
+    <div class="status" id="status">Waiting for scan...</div>
   </div>
-</div>
 
-<!-- QR MODAL -->
-<div class="modal" id="qrModal">
-  <div class="modal-box">
-    <h2>Scan Book QR</h2>
-    <div id="qrScanner"></div>
-    <div class="modal-actions">
-      <button class="action secondary" id="closeQR">Close</button>
-    </div>
-  </div>
-</div>
+  <!-- FIREBASE + LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
-<script>
-// ---------------- SPLASH ----------------
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.getElementById("splash").remove();
-    document.getElementById("app").style.display = "block";
-  }, 4000);
-});
+    const firebaseConfig = {
+      apiKey: "AIzaSyCqCPpNb0beFJui-qpShYqwgb6e5IS7PyU",
+      authDomain: "tta-library.firebaseapp.com",
+      projectId: "tta-library",
+      storageBucket: "tta-library.firebasestorage.app",
+      messagingSenderId: "803320543492",
+      appId: "1:803320543492:web:5e1b19fcac2fe3846e7851"
+    };
 
-// ---------------- FIREBASE INIT ----------------
-const firebaseConfig = {
-  apiKey: "AIzaSyCqCPpNb0beFJui-qpShYqwgb6e5IS7PyU",
-  authDomain: "tta-library.firebaseapp.com",
-  projectId: "tta-library",
-  storageBucket: "tta-library.firebasestorage.app",
-  messagingSenderId: "803320543492",
-  appId: "1:803320543492:web:5e1b19fcac2fe3846e7851",
-  measurementId: "G-E988D3Z7ZQ"
-};
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-// ---------------- MODAL LOGIC ----------------
-const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modalTitle");
-const modalInput = document.getElementById("modalInput");
-let step = 0;
-let currentStudentID = "";
-let currentBookID = "";
+    const statusText = document.getElementById("status");
 
-document.getElementById("openCheckIn").onclick = () => {
-  step = 0;
-  modalTitle.textContent = "Enter Student ID";
-  modalInput.value = "";
-  modal.style.display = "flex";
-};
+    async function handleScan(bookId) {
+      const bookRef = doc(db, "books", bookId);
+      const snap = await getDoc(bookRef);
 
-document.getElementById("nextStep").onclick = async () => {
-  const inputValue = modalInput.value.trim();
-  if (step === 0) {
-    currentStudentID = inputValue;
-    step = 1;
-    modalTitle.textContent = "Enter Book ID";
-    modalInput.value = "";
-  } else if (step === 1) {
-    currentBookID = inputValue;
-    const bookRef = db.collection("books").doc(currentBookID);
-    const doc = await bookRef.get();
-    if (!doc.exists) { alert("Book not found!"); return; }
-    const bookData = doc.data();
-    let action;
-    if (bookData.status === "available") {
-      await bookRef.update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
-      action = "checked out";
-    } else {
-      await bookRef.update({ status:"available", checkedOutBy:"", timestamp:new Date() });
-      action = "returned";
+      if (!snap.exists()) {
+        await setDoc(bookRef, {
+          checkedOut: true,
+          lastAction: new Date()
+        });
+
+        statusText.innerHTML = `📘 Book <b>${bookId}</b> checked OUT`;
+        statusText.className = "status success";
+        return;
+      }
+
+      const data = snap.data();
+
+      if (data.checkedOut) {
+        await updateDoc(bookRef, {
+          checkedOut: false,
+          lastAction: new Date()
+        });
+        statusText.innerHTML = `✅ Book <b>${bookId}</b> checked IN`;
+      } else {
+        await updateDoc(bookRef, {
+          checkedOut: true,
+          lastAction: new Date()
+        });
+        statusText.innerHTML = `📕 Book <b>${bookId}</b> checked OUT`;
+      }
+
+      statusText.className = "status success";
     }
-    // Log history
-    await db.collection("history").add({ studentID: currentStudentID, bookID: currentBookID, action, timestamp:new Date() });
-    alert(`Book ${currentBookID} ${action}!`);
-    modal.style.display = "none";
-  }
-};
 
-document.getElementById("closeModal").onclick = () => { modal.style.display="none"; };
+    const qr = new Html5Qrcode("reader");
 
-// ---------------- QR SCANNER ----------------
-const qrModal = document.getElementById("qrModal");
-document.getElementById("openQR").onclick = () => {
-  qrModal.style.display = "flex";
-  const html5QrCode = new Html5Qrcode("qrScanner");
-  html5QrCode.start(
-    { facingMode: "environment" },
-    { fps:10, qrbox:250 },
-    qrCodeMessage => {
-      currentBookID = qrCodeMessage.trim();
-      qrModal.style.display="none";
-      html5QrCode.stop();
-      modalTitle.textContent = "Enter Student ID";
-      modalInput.value="";
-      modal.style.display="flex";
-      step = 1;
-    },
-    errorMessage => { /* ignore errors */ }
-  );
-};
-document.getElementById("closeQR").onclick = () => { qrModal.style.display="none"; };
-</script>
+    qr.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      (decodedText) => {
+        qr.stop();
+        statusText.innerHTML = "Processing...";
+        handleScan(decodedText);
+      },
+      () => {}
+    );
+  </script>
 
 </body>
 </html>

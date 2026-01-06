@@ -13,30 +13,20 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
-/* ---------------- RESET ---------------- */
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', system-ui, sans-serif; }
 html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 
-/* ---------------- SPLASH ---------------- */
-#splash {
-  position:fixed; inset:0;
-  background: radial-gradient(circle at top,#111827,#020617);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1000;
-}
-#logo { width:180px; transform:scale(0); animation:logoZoom 2.5s forwards; }
-#welcomeText {
-  margin-top:24px; font-size:2.5rem; font-weight:bold;
-  background:linear-gradient(90deg,#007bff,#00c2ff);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  opacity:0; animation:textUnfold 2s 1.2s forwards;
-}
-@keyframes logoZoom { 0%{transform:scale(.2);opacity:0} 100%{transform:scale(1);opacity:1} }
-@keyframes textUnfold { 0%{opacity:0;transform:translateY(20px)} 100%{opacity:1;transform:translateY(0)} }
+/* SPLASH */
+#splash { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background: radial-gradient(circle at top,#111827,#020617); z-index:1000; }
+#logo { width:160px; transform:scale(0); animation:zoom 2.5s forwards; }
+#welcomeText { margin-top:24px; font-size:2.5rem; font-weight:bold; background:linear-gradient(90deg,#007bff,#00c2ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; opacity:0; animation:fade 2s 1.2s forwards; }
+@keyframes zoom { from{transform:scale(.2);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes fade { to{opacity:1} }
 
-/* ---------------- APP ---------------- */
+/* APP */
 #app { display:none; height:100vh; width:100vw; overflow:hidden; }
 
-/* ---------------- TOP BAR ---------------- */
+/* TOP BAR */
 .topbar { display:flex; align-items:center; height:68px; padding:0 40px; background:#111827; }
 .logo { display:flex; align-items:center; gap:12px; }
 .logo img { height:36px; }
@@ -45,17 +35,15 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 .nav-btn::after { content:""; position:absolute; bottom:0; left:0; width:0%; height:2px; background:#007bff; transition:width 0.3s ease; }
 .nav-btn:hover::after { width:100%; }
 
-/* ---------------- MAIN ---------------- */
+/* MAIN */
 .content { padding:48px; height:calc(100% - 68px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; }
-
-/* ---------------- ACTION BUTTONS ---------------- */
 .actions { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
 .action { padding:18px 40px; border-radius:14px; border:none; font-size:1.1rem; cursor:pointer; font-weight:600; transition:all 0.2s ease; }
 .action:hover { transform:scale(1.05); }
 .primary { background:#007bff; color:white; }
 .secondary { background:#e5e7eb; color:#111827; }
 
-/* ---------------- MODAL ---------------- */
+/* MODAL */
 .modal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:2000; }
 .modal-box { width:420px; padding:36px; border-radius:18px; background:#020617; display:flex; flex-direction:column; gap:16px; }
 .modal-box h2 { margin-bottom:8px; }
@@ -63,8 +51,8 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 .modal-box input { width:100%; padding:14px; border-radius:10px; background:#020617; border:1px solid rgba(255,255,255,0.15); color:white; }
 .modal-actions { margin-top:16px; display:flex; justify-content:flex-end; gap:12px; }
 
-/* ---------------- QR SCANNER ---------------- */
-#qrScanner { width:100%; height:300px; }
+/* QR SCANNER */
+#qrScanner { width:100%; height:300px; margin-top:12px; border-radius:12px; }
 </style>
 </head>
 <body>
@@ -78,7 +66,6 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 <!-- APP -->
 <div id="app">
 
-  <!-- TOP BAR -->
   <header class="topbar">
     <div class="logo">
       <img src="https://www.catamilacademy.org/images/tha_logo.png">
@@ -91,12 +78,9 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
     </nav>
   </header>
 
-  <!-- MAIN -->
   <main class="content">
     <div class="actions">
-      <button class="action primary" id="checkoutBtn">Check Out</button>
-      <button class="action secondary" id="returnBtn">Return</button>
-      <button class="action secondary" id="openQR">Scan QR</button>
+      <button class="action primary" id="checkoutBtn">Check Out / Return</button>
     </div>
   </main>
 </div>
@@ -104,10 +88,11 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
 <!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h2 id="modalTitle"></h2>
+    <h2 id="modalTitle">Enter Student ID</h2>
     <p id="studentName"></p>
     <p id="bookInfo"></p>
-    <input id="modalInput" placeholder="">
+    <input id="modalInput" placeholder="Student ID">
+    <div id="qrScanner"></div>
     <div class="modal-actions">
       <button class="action secondary" id="closeModal">Cancel</button>
       <button class="action primary" id="nextStep">Continue</button>
@@ -115,16 +100,9 @@ html, body { height:100%; background:#0b0d10; color:#e5e7eb; overflow:hidden; }
   </div>
 </div>
 
-<!-- QR MODAL -->
-<div class="modal" id="qrModal">
-  <div class="modal-box">
-    <h2>Scan Book QR</h2>
-    <div id="qrScanner"></div>
-    <div class="modal-actions">
-      <button class="action secondary" id="closeQR">Close</button>
-    </div>
-  </div>
-</div>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
 // ---------------- SPLASH ----------------
@@ -135,7 +113,7 @@ window.addEventListener("load", () => {
   }, 3000);
 });
 
-// ---------------- FIREBASE INIT ----------------
+// ---------------- FIREBASE ----------------
 const firebaseConfig = {
   apiKey: "AIzaSyCqCPpNb0beFJui-qpShYqwgb6e5IS7PyU",
   authDomain: "tta-library.firebaseapp.com",
@@ -147,8 +125,7 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ---------------- GLOBAL STATE ----------------
-let currentMode = ""; // "checkout" or "return"
+// ---------------- STATE ----------------
 let step = 0;
 let currentStudentID = "";
 let currentStudentName = "";
@@ -156,16 +133,14 @@ let currentBookID = "";
 let currentBookTitle = "";
 let scanner = null;
 
-// ---------------- MODAL ELEMENTS ----------------
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const modalInput = document.getElementById("modalInput");
 const studentNameDisplay = document.getElementById("studentName");
 const bookInfoDisplay = document.getElementById("bookInfo");
 
-// ---------------- MODAL FUNCTIONS ----------------
-function openModal(mode) {
-  currentMode = mode;
+// ---------------- FLOW ----------------
+document.getElementById("checkoutBtn").onclick = async () => {
   step = 0;
   currentStudentID = "";
   currentStudentName = "";
@@ -178,91 +153,63 @@ function openModal(mode) {
   bookInfoDisplay.textContent = "";
   modal.style.display = "flex";
   modalInput.focus();
-}
+};
 
-async function nextStep() {
-  const value = modalInput.value.trim();
-  
+document.getElementById("nextStep").onclick = async () => {
+  const val = modalInput.value.trim();
   if(step === 0){
-    // Verify Student
-    const studentDoc = await db.collection("students").doc(value).get();
+    // validate student
+    const studentDoc = await db.collection("students").doc(val).get();
     if(!studentDoc.exists){ alert("Invalid Student ID!"); return; }
-    currentStudentID = value;
+    currentStudentID = val;
     currentStudentName = studentDoc.data().name || "Unknown";
     studentNameDisplay.textContent = `Student: ${currentStudentName}`;
     step = 1;
-    modalTitle.textContent = "Enter Book ID";
-    modalInput.placeholder = "Book ID or scan QR";
-    modalInput.value = "";
-  } else if(step === 1){
-    // Verify Book
-    const bookDoc = await db.collection("books").doc(value).get();
-    if(!bookDoc.exists){ alert("Book not found!"); return; }
-    currentBookID = value;
-    currentBookTitle = bookDoc.data().title || "Unknown";
-    bookInfoDisplay.textContent = `Book: ${currentBookTitle}`;
-    
-    // Determine action
-    if(currentMode === "checkout"){
-      if(bookDoc.data().status !== "available"){
-        alert("Book is already checked out!"); return;
-      }
-      await db.collection("books").doc(currentBookID).update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
-      await db.collection("history").add({ studentID:currentStudentID, studentName:currentStudentName, bookID:currentBookID, bookTitle:currentBookTitle, action:"checkout", timestamp:new Date() });
-      alert(`✅ ${currentStudentName} checked out "${currentBookTitle}"`);
-    } else if(currentMode === "return"){
-      if(bookDoc.data().status !== "checked out" || bookDoc.data().checkedOutBy !== currentStudentID){
-        alert("Book is not checked out by this student!"); return;
-      }
-      await db.collection("books").doc(currentBookID).update({ status:"available", checkedOutBy:"", timestamp:new Date() });
-      await db.collection("history").add({ studentID:currentStudentID, studentName:currentStudentName, bookID:currentBookID, bookTitle:currentBookTitle, action:"return", timestamp:new Date() });
-      alert(`✅ ${currentStudentName} returned "${currentBookTitle}"`);
-    }
-    closeModal();
+    modalTitle.textContent = "Scan Book QR";
+    modalInput.style.display = "none";
+
+    // start QR scanner
+    scanner = new Html5Qrcode("qrScanner");
+    scanner.start(
+      { facingMode:"environment" },
+      { fps:10, qrbox:250 },
+      async (decodedText) => {
+        currentBookID = decodedText.trim();
+        const bookDoc = await db.collection("books").doc(currentBookID).get();
+        if(!bookDoc.exists){ alert("Book not found!"); return; }
+        currentBookTitle = bookDoc.data().title || "Unknown";
+        bookInfoDisplay.textContent = `Book: ${currentBookTitle}`;
+
+        // Decide if checkout or return
+        if(bookDoc.data().status === "available"){
+          await db.collection("books").doc(currentBookID).update({ status:"checked out", checkedOutBy:currentStudentID, timestamp:new Date() });
+          await db.collection("history").add({ studentID:currentStudentID, studentName:currentStudentName, bookID:currentBookID, bookTitle:currentBookTitle, action:"checkout", timestamp:new Date() });
+          alert(`✅ ${currentStudentName} checked out "${currentBookTitle}"`);
+        } else if(bookDoc.data().status === "checked out" && bookDoc.data().checkedOutBy === currentStudentID){
+          await db.collection("books").doc(currentBookID).update({ status:"available", checkedOutBy:"", timestamp:new Date() });
+          await db.collection("history").add({ studentID:currentStudentID, studentName:currentStudentName, bookID:currentBookID, bookTitle:currentBookTitle, action:"return", timestamp:new Date() });
+          alert(`✅ ${currentStudentName} returned "${currentBookTitle}"`);
+        } else {
+          alert("Book is checked out by another student!");
+        }
+        closeModal();
+      },
+      errorMessage => {}
+    );
   }
-}
+};
 
 function closeModal(){
   modal.style.display = "none";
+  modalInput.style.display = "block";
   modalInput.value = "";
   studentNameDisplay.textContent = "";
   bookInfoDisplay.textContent = "";
   step = 0;
+  if(scanner) scanner.stop().catch(()=>{});
 }
 
-// ---------------- EVENT LISTENERS ----------------
-document.getElementById("checkoutBtn").onclick = () => openModal("checkout");
-document.getElementById("returnBtn").onclick = () => openModal("return");
-document.getElementById("nextStep").onclick = nextStep;
 document.getElementById("closeModal").onclick = closeModal;
-
-// ---------------- QR SCANNER ----------------
-const qrModal = document.getElementById("qrModal");
-document.getElementById("openQR").onclick = () => {
-  qrModal.style.display = "flex";
-  if(scanner) scanner.stop().catch(()=>{});
-  scanner = new Html5Qrcode("qrScanner");
-  scanner.start(
-    { facingMode:"environment" },
-    { fps:10, qrbox:250 },
-    async (decodedText) => {
-      qrModal.style.display = "none";
-      scanner.stop();
-      currentBookID = decodedText.trim();
-      if(step === 0){
-        alert("Please enter Student ID first!"); 
-      } else {
-        modalInput.value = currentBookID;
-        nextStep();
-      }
-    },
-    errorMessage => {}
-  );
-};
-document.getElementById("closeQR").onclick = () => { 
-  qrModal.style.display = "none"; 
-  if(scanner) scanner.stop().catch(()=>{});
-};
 </script>
 </body>
 </html>

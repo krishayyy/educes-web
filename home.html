@@ -397,17 +397,12 @@ html, body {
   </header>
 
   <main class="content">
-    <div class="welcome-section" id="welcomeSection" style="display:none;">
-      <h1 id="studentWelcome"></h1>
-    </div>
-
     <div class="actions">
-      <button class="action primary" id="checkoutBtn">📚 Check Out Book</button>
-      <button class="action success" id="returnBtn">↩️ Return Book</button>
+      <button class="action primary" id="checkoutBtn">Check Out Book</button>
+      <button class="action success" id="returnBtn">Return Book</button>
     </div>
 
     <div class="books-section" id="booksSection">
-      <h2>Available Books</h2>
       <div class="books-grid" id="booksGrid"></div>
     </div>
   </main>
@@ -610,8 +605,6 @@ async function validateStudent() {
     currentStudentName = studentDoc.data().name || "Student";
     
     studentNameDisplay.textContent = `Welcome, ${currentStudentName}!`;
-    welcomeSection.style.display = "block";
-    studentWelcome.textContent = `Welcome, ${currentStudentName}!`;
     
     step = 1;
     modalTitle.textContent = `Scan Book QR Code`;

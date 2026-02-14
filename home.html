@@ -1,446 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tamil School Library</title>
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', system-ui, sans-serif;
-}
-
-html, body {
-  height: 100%;
-  background: #0b0d10;
-  color: #e5e7eb;
-  overflow: hidden;
-}
-
-/* === SPLASH SCREEN === */
-#splash {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at top, #111827, #020617);
-  z-index: 1000;
-}
-
-#logo {
-  width: 160px;
-  transform: scale(0);
-  animation: zoomIn 2.5s forwards;
-}
-
-#welcomeText {
-  margin-top: 24px;
-  font-size: 2.5rem;
-  font-weight: bold;
-  background: linear-gradient(90deg, #007bff, #00c2ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: 0;
-  animation: fadeIn 2s 1.2s forwards;
-}
-
-@keyframes zoomIn {
-  from { transform: scale(0.2); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-/* === MAIN APP === */
-#app {
-  display: none;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  flex-direction: column;
-}
-
-/* === TOP BAR === */
-.topbar {
-  display: flex;
-  align-items: center;
-  height: 68px;
-  padding: 0 40px;
-  background: #111827;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo img {
-  height: 36px;
-}
-
-.nav {
-  display: flex;
-  gap: 16px;
-  margin-left: auto;
-}
-
-.nav-btn {
-  background: none;
-  border: none;
-  font-size: 0.95rem;
-  color: #e5e7eb;
-  cursor: pointer;
-  padding: 8px 12px;
-  position: relative;
-  transition: color 0.2s;
-}
-
-.nav-btn::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #007bff;
-  transition: width 0.3s ease;
-}
-
-.nav-btn:hover {
-  color: #00c2ff;
-}
-
-.nav-btn:hover::after {
-  width: 100%;
-}
-
-/* === CONTENT === */
-.content {
-  padding: 48px;
-  height: calc(100% - 68px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-  overflow-y: auto;
-}
-
-.welcome-section {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.welcome-section h1 {
-  font-size: 2rem;
-  margin-bottom: 8px;
-  color: #00c2ff;
-}
-
-.actions {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.action {
-  padding: 18px 40px;
-  border-radius: 14px;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.action:hover {
-  transform: scale(1.05);
-}
-
-.action:active {
-  transform: scale(0.98);
-}
-
-.primary {
-  background: #007bff;
-  color: white;
-}
-
-.primary:hover {
-  background: #0066dd;
-}
-
-.secondary {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.secondary:hover {
-  background: #d1d5db;
-}
-
-.success {
-  background: #10b981;
-  color: white;
-}
-
-.success:hover {
-  background: #059669;
-}
-
-/* === BOOKS GRID === */
-.books-section {
-  width: 100%;
-  max-width: 1200px;
-}
-
-.books-section h2 {
-  margin-bottom: 24px;
-  text-align: center;
-  font-size: 1.5rem;
-}
-
-.books-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.book-card {
-  background: #111827;
-  border-radius: 12px;
-  padding: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.book-card:hover {
-  transform: translateY(-4px);
-  border-color: #007bff;
-  box-shadow: 0 8px 16px rgba(0, 123, 255, 0.3);
-}
-
-.book-card.checked-out {
-  opacity: 0.6;
-  border-color: #ef4444;
-}
-
-.book-card.checked-out:hover {
-  border-color: #dc2626;
-}
-
-.book-cover {
-  width: 100%;
-  height: 180px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  font-size: 3rem;
-}
-
-.book-title {
-  font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 1rem;
-}
-
-.book-status {
-  font-size: 0.85rem;
-  padding: 4px 8px;
-  border-radius: 6px;
-  display: inline-block;
-}
-
-.book-status.available {
-  background: #10b981;
-  color: white;
-}
-
-.book-status.unavailable {
-  background: #ef4444;
-  color: white;
-}
-
-/* === MODAL === */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.modal.active {
-  display: flex;
-}
-
-.modal-box {
-  width: 90%;
-  max-width: 420px;
-  padding: 36px;
-  border-radius: 18px;
-  background: #020617;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.modal-box h2 {
-  margin-bottom: 8px;
-  color: white;
-  font-size: 1.5rem;
-}
-
-.modal-info {
-  color: #00ff9c;
-  font-weight: 600;
-  font-size: 0.95rem;
-  min-height: 20px;
-}
-
-/* === STYLIZED INPUT === */
-.id-input-container {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin: 16px 0;
-}
-
-.id-digit {
-  width: 50px;
-  height: 60px;
-  background: #0b0d10;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 600;
-  color: #00c2ff;
-  transition: all 0.2s;
-}
-
-.id-digit.filled {
-  border-color: #007bff;
-  background: #111827;
-}
-
-.id-digit.active {
-  border-color: #00c2ff;
-  box-shadow: 0 0 12px rgba(0, 194, 255, 0.4);
-}
-
-.hidden-input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.modal-actions {
-  margin-top: 16px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-/* === QR SCANNER === */
-#qrScanner {
-  width: 100%;
-  height: 300px;
-  margin-top: 12px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #0b0d10;
-}
-
-.hidden {
-  display: none !important;
-}
-</style>
-</head>
-<body>
-
-<!-- SPLASH SCREEN -->
-<div id="splash">
-  <img src="https://www.catamilacademy.org/images/tha_logo.png" id="logo" alt="Tamil School Logo">
-  <div id="welcomeText">Welcome to Tamil School Library</div>
-</div>
-
-<!-- MAIN APP -->
-<div id="app">
-  <header class="topbar">
-    <div class="logo">
-      <img src="https://www.catamilacademy.org/images/tha_logo.png" alt="Logo">
-    </div>
-    <nav class="nav">
-      <button class="nav-btn" onclick="window.location.href='studentcheck.html'">Student Check</button>
-      <button class="nav-btn" onclick="window.location.href='booksout.html'">Books Out</button>
-      <button class="nav-btn" onclick="window.location.href='history.html'">History</button>
-    </nav>
-  </header>
-
-  <main class="content">
-    <div class="actions">
-      <button class="action primary" id="checkoutBtn">Check Out Book</button>
-      <button class="action success" id="returnBtn">Return Book</button>
-    </div>
-
-    <div class="books-section" id="booksSection">
-      <div class="books-grid" id="booksGrid"></div>
-    </div>
-  </main>
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <h2 id="modalTitle">Enter Student ID</h2>
-    <p class="modal-info" id="studentName"></p>
-    <p class="modal-info" id="bookInfo"></p>
-    
-    <div id="idInputSection">
-      <div class="id-input-container" id="idDigits">
-        <div class="id-digit" data-index="0">-</div>
-        <div class="id-digit" data-index="1">-</div>
-        <div class="id-digit" data-index="2">-</div>
-        <div class="id-digit" data-index="3">-</div>
-      </div>
-      <input type="text" id="hiddenInput" class="hidden-input" maxlength="4" autocomplete="off">
-    </div>
-
-    <div id="qrScanner" class="hidden"></div>
-    
-    <div class="modal-actions">
-      <button class="action secondary" id="closeModal">Cancel</button>
-      <button class="action primary" id="nextStep">Continue</button>
-    </div>
-  </div>
-</div>
-
-<!-- Firebase v8 -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
-
 <script>
-// ==================== FIREBASE CONFIG ====================
+// ==================== FIREBASE ====================
 const firebaseConfig = {
   apiKey: "AIzaSyCqCPpNb0beFJui-qpShYqwgb6e5IS7PyU",
   authDomain: "tta-library.firebaseapp.com",
@@ -453,16 +12,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ==================== STATE ====================
-let currentAction = "";
-let currentStudentID = "";
-let currentStudentName = "";
-let currentBookID = "";
-let currentBookTitle = "";
-let scanner = null;
-let step = 0;
+// ==================== GLOBAL STATE ====================
+let state = {
+  action: null,
+  studentID: null,
+  studentName: null,
+  bookID: null,
+  bookTitle: null,
+  scanner: null,
+  step: 0,
+  scanning: false
+};
 
-// ==================== DOM ELEMENTS ====================
+// ==================== DOM ====================
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const studentNameDisplay = document.getElementById("studentName");
@@ -471,35 +33,92 @@ const idInputSection = document.getElementById("idInputSection");
 const qrScannerDiv = document.getElementById("qrScanner");
 const hiddenInput = document.getElementById("hiddenInput");
 const idDigits = document.querySelectorAll(".id-digit");
-const welcomeSection = document.getElementById("welcomeSection");
-const studentWelcome = document.getElementById("studentWelcome");
 const booksGrid = document.getElementById("booksGrid");
 
-// ==================== SPLASH SCREEN ====================
+// ==================== SPLASH ====================
 window.addEventListener("load", () => {
   setTimeout(() => {
     document.getElementById("splash").remove();
     document.getElementById("app").style.display = "flex";
-    loadBooks();
-  }, 3000);
+    startRealtimeBooks();
+  }, 2500);
 });
 
-// ==================== STYLIZED ID INPUT ====================
-function setupIDInput() {
-  hiddenInput.value = "";
-  idDigits.forEach(digit => {
-    digit.textContent = "-";
-    digit.classList.remove("filled", "active");
+// ==================== REALTIME BOOKS + ANALYTICS ====================
+function startRealtimeBooks() {
+  db.collection("books").onSnapshot(snapshot => {
+
+    booksGrid.innerHTML = "";
+
+    let total = 0;
+    let checkedOut = 0;
+
+    snapshot.forEach(doc => {
+      const book = doc.data();
+      total++;
+
+      if (book.status === "checked out") checkedOut++;
+
+      const card = document.createElement("div");
+      card.className = `book-card ${book.status === "checked out" ? "checked-out" : ""}`;
+
+      card.innerHTML = `
+        <div class="book-cover">📖</div>
+        <div class="book-title">${book.title || "Untitled"}</div>
+        <span class="book-status ${book.status === "available" ? "available" : "unavailable"}">
+          ${book.status === "available" ? "Available" : "Checked Out"}
+        </span>
+      `;
+
+      booksGrid.appendChild(card);
+    });
+
+    console.log("📊 Analytics:", {
+      totalBooks: total,
+      checkedOutBooks: checkedOut,
+      availableBooks: total - checkedOut
+    });
+
+  }, error => {
+    console.error("🔥 Firestore Listener Error:", error);
+    alert("Database connection error: " + error.message);
   });
-  idDigits[0].classList.add("active");
-  
-  setTimeout(() => hiddenInput.focus(), 100);
 }
 
-hiddenInput.addEventListener("input", (e) => {
+// ==================== ACTION BUTTONS ====================
+document.getElementById("checkoutBtn").onclick = () => openModal("checkout");
+document.getElementById("returnBtn").onclick = () => openModal("return");
+
+// ==================== OPEN MODAL ====================
+function openModal(action) {
+  state = { ...state, action, step: 0, studentID: null, bookID: null, scanning: false };
+
+  modalTitle.textContent = "Enter Student ID";
+  studentNameDisplay.textContent = "";
+  bookInfoDisplay.textContent = "";
+
+  idInputSection.classList.remove("hidden");
+  qrScannerDiv.classList.add("hidden");
+
+  setupIDInput();
+  modal.classList.add("active");
+}
+
+// ==================== ID INPUT ====================
+function setupIDInput() {
+  hiddenInput.value = "";
+  idDigits.forEach((digit, i) => {
+    digit.textContent = "-";
+    digit.classList.remove("filled", "active");
+    if (i === 0) digit.classList.add("active");
+  });
+  hiddenInput.focus();
+}
+
+hiddenInput.addEventListener("input", e => {
   const value = e.target.value.replace(/\D/g, "").slice(0, 4);
   hiddenInput.value = value;
-  
+
   idDigits.forEach((digit, index) => {
     digit.classList.remove("active", "filled");
     if (index < value.length) {
@@ -509,253 +128,163 @@ hiddenInput.addEventListener("input", (e) => {
       digit.textContent = "-";
     }
   });
-  
-  if (value.length < 4) {
-    idDigits[value.length]?.classList.add("active");
-  }
+
+  if (value.length < 4) idDigits[value.length]?.classList.add("active");
 });
 
-idDigits.forEach(digit => {
-  digit.addEventListener("click", () => hiddenInput.focus());
-});
-
-// ==================== LOAD BOOKS ====================
-async function loadBooks() {
-  try {
-    const snapshot = await db.collection("books").get();
-    booksGrid.innerHTML = "";
-    
-    snapshot.forEach(doc => {
-      const book = doc.data();
-      const bookCard = document.createElement("div");
-      bookCard.className = `book-card ${book.status === "checked out" ? "checked-out" : ""}`;
-      
-      bookCard.innerHTML = `
-        <div class="book-cover">📖</div>
-        <div class="book-title">${book.title || "Untitled"}</div>
-        <span class="book-status ${book.status === "available" ? "available" : "unavailable"}">
-          ${book.status === "available" ? "Available" : "Checked Out"}
-        </span>
-      `;
-      
-      booksGrid.appendChild(bookCard);
-    });
-  } catch (error) {
-    console.error("Error loading books:", error);
-  }
-}
-
-// ==================== CHECK OUT FLOW ====================
-document.getElementById("checkoutBtn").onclick = () => {
-  currentAction = "checkout";
-  openModal();
-};
-
-// ==================== RETURN FLOW ====================
-document.getElementById("returnBtn").onclick = () => {
-  currentAction = "return";
-  openModal();
-};
-
-// ==================== OPEN MODAL ====================
-function openModal() {
-  step = 0;
-  currentStudentID = "";
-  currentStudentName = "";
-  currentBookID = "";
-  currentBookTitle = "";
-  
-  modalTitle.textContent = "Enter Student ID";
-  studentNameDisplay.textContent = "";
-  bookInfoDisplay.textContent = "";
-  
-  idInputSection.classList.remove("hidden");
-  qrScannerDiv.classList.add("hidden");
-  
-  setupIDInput();
-  modal.classList.add("active");
-}
-
-// ==================== NEXT STEP ====================
-document.getElementById("nextStep").onclick = async () => {
-  if (step === 0) {
-    await validateStudent();
-  }
+document.getElementById("nextStep").onclick = () => {
+  if (state.step === 0) validateStudent();
 };
 
 // ==================== VALIDATE STUDENT ====================
 async function validateStudent() {
-  const studentID = hiddenInput.value.trim();
-  
-  if (studentID.length !== 4) {
-    alert("Please enter a 4-digit Student ID");
-    return;
-  }
-  
+  const id = hiddenInput.value.trim();
+
+  if (id.length !== 4) return alert("Enter a valid 4-digit ID");
+
   try {
-    const studentDoc = await db.collection("students").doc(studentID).get();
-    
-    if (!studentDoc.exists) {
-      alert("Invalid Student ID! Please try again.");
-      setupIDInput();
-      return;
-    }
-    
-    currentStudentID = studentID;
-    currentStudentName = studentDoc.data().name || "Student";
-    
-    studentNameDisplay.textContent = `Welcome, ${currentStudentName}!`;
-    
-    step = 1;
-    modalTitle.textContent = `Scan Book QR Code`;
+    const doc = await db.collection("students").doc(id).get();
+
+    if (!doc.exists) return alert("Student not found");
+
+    state.studentID = id;
+    state.studentName = doc.data().name || "Student";
+
+    studentNameDisplay.textContent = `Welcome, ${state.studentName}`;
+    modalTitle.textContent = "Scan Book QR Code";
+
     idInputSection.classList.add("hidden");
     qrScannerDiv.classList.remove("hidden");
-    
-    startQRScanner();
+
+    state.step = 1;
+    startScanner();
+
   } catch (error) {
-    console.error("Error validating student:", error);
-    alert("Error connecting to database. Please try again.");
+    console.error("Student validation error:", error);
+    alert("Database error: " + error.message);
   }
 }
 
 // ==================== QR SCANNER ====================
-function startQRScanner() {
-  scanner = new Html5Qrcode("qrScanner");
-  
-  scanner.start(
+function startScanner() {
+  if (state.scanning) return;
+
+  state.scanning = true;
+  state.scanner = new Html5Qrcode("qrScanner");
+
+  state.scanner.start(
     { facingMode: "environment" },
     { fps: 10, qrbox: 250 },
-    async (decodedText) => {
-      await handleBookScan(decodedText);
-    },
-    (errorMessage) => {
-      // Silent error handling
+    async decodedText => {
+      if (!state.bookID) {
+        state.bookID = decodedText.trim();
+        await handleBook();
+      }
     }
   ).catch(err => {
-    console.error("Scanner error:", err);
-    alert("Unable to start camera. Please check permissions.");
+    console.error("Camera error:", err);
+    alert("Camera permission denied or unavailable.");
   });
 }
 
-// ==================== HANDLE BOOK SCAN ====================
-async function handleBookScan(bookID) {
-  currentBookID = bookID.trim();
-  
+// ==================== HANDLE BOOK ====================
+async function handleBook() {
   try {
-    const bookDoc = await db.collection("books").doc(currentBookID).get();
-    
-    if (!bookDoc.exists) {
-      alert("Book not found in database!");
-      return;
-    }
-    
-    const book = bookDoc.data();
-    currentBookTitle = book.title || "Unknown Book";
-    bookInfoDisplay.textContent = `Book: ${currentBookTitle}`;
-    
-    if (currentAction === "checkout") {
-      await checkoutBook(book);
-    } else if (currentAction === "return") {
-      await returnBook(book);
-    }
-    
+    const doc = await db.collection("books").doc(state.bookID).get();
+
+    if (!doc.exists) return alert("Book not found.");
+
+    const book = doc.data();
+    state.bookTitle = book.title || "Unknown Book";
+    bookInfoDisplay.textContent = `Book: ${state.bookTitle}`;
+
+    if (state.action === "checkout") await checkoutBook(book);
+    else await returnBook(book);
+
   } catch (error) {
-    console.error("Error processing book:", error);
-    alert("Error processing book. Please try again.");
+    console.error("Book error:", error);
+    alert("Error: " + error.message);
   }
 }
 
-// ==================== CHECKOUT BOOK ====================
+// ==================== CHECKOUT ====================
 async function checkoutBook(book) {
-  if (book.status === "checked out") {
-    alert(`Sorry, "${currentBookTitle}" is already checked out by another student.`);
-    return;
-  }
-  
-  try {
-    await db.collection("books").doc(currentBookID).update({
-      status: "checked out",
-      checkedOutBy: currentStudentID,
-      timestamp: new Date()
-    });
-    
-    await db.collection("history").add({
-      studentID: currentStudentID,
-      studentName: currentStudentName,
-      bookID: currentBookID,
-      bookTitle: currentBookTitle,
-      action: "checkout",
-      timestamp: new Date()
-    });
-    
-    alert(`✅ ${currentStudentName} successfully checked out "${currentBookTitle}"!`);
-    closeModal();
-    loadBooks();
-  } catch (error) {
-    console.error("Checkout error:", error);
-    alert("Error checking out book. Please try again.");
-  }
+
+  if (book.status === "checked out")
+    return alert("Book already checked out.");
+
+  const batch = db.batch();
+
+  const bookRef = db.collection("books").doc(state.bookID);
+  batch.update(bookRef, {
+    status: "checked out",
+    checkedOutBy: state.studentID,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  const historyRef = db.collection("history").doc();
+  batch.set(historyRef, {
+    studentID: state.studentID,
+    studentName: state.studentName,
+    bookID: state.bookID,
+    bookTitle: state.bookTitle,
+    action: "checkout",
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  await batch.commit();
+
+  alert("Checkout successful!");
+  closeModal();
 }
 
-// ==================== RETURN BOOK ====================
+// ==================== RETURN ====================
 async function returnBook(book) {
-  if (book.status === "available") {
-    alert(`"${currentBookTitle}" is not currently checked out.`);
-    return;
-  }
-  
-  if (book.checkedOutBy !== currentStudentID) {
-    alert(`This book was checked out by another student. Only they can return it.`);
-    return;
-  }
-  
-  try {
-    await db.collection("books").doc(currentBookID).update({
-      status: "available",
-      checkedOutBy: "",
-      timestamp: new Date()
-    });
-    
-    await db.collection("history").add({
-      studentID: currentStudentID,
-      studentName: currentStudentName,
-      bookID: currentBookID,
-      bookTitle: currentBookTitle,
-      action: "return",
-      timestamp: new Date()
-    });
-    
-    alert(`✅ ${currentStudentName} successfully returned "${currentBookTitle}"!`);
-    closeModal();
-    loadBooks();
-  } catch (error) {
-    console.error("Return error:", error);
-    alert("Error returning book. Please try again.");
-  }
+
+  if (book.status === "available")
+    return alert("Book is not checked out.");
+
+  if (book.checkedOutBy !== state.studentID)
+    return alert("Only the student who checked it out can return it.");
+
+  const batch = db.batch();
+
+  batch.update(db.collection("books").doc(state.bookID), {
+    status: "available",
+    checkedOutBy: "",
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  batch.set(db.collection("history").doc(), {
+    studentID: state.studentID,
+    studentName: state.studentName,
+    bookID: state.bookID,
+    bookTitle: state.bookTitle,
+    action: "return",
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  await batch.commit();
+
+  alert("Return successful!");
+  closeModal();
 }
 
-// ==================== CLOSE MODAL ====================
+// ==================== CLOSE ====================
 function closeModal() {
   modal.classList.remove("active");
-  idInputSection.classList.remove("hidden");
-  qrScannerDiv.classList.add("hidden");
-  studentNameDisplay.textContent = "";
-  bookInfoDisplay.textContent = "";
-  step = 0;
-  
-  if (scanner) {
-    scanner.stop().catch(() => {});
-    scanner = null;
+
+  if (state.scanner) {
+    state.scanner.stop().catch(() => {});
   }
+
+  state.scanning = false;
+  state.bookID = null;
 }
 
 document.getElementById("closeModal").onclick = closeModal;
 
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    closeModal();
-  }
+modal.addEventListener("click", e => {
+  if (e.target === modal) closeModal();
 });
 </script>
-</body>
-</html>

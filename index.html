@@ -15,8 +15,6 @@
   --green: #1a7a4a; --red: #c0392b; --radius: 14px; --radius-lg: 20px; --radius-xl: 28px;
 }
 html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--white); color:var(--text); -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden; }
-
-/* SPLASH */
 #splash { position:fixed; inset:0; background:var(--white); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px; transition:opacity 0.9s ease,visibility 0.9s ease; }
 #splash.out { opacity:0; visibility:hidden; pointer-events:none; }
 .splash-mark { display:flex; align-items:center; gap:14px; animation:up 1s cubic-bezier(0.16,1,0.3,1) both; }
@@ -29,14 +27,10 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .splash-prog { height:100%; width:0; background:var(--text); animation:prog 1.8s 0.3s cubic-bezier(0.4,0,0.2,1) forwards; }
 @keyframes prog { to{width:100%} }
 @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-
-/* PAGE */
 #page { opacity:0; transition:opacity 0.7s ease; min-height:100vh; }
 #page.show { opacity:1; }
 .view { display:none; min-height:100vh; }
 .view.active { display:flex; }
-
-/* LANDING */
 #landing { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px; position:relative; overflow:hidden; }
 .bg-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(0,0,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.025) 1px,transparent 1px); background-size:48px 48px; mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black,transparent); pointer-events:none; }
 .landing-inner { position:relative; z-index:1; width:100%; max-width:500px; display:flex; flex-direction:column; align-items:center; }
@@ -49,8 +43,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .landing-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(44px,9vw,74px); font-weight:300; line-height:1.05; letter-spacing:-0.02em; color:var(--text); text-align:center; margin-bottom:16px; animation:up 0.8s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
 .landing-headline em { font-style:italic; color:var(--text3); }
 .landing-sub { font-size:16px; font-weight:300; color:var(--text2); text-align:center; line-height:1.6; margin-bottom:52px; animation:up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
-
-/* SELECTORS */
 .selectors { width:100%; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; animation:up 0.8s 0.25s cubic-bezier(0.16,1,0.3,1) both; }
 .sel-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:5px; }
 .sel-head { display:flex; align-items:center; justify-content:space-between; padding:10px 13px 6px; }
@@ -63,15 +55,11 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .slider-wrap { display:flex; background:var(--off); border-radius:11px; padding:3px; gap:3px; margin:0 3px 3px; }
 .sopt { flex:1; padding:10px; border:none; border-radius:9px; font-size:14px; font-weight:400; cursor:pointer; background:transparent; color:var(--text3); transition:all 0.2s cubic-bezier(0.16,1,0.3,1); font-family:inherit; }
 .sopt.on { background:var(--white); color:var(--text); font-weight:500; box-shadow:0 1px 6px rgba(0,0,0,0.1),0 0 0 0.5px rgba(0,0,0,0.06); }
-
-/* START */
 .start-btn { width:100%; padding:16px; background:var(--text); color:white; border:none; border-radius:var(--radius-lg); font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; letter-spacing:0.01em; transition:all 0.2s; animation:up 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both; display:flex; align-items:center; justify-content:center; gap:10px; }
 .start-btn:hover { background:#222; transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.18); }
 .start-btn:active { transform:translateY(0); }
 .arrow-circle { width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; }
 .arrow-circle svg { width:8px; height:8px; fill:white; }
-
-/* SIM */
 #sim { flex-direction:column; height:100vh; background:var(--off); }
 .sim-top { height:52px; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0; gap:16px; }
 .top-left { display:flex; align-items:center; gap:10px; }
@@ -92,14 +80,10 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .tbtn.end { background:var(--red); color:white; border-color:var(--red); }
 .tbtn.end:hover { background:#a93226; }
 .sim-body { display:flex; flex:1; overflow:hidden; }
-
-/* Left panel */
 .p-left { width:265px; min-width:265px; background:var(--white); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
 .p-lbl { padding:14px 18px 10px; font-size:10px; font-weight:600; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid var(--border); flex-shrink:0; }
 .scen-txt { padding:16px 18px; font-size:13px; line-height:1.75; color:var(--text); overflow-y:auto; flex:1; }
 .hint-card { margin:0 14px 14px; background:#fffbf0; border:1px solid #f0d98a; border-radius:var(--radius); padding:11px 13px; font-size:12px; line-height:1.6; color:#7a5500; flex-shrink:0; }
-
-/* Mid panel */
 .p-mid { flex:1; display:flex; flex-direction:column; min-width:0; background:var(--off); }
 .chat-scroll { flex:1; overflow-y:auto; padding:20px 18px; display:flex; flex-direction:column; gap:10px; }
 .bw { display:flex; }
@@ -121,8 +105,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .send-btn { width:36px; height:36px; background:var(--text); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.15s; }
 .send-btn:hover { background:#333; transform:scale(1.05); }
 .send-btn svg { stroke:white; fill:none; stroke-width:2; width:14px; height:14px; }
-
-/* Right panel */
 .p-right { width:250px; min-width:250px; background:var(--white); border-left:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
 .cl-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:24px; }
 .cl-empty p { font-size:12px; color:var(--text3); text-align:center; line-height:1.6; }
@@ -134,9 +116,7 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .cl-box { width:14px; height:14px; border:1px solid var(--border2); border-radius:4px; flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
 .cl-box.checked { background:var(--text); border-color:var(--text); }
 .cl-box.checked::after { content:''; display:block; width:5px; height:3px; border-left:1.5px solid white; border-bottom:1.5px solid white; transform:rotate(-45deg) translateY(-1px); }
-
-/* RESULTS */
-#results { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px; background:var(--off); }
+#results { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px; background:var(--off); min-height:100vh; }
 .results-wrap { width:100%; max-width:520px; }
 .score-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-xl); padding:40px; text-align:center; margin-bottom:12px; }
 .big-num { font-family:'Cormorant Garamond',serif; font-size:88px; font-weight:300; line-height:1; color:var(--text); letter-spacing:-3px; }
@@ -144,8 +124,8 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .score-lbl { font-size:14px; color:var(--text2); margin-top:8px; font-weight:300; }
 .crit-card { background:#fef2f2; border:1px solid #fecaca; border-radius:var(--radius-lg); padding:16px 20px; margin-bottom:12px; }
 .crit-title { font-size:11px; font-weight:600; color:var(--red); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
-.crit-item { font-size:13px; color:#7f1d1d; padding:3px 0; display:flex; gap:8px; }
-.crit-item::before { content:'×'; font-weight:600; }
+.crit-item { font-size:13px; color:#7f1d1d; padding:3px 0; display:flex; gap:8px; line-height:1.4; }
+.crit-item::before { content:'×'; font-weight:600; flex-shrink:0; }
 .detail-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; margin-bottom:12px; }
 .detail-title { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; }
 .r-item { font-size:13px; padding:3px 0; display:flex; gap:8px; line-height:1.4; }
@@ -266,10 +246,101 @@ const MED_SCENES=['football practice','basketball game','track meet','soccer mat
 const TRA_SCENES=['football collision','fall from bleachers','bicycle crash','gymnastics fall','wrestling injury','skateboarding accident'];
 const MED_CONDS=['cardiac arrest','stroke','seizure/epilepsy','anaphylaxis','asthma attack','diabetic emergency','overdose','fainting/syncope','concussion'];
 const TRA_CONDS=['severe head trauma','suspected spinal injury','femur fracture','open wound with major bleeding','multi-system trauma'];
-const MED_CL={'PPE':['Takes/verbalizes appropriate PPE precautions'],'Scene Size-Up':['Determines scene/situation is safe','Determines MOI/NOI','Requests additional EMS if necessary','Considers spinal stabilization'],'Primary Survey':['Determines responsiveness/LOC (AVPU)','Determines chief complaint/life-threats','Assesses airway','Assures adequate ventilation','Assesses/controls major bleeding','Checks pulse','Assesses skin (color/temp/condition)','Identifies priority and transport decision'],'OPQRST':['Onset','Quality','Provocation','Radiation','Severity','Time','Clarifying questions'],'SAMPLE':['Allergies','Medications','Past pertinent history','Last oral intake'],'Secondary Assessment':['Assesses affected body system'],'Vital Signs':['Blood pressure','Pulse','Respiratory rate and quality'],'Interventions':['States field impression','Verbalizes proper interventions','Initiates appropriate oxygen therapy'],'Reassessment':['Demonstrates reassessment of patient','Provides accurate verbal report to EMS']};
-const TRA_CL={'PPE':['Takes/verbalizes appropriate PPE precautions'],'Scene Size-Up':['Determines scene/situation is safe','Determines MOI/NOI','Requests additional EMS if necessary','Considers spinal stabilization'],'Primary Survey':['Determines responsiveness/LOC','Determines chief complaint/life-threats','Opens and assesses airway','Assesses breathing','Initiates oxygen therapy','Inserts adjunct as indicated','Assures adequate ventilation','Manages injury compromising breathing','Checks pulse','Assesses skin','Assesses/controls major bleeding','Initiates shock management','Identifies priority/transport (GCS)'],'History & Vitals':['Obtains baseline vitals (BP, P, R)','Attempts SAMPLE history'],'Head':['Inspects/palpates scalp and ears','Assesses eyes','Inspects mouth, nose, facial area'],'Neck & Chest':['Checks trachea position','Checks jugular veins','Palpates cervical spine','Inspects chest','Palpates chest','Auscultates chest'],'Abdomen/Pelvis':['Inspects/palpates abdomen','Assesses pelvis','Verbalizes genitalia/perineum assessment'],'Extremities':['Lower extremities (motor/sensory/circ)','Upper extremities (motor/sensory/circ)'],'Posterior':['Inspects/palpates posterior thorax','Inspects/palpates lumbar and buttocks'],'Reassessment':['Manages secondary injuries/wounds','Demonstrates reassessment of patient']};
+
+const MED_CL={
+  'PPE':['Takes/verbalizes appropriate PPE precautions'],
+  'Scene Size-Up':['Determines scene/situation is safe','Determines mechanism of injury/nature of illness','Requests additional EMS assistance if necessary','Considers stabilization of the spine'],
+  'Primary Survey':['Determines responsiveness/level of consciousness (AVPU)','Determines chief complaint/apparent life-threats','Assesses airway — assessment','Assures adequate ventilation','Initiates appropriate oxygen therapy','Assesses/controls major bleeding','Checks pulse','Assesses skin (color, temperature, or condition)','Identifies patient priority and makes treatment/transport decision'],
+  'OPQRST':['Onset','Quality','Provocation','Radiation','Severity','Time','Clarifying questions (1)','Clarifying questions (2)'],
+  'SAMPLE':['Allergies','Medications','Past pertinent history','Last oral intake','Events leading to present illness'],
+  'Secondary Assessment':['Cardiovascular system','Neurological system','Pulmonary system','Musculoskeletal system','Integumentary / GI/GU / Reproductive / Psychological'],
+  'Vital Signs':['Blood pressure','Pulse','Respiratory rate','Respiratory quality'],
+  'Impression & Interventions':['States field impression of patient','Verbalizes proper interventions/treatment'],
+  'Reassessment':['Demonstrates how and when to reassess patient','Provides accurate verbal report to arriving EMS unit']
+};
+
+const MED_CRITS=[
+  'Failure to initiate or call for transport within 15 minute time limit',
+  'Failure to take or verbalize appropriate PPE precautions',
+  'Failure to determine scene safety before approaching patient',
+  'Failure to voice and ultimately provide appropriate oxygen therapy',
+  'Failure to assess/provide adequate ventilation',
+  'Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock',
+  'Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene',
+  'Performs secondary examination before assessing/treating threats to airway, breathing and circulation',
+  'Orders a dangerous or inappropriate intervention',
+  'Failure to provide accurate report to arriving EMS unit',
+  'Failure to manage the patient as a competent EMR',
+  'Exhibits unacceptable affect with patient or other personnel',
+  'Uses or orders a dangerous or inappropriate intervention'
+];
+
+const TRA_CL={
+  'PPE':['Takes/verbalizes appropriate PPE precautions'],
+  'Scene Size-Up':['Determines scene/situation is safe','Determines mechanism of injury/nature of illness','Requests additional EMS assistance if necessary','Considers stabilization of the spine'],
+  'Primary Survey':['Determines responsiveness/level of consciousness','Determines chief complaint/apparent life-threats','Opens and assesses airway','Assesses breathing','Initiates appropriate oxygen therapy','Inserts adjunct as indicated','Assures adequate ventilation','Manages any injury which may compromise breathing/ventilation','Checks pulse','Assesses skin (color, temperature, or condition)','Assesses for and controls major bleeding if present','Initiates shock management (positions patient, conserves body heat)','Identifies patient priority and makes treatment/transport decision (GCS)'],
+  'History Taking':['Obtains baseline vital signs (BP, pulse, respirations)','Attempts to obtain SAMPLE history'],
+  'Head':['Inspects and palpates scalp and ears','Assesses eyes','Inspects mouth, nose and assesses facial area'],
+  'Neck & Chest':['Checks position of trachea','Checks jugular veins','Palpates cervical spine','Inspects chest','Palpates chest','Auscultates chest'],
+  'Abdomen & Pelvis':['Inspects and palpates abdomen','Assesses pelvis','Verbalizes assessment of genitalia/perineum as needed'],
+  'Extremities':['Lower extremity — left (motor, sensory, distal circulation)','Lower extremity — right (motor, sensory, distal circulation)','Upper extremity — left (motor, sensory, distal circulation)','Upper extremity — right (motor, sensory, distal circulation)'],
+  'Posterior':['Inspects and palpates posterior thorax','Inspects and palpates lumbar and buttocks areas'],
+  'Reassessment':['Manages secondary injuries and wounds appropriately','Demonstrates how and when to reassess the patient']
+};
+
+const TRA_CRITS=[
+  'Failure to initiate or call for transport within 10 minute time limit',
+  'Failure to take or verbalize appropriate PPE precautions',
+  'Failure to determine scene safety',
+  'Failure to assess for and provide spinal protection when indicated',
+  'Failure to voice and ultimately provide high concentration oxygen',
+  'Failure to assess/provide adequate ventilation',
+  'Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock',
+  'Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene',
+  'Performs other assessment before assessing/treating threats to airway, breathing and circulation',
+  'Failure to manage the patient as a competent EMR',
+  'Exhibits unacceptable affect with patient or other personnel',
+  'Uses or orders a dangerous or inappropriate intervention'
+];
+
 const TIME_MAP={'vital':180,'blood pressure':180,'opqrst':120,'sample':90,'history':90,'secondary assess':120,'head to toe':120,'ppe':30,'gloves':20,'airway':30,'oxygen':45,'o2':45,'spinal':60,'c-spine':60,'spine':60,'bleeding':45,'tourniquet':60,'shock management':60,'gcs':45};
-const KW_MAP={'safe':['scene safe','scene is safe','safety','size-up'],'moi':['moi','noi','mechanism','nature of illness'],'ems':['additional ems','call for backup','request ems'],'spinal':['spine','spinal','c-spine','cervical','backboard'],'avpu':['avpu','responsiveness','conscious','alert','verbal','unresponsive'],'airway':['airway','head tilt','jaw thrust'],'ventilation':['ventilation','bag mask'],'oxygen':['oxygen','o2','nrb','nasal cannula','high flow'],'bleeding':['bleeding','hemorrhage','tourniquet'],'pulse':['pulse','heart rate','radial','carotid'],'skin':['skin','color','temperature','diaphoretic'],'transport':['transport','priority','load and go'],'onset':['onset','when did','start'],'quality':['quality','describe','feel like'],'provocation':['provocation','makes it'],'radiation':['radiation','radiate','spread'],'severity':['severity','scale of','1 to 10'],'time':['how long','duration','minutes ago'],'allergies':['allergies','allergic'],'medications':['medication','meds','taking anything'],'history':['past history','medical history'],'intake':['last ate','last oral','last drink'],'vitals':['vitals','vital signs','blood pressure'],'impression':['field impression','appears to be','consistent with'],'reassess':['reassess','reassessment','monitor','check again'],'report':['report to','handoff','verbal report','arriving ems'],'ppe':['ppe','gloves','mask','gown','protective equipment']};
+const KW_MAP={
+  'ppe':['ppe','gloves','mask','gown','protective equipment'],
+  'safe':['scene safe','scene is safe','safety','size-up'],
+  'moi':['moi','noi','mechanism','nature of illness'],
+  'ems':['additional ems','call for backup','request ems'],
+  'spinal':['spine','spinal','c-spine','cervical','backboard'],
+  'avpu':['avpu','responsiveness','conscious','alert','verbal','unresponsive'],
+  'airway':['airway','head tilt','jaw thrust'],
+  'ventilation':['ventilation','bag mask'],
+  'oxygen':['oxygen','o2','nrb','nasal cannula','high flow'],
+  'bleeding':['bleeding','hemorrhage','tourniquet'],
+  'pulse':['pulse','heart rate','radial','carotid'],
+  'skin':['skin','color','temperature','diaphoretic'],
+  'transport':['transport','priority','load and go'],
+  'onset':['onset','when did','start'],
+  'quality':['quality','describe','feel like'],
+  'provocation':['provocation','makes it'],
+  'radiation':['radiation','radiate','spread'],
+  'severity':['severity','scale of','1 to 10'],
+  'time':['how long','duration','minutes ago'],
+  'allergies':['allergies','allergic'],
+  'medications':['medication','meds','taking anything'],
+  'history':['past history','medical history'],
+  'intake':['last ate','last oral','last drink'],
+  'events':['what happened','events leading','how did this start'],
+  'vitals':['vitals','vital signs','blood pressure'],
+  'impression':['field impression','appears to be','consistent with'],
+  'reassess':['reassess','reassessment','monitor','check again'],
+  'report':['report to','handoff','verbal report','arriving ems'],
+  'cardiovascular':['cardiovascular','cardiac','heart sounds'],
+  'neurological':['neurological','neuro','pupils','gcs score'],
+  'pulmonary':['pulmonary','lung sounds','breath sounds'],
+  'musculoskeletal':['musculoskeletal','msk','bones','joints'],
+  'integumentary':['integumentary','skin wounds','lacerations'],
+  'reproductive':['reproductive','obstetric','pregnancy'],
+  'psychological':['psychological','behavioral','psychiatric']
+};
 
 let S={type:'medical',mode:'education',scenario:'',condition:'',patientSys:'',msgs:[],cl:{},clVisible:false,timerSec:900,timerInt:null,timerPaused:false,timerDone:false};
 
@@ -283,16 +354,52 @@ function toggleCL(){S.clVisible=!S.clVisible;const btn=document.getElementById('
 function tick(){if(S.timerPaused)return;S.timerSec--;const abs=Math.abs(S.timerSec);const m=Math.floor(abs/60),s=abs%60;const neg=S.timerSec<0?'-':'';const txt=`${neg}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const tnum=document.getElementById('t-num');const tdot=document.getElementById('t-dot');tnum.textContent=txt;if(S.timerSec<90&&S.timerSec>0){tnum.classList.add('warn');tdot.classList.add('warn');}if(S.timerSec<=0&&!S.timerDone){S.timerDone=true;if(S.mode==='quiz'){clearInterval(S.timerInt);addMsg('sys','Time limit reached. Scenario ended.');setTimeout(endSim,1200);}else{addMsg('sys','Time limit passed — continuing in education mode.');}}}
 function deductTime(secs,label){S.timerSec-=secs;const m=Math.floor(secs/60),s=secs%60;const str=m>0?`${m}m${s>0?' '+s+'s':''}`:`${s}s`;addMsg('sys',`Performing: ${label} (−${str.trim()})`);}
 function checkTime(text){const low=text.toLowerCase();for(const[kw,cost]of Object.entries(TIME_MAP)){if(low.includes(kw)){deductTime(cost,kw);return;}}}
-function markCL(text){const low=text.toLowerCase();let changed=false;for(const[key,kws]of Object.entries(KW_MAP)){if(kws.some(k=>low.includes(k))){for(const items of Object.values(S.cl)){items.forEach(item=>{if(!item.done){const il=item.label.toLowerCase();if(kws.some(k=>il.includes(k.split(' ')[0]))||il.includes(key)){item.done=true;changed=true;}}});}}}if(changed)renderCL();}
+function markCL(text){const low=text.toLowerCase();let changed=false;for(const[key,kws]of Object.entries(KW_MAP)){if(kws.some(k=>low.includes(k))){for(const items of Object.values(S.cl)){items.forEach(item=>{if(!item.done){const il=item.label.toLowerCase();if(kws.some(k=>il.includes(k.split(' ')[0]))||il.includes(key)){item.done=true;changed=true;}}});}}};if(changed)renderCL();}
 function addMsg(role,txt){const scroll=document.getElementById('chat-scroll');const w=document.createElement('div');w.className=`bw ${role}`;const b=document.createElement('div');b.className=`bubble ${role}`;b.textContent=txt;w.appendChild(b);scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;}
 function showTyping(){const scroll=document.getElementById('chat-scroll');const w=document.createElement('div');w.className='bw ai';w.id='typing';w.innerHTML='<div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>';scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;}
 function hideTyping(){const el=document.getElementById('typing');if(el)el.remove();}
-async function callAPI(messages,system){const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,system})});const d=await r.json();if(d.error)throw new Error(d.error);return d.content;}
+async function callAPI(messages,system){const r=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,system})});const d=await r.json();if(d.error)throw new Error(d.error);return d.content;}
 async function startSim(){buildCL();S.msgs=[];S.clVisible=false;S.timerDone=false;S.timerSec=S.type==='trauma'?600:900;showView('sim');const mp=document.getElementById('mode-pill');mp.textContent=S.mode==='education'?'Education':'Quiz';mp.className=`pill ${S.mode==='education'?'pill-edu':'pill-quiz'}`;document.getElementById('type-pill').textContent=S.type.charAt(0).toUpperCase()+S.type.slice(1);document.getElementById('t-num').textContent=S.type==='trauma'?'10:00':'15:00';document.getElementById('t-num').classList.remove('warn');document.getElementById('t-dot').classList.remove('warn');document.getElementById('hint-btn').style.display=S.mode==='quiz'?'none':'';document.getElementById('cl-btn').textContent='Show checklist';document.getElementById('cl-btn').classList.remove('on');document.getElementById('cl-empty').style.display='flex';document.getElementById('cl-scroll').style.display='none';document.getElementById('chat-scroll').innerHTML='';document.getElementById('hint-area').innerHTML='';document.getElementById('scen-txt').textContent='Generating scenario...';const scenes=S.type==='medical'?MED_SCENES:TRA_SCENES;const conds=S.type==='medical'?MED_CONDS:TRA_CONDS;const scene=scenes[Math.floor(Math.random()*scenes.length)];const cond=conds[Math.floor(Math.random()*conds.length)];S.condition=cond;try{const scen=await callAPI([],`Generate a realistic ${S.type} EMT emergency scenario at a ${scene}. Patient has ${cond}. Write 3-4 sentences: setting, what you see on arrival, patient age and sex, visible symptoms. Do NOT state the diagnosis. Realistic and specific. No intro text.`);S.scenario=scen;document.getElementById('scen-txt').textContent=scen;S.patientSys=`You are a patient in a ${S.type} emergency. Setting: ${scen}. Actual condition: ${cond}. Rules: Stay in character always. Respond only as the patient — scared, in pain, confused as appropriate. Never reveal your diagnosis. Show symptoms gradually. Keep responses 1-3 sentences. If responder asks good questions, give useful symptom info.`;addMsg('sys','Scenario ready. You are the first responder on scene.');S.timerInt=setInterval(tick,1000);}catch(e){document.getElementById('scen-txt').textContent='Error generating scenario. Check your connection and try again.';}}
 async function send(){const input=document.getElementById('msg-input');const text=input.value.trim();if(!text)return;input.value='';addMsg('user',text);checkTime(text);markCL(text);S.msgs.push({role:'user',content:text});S.timerPaused=true;showTyping();try{const reply=await callAPI(S.msgs,S.patientSys);hideTyping();S.msgs.push({role:'assistant',content:reply});addMsg('ai',reply);markCL(reply);}catch(e){hideTyping();addMsg('sys','Error: '+e.message);}S.timerPaused=false;}
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
-async function doHint(){if(S.mode==='quiz')return;try{const hint=await callAPI(S.msgs,`You are an EMT instructor. Student is doing a ${S.type} assessment. Checklist: ${JSON.stringify(S.cl)}. Give ONE short hint about the most important next step. One sentence only.`);document.getElementById('hint-area').innerHTML=`<div class="hint-card">${hint}</div>`;}catch(e){}}
-function endSim(){clearInterval(S.timerInt);let earned=0,possible=0;const missed=[],done=[];for(const[,items]of Object.entries(S.cl)){items.forEach(i=>{possible++;if(i.done){earned++;done.push(i.label);}else missed.push(i.label);});}const overtime=S.timerSec<0;const pct=Math.round((earned/possible)*100);document.getElementById('big-num').innerHTML=`${earned}<span class="big-denom">/${possible}</span>`;document.getElementById('score-lbl').textContent=`${pct}% — ${pct>=75?'Passing':'Below passing'}${overtime?' · Overtime':''}`;const crits=[];if(overtime&&S.mode==='quiz')crits.push(`Exceeded ${S.type==='trauma'?'10':'15'} minute time limit`);if(!S.cl['PPE']?.[0]?.done)crits.push('Failed to take/verbalize PPE precautions');const sceneSafe=Object.values(S.cl).flat().find(i=>i.label.toLowerCase().includes('safe'));if(!sceneSafe?.done)crits.push('Failed to determine scene safety');const oxy=Object.values(S.cl).flat().find(i=>i.label.toLowerCase().includes('oxygen'));if(!oxy?.done)crits.push('Failed to provide oxygen therapy');document.getElementById('crit-area').innerHTML=crits.length?`<div class="crit-card"><div class="crit-title">Critical failures</div>${crits.map(c=>`<div class="crit-item">${c}</div>`).join('')}</div>`:'';let dh='';if(done.length)dh+=`<div class="detail-card"><div class="detail-title">Completed (${done.length})</div>${done.map(d=>`<div class="r-item r-done"><span>✓</span><span>${d}</span></div>`).join('')}</div>`;if(missed.length)dh+=`<div class="detail-card"><div class="detail-title">Missed (${missed.length})</div>${missed.map(m=>`<div class="r-item r-miss"><span>✗</span><span>${m}</span></div>`).join('')}</div>`;document.getElementById('detail-area').innerHTML=dh;showView('results');}
+async function doHint(){if(S.mode==='quiz')return;try{const hint=await callAPI(S.msgs,`You are an EMT instructor. Student is doing a ${S.type} assessment. Checklist: ${JSON.stringify(S.cl)}. Give ONE short hint about the most important next step they are missing. One sentence only.`);document.getElementById('hint-area').innerHTML=`<div class="hint-card">${hint}</div>`;}catch(e){}}
+
+function checkCrits(){
+  const allItems=Object.values(S.cl).flat();
+  const found=[];
+  const overtime=S.timerSec<0;
+  if(overtime&&S.mode==='quiz')found.push(S.type==='trauma'?'Failure to initiate or call for transport within 10 minute time limit':'Failure to initiate or call for transport within 15 minute time limit');
+  const ppe=allItems.find(i=>i.label.toLowerCase().includes('ppe'));
+  if(!ppe?.done)found.push('Failure to take or verbalize appropriate PPE precautions');
+  const safe=allItems.find(i=>i.label.toLowerCase().includes('safe'));
+  if(!safe?.done)found.push('Failure to determine scene safety');
+  const oxy=allItems.find(i=>i.label.toLowerCase().includes('oxygen'));
+  if(!oxy?.done)found.push(S.type==='trauma'?'Failure to voice and ultimately provide high concentration oxygen':'Failure to voice and ultimately provide appropriate oxygen therapy');
+  const vent=allItems.find(i=>i.label.toLowerCase().includes('ventilation'));
+  if(!vent?.done)found.push('Failure to assess/provide adequate ventilation');
+  const airway=allItems.find(i=>i.label.toLowerCase().includes('airway'));
+  if(!airway?.done)found.push('Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock');
+  if(S.type==='trauma'){const spine=allItems.find(i=>i.label.toLowerCase().includes('spinal')||i.label.toLowerCase().includes('spine'));if(!spine?.done)found.push('Failure to assess for and provide spinal protection when indicated');}
+  return found;
+}
+
+function endSim(){
+  clearInterval(S.timerInt);
+  let earned=0,possible=0;
+  const missed=[],done=[];
+  for(const[,items]of Object.entries(S.cl)){items.forEach(i=>{possible++;if(i.done){earned++;done.push(i.label);}else missed.push(i.label);});}
+  const pct=Math.round((earned/possible)*100);
+  document.getElementById('big-num').innerHTML=`${earned}<span class="big-denom">/${possible}</span>`;
+  document.getElementById('score-lbl').textContent=`${pct}% — ${pct>=75?'Passing':'Below passing'}${S.timerSec<0?' · Overtime':''}`;
+  const crits=checkCrits();
+  document.getElementById('crit-area').innerHTML=crits.length?`<div class="crit-card"><div class="crit-title">Critical failures — automatic fail</div>${crits.map(c=>`<div class="crit-item">${c}</div>`).join('')}</div>`:'';
+  let dh='';
+  if(done.length)dh+=`<div class="detail-card"><div class="detail-title">Completed (${done.length})</div>${done.map(d=>`<div class="r-item r-done"><span>✓</span><span>${d}</span></div>`).join('')}</div>`;
+  if(missed.length)dh+=`<div class="detail-card"><div class="detail-title">Missed (${missed.length})</div>${missed.map(m=>`<div class="r-item r-miss"><span>✗</span><span>${m}</span></div>`).join('')}</div>`;
+  document.getElementById('detail-area').innerHTML=dh;
+  showView('results');
+}
+
 function goHome(){clearInterval(S.timerInt);showView('landing');document.getElementById('landing').style.display='flex';}
 window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('splash').classList.add('out');document.getElementById('page').classList.add('show');},2400);});
 </script>

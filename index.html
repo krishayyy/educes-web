@@ -46,7 +46,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .landing-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(42px,9vw,70px); font-weight:300; line-height:1.05; letter-spacing:-0.02em; color:var(--text); text-align:center; margin-bottom:14px; animation:up 0.8s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
 .landing-headline em { font-style:italic; color:var(--text3); }
 .landing-sub { font-size:15px; font-weight:300; color:var(--text2); text-align:center; line-height:1.6; margin-bottom:40px; animation:up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
-
 .selectors { width:100%; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; animation:up 0.8s 0.25s cubic-bezier(0.16,1,0.3,1) both; position:relative; z-index:1; }
 .sel-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:5px; position:relative; }
 .sel-head { display:flex; align-items:center; justify-content:space-between; padding:10px 13px 6px; }
@@ -59,7 +58,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .slider-wrap { display:flex; background:var(--off); border-radius:11px; padding:3px; gap:3px; margin:0 3px 3px; }
 .sopt { flex:1; padding:10px; border:none; border-radius:9px; font-size:14px; font-weight:400; cursor:pointer; background:transparent; color:var(--text3); transition:all 0.2s cubic-bezier(0.16,1,0.3,1); font-family:inherit; }
 .sopt.on { background:var(--white); color:var(--text); font-weight:500; box-shadow:0 1px 6px rgba(0,0,0,0.1),0 0 0 0.5px rgba(0,0,0,0.06); }
-
 .start-btn { width:100%; padding:16px; background:var(--text); color:white; border:none; border-radius:var(--radius-lg); font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; letter-spacing:0.01em; transition:all 0.2s; animation:up 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both; display:flex; align-items:center; justify-content:center; gap:10px; margin-top:10px; position:relative; z-index:1; }
 .start-btn:hover { background:#222; transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.18); }
 .start-btn:active { transform:translateY(0); }
@@ -92,21 +90,17 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .scen-txt { padding:16px 18px; font-size:13px; line-height:1.75; color:var(--text); overflow-y:auto; flex:1; }
 
 .p-mid { flex:1; display:flex; flex-direction:column; min-width:0; background:var(--off); }
-
 .talk-tabs { display:flex; align-items:center; gap:6px; padding:10px 14px 0; flex-shrink:0; }
 .talk-tab { padding:5px 14px; border:1px solid var(--border); border-radius:100px; font-size:12px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
 .talk-tab:hover { border-color:var(--border2); color:var(--text); }
 .talk-tab.active { background:var(--text); color:white; border-color:var(--text); }
-
 .bystander-picker { display:none; padding:6px 14px; flex-shrink:0; gap:6px; flex-wrap:wrap; }
 .bystander-picker.show { display:flex; }
 .by-btn { padding:4px 12px; border:1px solid var(--border); border-radius:100px; font-size:11px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
 .by-btn:hover { border-color:var(--border2); color:var(--text); }
 .by-btn.active { background:var(--text); color:white; border-color:var(--text); }
-
 .hint-bar { margin:8px 14px 0; background:#fffbf0; border:1px solid #f0d98a; border-radius:var(--radius); padding:9px 13px; font-size:12px; line-height:1.5; color:#7a5500; display:none; flex-shrink:0; }
 .hint-bar.show { display:block; }
-
 .chat-scroll { flex:1; overflow-y:auto; padding:14px 18px; display:flex; flex-direction:column; gap:10px; }
 .bw { display:flex; }
 .bw.user { justify-content:flex-end; }
@@ -197,7 +191,7 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
           <div class="sel-head">
             <span class="sel-lbl">Mode</span>
             <button class="qbtn" onclick="toggleTip('t2')">?
-              <div class="tip" id="t2"><strong>Education</strong> — Checklist visible, hints available, AI challenges you on technique.<br><br><strong>Quiz</strong> — No checklist, no hints, AI plays it straight. Graded at the end.</div>
+              <div class="tip" id="t2"><strong>Education</strong> — Checklist visible, hints available, AI challenges your technique.<br><br><strong>Quiz</strong> — No checklist, no hints, AI plays it straight. Graded at the end.</div>
             </button>
           </div>
           <div class="slider-wrap">
@@ -235,16 +229,16 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
         <div class="scen-txt" id="scen-txt">Generating scenario...</div>
       </div>
       <div class="p-mid">
-        <div class="talk-tabs" id="talk-tabs">
-          <button class="talk-tab active" onclick="setTab('actions')">Actions</button>
-          <button class="talk-tab" onclick="setTab('patient')">Patient</button>
-          <button class="talk-tab" onclick="setTab('bystanders')">Bystanders</button>
+        <div class="talk-tabs">
+          <button class="talk-tab active" onclick="setTab(this,'actions')">Actions</button>
+          <button class="talk-tab" onclick="setTab(this,'patient')">Patient</button>
+          <button class="talk-tab" onclick="setTab(this,'bystanders')">Bystanders</button>
         </div>
         <div class="bystander-picker" id="bystander-picker"></div>
         <div class="hint-bar" id="hint-bar"></div>
         <div class="chat-scroll" id="chat-scroll"></div>
         <div class="input-row">
-          <textarea class="msg-input" id="msg-input" placeholder='Verbalize your actions... e.g. "I am applying gloves"' rows="1" onkeydown="onKey(event)"></textarea>
+          <textarea class="msg-input" id="msg-input" placeholder='Verbalize your actions...' rows="1" onkeydown="onKey(event)"></textarea>
           <button class="send-btn" onclick="send()">
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
@@ -325,73 +319,32 @@ const TRA_CL={
 
 const TRA_CRITS=['Failure to initiate or call for transport within 10 minute time limit','Failure to take or verbalize appropriate PPE precautions','Failure to determine scene safety','Failure to assess for and provide spinal protection when indicated','Failure to voice and ultimately provide high concentration oxygen','Failure to assess/provide adequate ventilation','Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock','Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene','Performs other assessment before assessing/treating threats to airway, breathing and circulation','Failure to manage the patient as a competent EMR','Exhibits unacceptable affect with patient or other personnel','Uses or orders a dangerous or inappropriate intervention'];
 
-// Explicit action → {checklist keyword, time in seconds}
-const ACTION_MAP=[
-  {kws:['applying gloves','put on gloves','gloves on','applying ppe','putting on ppe','ppe on','applying personal protective'],cl:'ppe',secs:30},
-  {kws:['scene is safe','scene safe','checking scene safety','scene safety','sizing up the scene','scene size-up','scene size up'],cl:'safe',secs:20},
-  {kws:['determining moi','determining noi','mechanism of injury','nature of illness','moi is','noi is','mechanism is'],cl:'moi',secs:15},
-  {kws:['calling for additional ems','requesting additional ems','calling ems','called 911','requesting backup','calling for backup'],cl:'ems',secs:10},
-  {kws:['considering spinal','spinal stabilization','c-spine stabilization','manual c-spine','stabilizing the spine','spine consideration'],cl:'spinal',secs:60},
-  {kws:['checking responsiveness','checking level of consciousness','avpu','determining responsiveness','checking if responsive','checking consciousness'],cl:'avpu',secs:20},
-  {kws:['determining chief complaint','chief complaint is','apparent life threat','life threat'],cl:'chief',secs:15},
-  {kws:['opening airway','assessing airway','checking airway','airway is clear','head tilt chin lift','jaw thrust','airway open'],cl:'airway',secs:30},
-  {kws:['assessing breathing','checking breathing','breathing is','respiratory effort','breathing adequate','checking for breathing'],cl:'ventilation',secs:30},
-  {kws:['applying oxygen','applying o2','applying nrb','applying nasal cannula','oxygen therapy','starting oxygen','o2 via','administering oxygen'],cl:'oxygen',secs:45},
-  {kws:['checking for bleeding','assessing bleeding','controlling bleeding','applying tourniquet','applying pressure','wound packing','no major bleeding'],cl:'bleeding',secs:45},
-  {kws:['checking pulse','assessing pulse','radial pulse','carotid pulse','pulse is','feeling for pulse'],cl:'pulse',secs:30},
-  {kws:['checking skin','assessing skin','skin color','skin temp','skin condition','capillary refill','cap refill','skin is'],cl:'skin',secs:20},
-  {kws:['priority is','transport decision','load and go','stay and play','patient priority','treatment decision'],cl:'transport',secs:15},
-  {kws:['taking blood pressure','checking bp','blood pressure is','bp is'],cl:'bp',secs:60},
-  {kws:['checking respiratory rate','respiratory rate is','counting respirations','resp rate'],cl:'resprate',secs:30},
-  {kws:['respiratory quality','quality of breathing','breath sounds','lung sounds','auscultating'],cl:'respquality',secs:30},
-  {kws:['field impression','my impression is','patient appears to have','i believe this is','impression is'],cl:'impression',secs:15},
-  {kws:['verbalizing interventions','interventions include','treatment includes','administering','applying treatment','treating with'],cl:'interventions',secs:20},
-  {kws:['reassessing patient','reassessment','reassessing vitals','monitoring patient','checking again','trending'],cl:'reassess',secs:60},
-  {kws:['verbal report','report to ems','handing off','handoff report','reporting to arriving'],cl:'report',secs:30},
-  {kws:['shock management','positioning patient','keeping patient warm','conserving body heat','treating for shock'],cl:'shock',secs:60},
-  {kws:['gcs is','glasgow coma','gcs score','calculating gcs','gcs of'],cl:'gcs',secs:45},
-  {kws:['inserting airway adjunct','oropharyngeal','nasopharyngeal','opa','npa','inserting adjunct'],cl:'adjunct',secs:45},
-  {kws:['inspecting head','palpating head','checking scalp','palpating scalp','checking ears','inspecting scalp'],cl:'head',secs:45},
-  {kws:['assessing eyes','checking eyes','pupils are','penlight to eyes','pupil response'],cl:'eyes',secs:30},
-  {kws:['checking mouth','inspecting mouth','checking nose','facial assessment','checking face'],cl:'face',secs:30},
-  {kws:['checking trachea','trachea position','tracheal deviation'],cl:'trachea',secs:20},
-  {kws:['checking jugular','jugular veins','jvd'],cl:'jvd',secs:20},
-  {kws:['palpating cervical','cervical spine','c-spine palpation'],cl:'cspine',secs:30},
-  {kws:['inspecting chest','chest rise','chest symmetry','looking at chest'],cl:'chestinspect',secs:20},
-  {kws:['palpating chest','feeling chest','chest palpation'],cl:'chestpalp',secs:30},
-  {kws:['auscultating chest','listening to chest','stethoscope on chest','breath sounds bilateral'],cl:'auscultate',secs:45},
-  {kws:['inspecting abdomen','palpating abdomen','abdominal assessment','checking abdomen','belly soft'],cl:'abdomen',secs:45},
-  {kws:['assessing pelvis','pelvic rock','checking pelvis','pelvis stable'],cl:'pelvis',secs:30},
-  {kws:['lower extremity','checking legs','assessing legs','motor sensory legs','leg movement','leg circulation'],cl:'lowerext',secs:60},
-  {kws:['upper extremity','checking arms','assessing arms','motor sensory arms','arm movement','arm circulation'],cl:'upperext',secs:60},
-  {kws:['posterior thorax','checking back','rolling patient','log roll','inspecting back','palpating back'],cl:'posterior',secs:60},
-  {kws:['managing wounds','bandaging wound','wound management','secondary injuries'],cl:'wounds',secs:60},
-  {kws:['cardiovascular assessment','heart sounds','cardiac assessment'],cl:'cardiovascular',secs:45},
-  {kws:['neurological assessment','neuro check','checking neuro','nerve assessment'],cl:'neurological',secs:45},
-  {kws:['pulmonary assessment','respiratory assessment'],cl:'pulmonary',secs:30},
-  {kws:['musculoskeletal assessment','msk assessment','checking muscles','checking bones'],cl:'musculoskeletal',secs:45},
-  {kws:['integumentary','skin assessment','skin exam','checking integumentary'],cl:'integumentary',secs:30},
-];
-
-// Map checklist label keywords to action map cl keys
-const CL_KEY_MAP={
-  'ppe':'ppe','safe':'safe','moi':'moi','noi':'moi','ems':'ems','spinal':'spinal','spine':'spinal',
-  'avpu':'avpu','responsiveness':'avpu','chief complaint':'chief','life-threat':'chief',
-  'airway':'airway','ventilation':'ventilation','oxygen':'oxygen','bleeding':'bleeding',
-  'pulse':'pulse','skin':'skin','priority':'transport','transport':'transport',
-  'blood pressure':'bp','respiratory rate':'resprate','respiratory quality':'respquality',
-  'impression':'impression','interventions':'interventions','reassess':'reassess','report':'report',
-  'shock':'shock','gcs':'gcs','adjunct':'adjunct',
-  'scalp':'head','ears':'head','eyes':'eyes','mouth':'face','nose':'face','facial':'face',
-  'trachea':'trachea','jugular':'jvd','cervical spine':'cspine',
-  'inspects chest':'chestinspect','palpates chest':'chestpalp','auscultates':'auscultate',
-  'abdomen':'abdomen','pelvis':'pelvis',
-  'lower extremity':'lowerext','upper extremity':'upperext','posterior':'posterior',
-  'secondary injuries':'wounds','cardiovascular':'cardiovascular','neurological':'neurological',
-  'pulmonary':'pulmonary','musculoskeletal':'musculoskeletal','integumentary':'integumentary'
+const TIME_MAP={
+  'ppe':30,'gloves':30,'scene':20,'safety':20,'moi':15,'noi':15,'ems':10,'spinal':60,'spine':60,
+  'responsiveness':20,'avpu':20,'airway':30,'breathing':30,'ventilation':30,'oxygen':45,'o2':45,
+  'bleeding':45,'tourniquet':60,'pulse':30,'skin':20,'capillary':20,'transport':15,'priority':15,
+  'blood pressure':60,'bp':60,'respiratory rate':30,'respiratory quality':30,'impression':15,
+  'interventions':20,'reassess':60,'report':30,'shock':60,'gcs':45,'adjunct':45,
+  'head':45,'scalp':45,'eyes':30,'mouth':30,'nose':30,'trachea':20,'jugular':20,'cervical':30,
+  'chest':45,'abdomen':45,'pelvis':30,'extremity':60,'posterior':60,'back':60,'wounds':60
 };
 
-let S={type:'medical',mode:'education',scenario:'',scene:'',condition:'',patientSys:'',bystanderSystems:{},bystanders:[],activeTab:'actions',activeBystander:'',msgs:{actions:[],patient:[],bystanders:{}},cl:{},clVisible:false,timerSec:900,timerInt:null,timerPaused:false,timerDone:false,completedActions:new Set()};
+function getTimeCost(text){
+  const low=text.toLowerCase();
+  for(const[kw,cost]of Object.entries(TIME_MAP)){
+    if(low.includes(kw))return cost;
+  }
+  return 15; // default 15 seconds for any action
+}
+
+let S={
+  type:'medical',mode:'education',scenario:'',scene:'',condition:'',
+  patientSys:'',bystanderSystems:{},bystanders:[],
+  activeTab:'actions',activeBystander:'',
+  msgs:{actions:[],patient:[],bystanders:{}},
+  cl:{},clVisible:false,
+  timerSec:900,timerInt:null,timerPaused:false,timerDone:false
+};
 
 function showView(id){document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active');v.style.display='none';});const el=document.getElementById(id);el.style.display='flex';el.classList.add('active');if(id==='sim')el.style.flexDirection='column';}
 function pick(btn,group,val){btn.parentElement.querySelectorAll('.sopt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');S[group]=val;}
@@ -400,63 +353,52 @@ document.addEventListener('click',e=>{if(!e.target.closest('.qbtn'))document.que
 
 function buildCL(){const src=S.type==='trauma'?TRA_CL:MED_CL;S.cl={};for(const[s,items]of Object.entries(src))S.cl[s]=items.map(i=>({label:i,done:false}));}
 
-function markItemByClKey(clKey){
+function markCompleted(completedLabels){
+  if(!completedLabels||!completedLabels.length)return;
   let changed=false;
-  for(const items of Object.values(S.cl)){
-    items.forEach(item=>{
-      if(!item.done){
-        const il=item.label.toLowerCase();
-        // Check if this checklist item matches the clKey
-        for(const[labelKw,mapKey] of Object.entries(CL_KEY_MAP)){
-          if(mapKey===clKey&&il.includes(labelKw)){item.done=true;changed=true;}
-        }
+  for(const label of completedLabels){
+    for(const items of Object.values(S.cl)){
+      for(const item of items){
+        if(!item.done&&item.label===label){item.done=true;changed=true;}
       }
-    });
+    }
   }
   if(changed)renderCL();
 }
 
-function processAction(text){
-  const low=text.toLowerCase();
-  let matched=false;
-  for(const action of ACTION_MAP){
-    if(action.kws.some(kw=>low.includes(kw))){
-      // Deduct time
-      const m=Math.floor(action.secs/60),s=action.secs%60;
-      const str=m>0?`${m}m ${s>0?s+'s':''}`:`${s}s`;
-      addSysMsg(`⏱ ${str.trim()} elapsed`);
-      // Mark checklist
-      markItemByClKey(action.cl);
-      S.completedActions.add(action.cl);
-      matched=true;
-      break;
-    }
+function renderCL(){
+  const empty=document.getElementById('cl-empty');
+  const scroll=document.getElementById('cl-scroll');
+  if(!S.clVisible){empty.style.display='flex';scroll.style.display='none';return;}
+  empty.style.display='none';scroll.style.display='block';
+  let h='';
+  for(const[sec,items]of Object.entries(S.cl)){
+    h+=`<div class="cl-sec"><div class="cl-sec-title">${sec}</div>`;
+    items.forEach(i=>{h+=`<div class="cl-item ${i.done?'done':''}"><div class="cl-box ${i.done?'checked':''}"></div><span>${i.label}</span></div>`;});
+    h+='</div>';
   }
-  return matched;
+  scroll.innerHTML=h;
 }
-
-function renderCL(){const empty=document.getElementById('cl-empty');const scroll=document.getElementById('cl-scroll');if(!S.clVisible){empty.style.display='flex';scroll.style.display='none';return;}empty.style.display='none';scroll.style.display='block';let h='';for(const[sec,items]of Object.entries(S.cl)){h+=`<div class="cl-sec"><div class="cl-sec-title">${sec}</div>`;items.forEach(i=>{h+=`<div class="cl-item ${i.done?'done':''}"><div class="cl-box ${i.done?'checked':''}"></div><span>${i.label}</span></div>`;});h+='</div>';}scroll.innerHTML=h;}
 
 function toggleCL(){if(S.mode==='quiz')return;S.clVisible=!S.clVisible;const btn=document.getElementById('cl-btn');btn.textContent=S.clVisible?'Hide checklist':'Show checklist';btn.classList.toggle('on',S.clVisible);renderCL();}
 
-function setTab(tab){
+function setTab(btn,tab){
   S.activeTab=tab;
   document.querySelectorAll('.talk-tab').forEach(t=>t.classList.remove('active'));
-  event.target.classList.add('active');
-  const picker=document.getElementById('bystander-picker');
-  picker.classList.toggle('show',tab==='bystanders');
+  btn.classList.add('active');
+  document.getElementById('bystander-picker').classList.toggle('show',tab==='bystanders');
   const input=document.getElementById('msg-input');
-  if(tab==='actions')input.placeholder='Verbalize your actions... e.g. "I am applying gloves"';
+  if(tab==='actions')input.placeholder='Verbalize your actions...';
   else if(tab==='patient')input.placeholder='Talk to the patient...';
   else input.placeholder=S.activeBystander?`Talk to ${S.activeBystander}...`:'Select a bystander above';
   renderChat();
 }
 
-function selectBystander(name){
+function selectBystander(name,btn){
   S.activeBystander=name;
   if(!S.msgs.bystanders[name])S.msgs.bystanders[name]=[];
   document.querySelectorAll('.by-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
+  btn.classList.add('active');
   document.getElementById('msg-input').placeholder=`Talk to ${name}...`;
   renderChat();
 }
@@ -469,13 +411,9 @@ function renderChat(){
   else if(S.activeTab==='patient')msgs=S.msgs.patient;
   else if(S.activeTab==='bystanders'&&S.activeBystander)msgs=S.msgs.bystanders[S.activeBystander]||[];
   msgs.forEach(m=>{
-    const w=document.createElement('div');
-    w.className=`bw ${m.role}`;
-    const b=document.createElement('div');
-    b.className=`bubble ${m.role}`;
-    b.textContent=m.text;
-    w.appendChild(b);
-    scroll.appendChild(w);
+    const w=document.createElement('div');w.className=`bw ${m.role}`;
+    const b=document.createElement('div');b.className=`bubble ${m.role}`;b.textContent=m.text;
+    w.appendChild(b);scroll.appendChild(w);
   });
   scroll.scrollTop=scroll.scrollHeight;
 }
@@ -484,8 +422,10 @@ function addMsg(role,txt){
   let arr;
   if(S.activeTab==='actions')arr=S.msgs.actions;
   else if(S.activeTab==='patient')arr=S.msgs.patient;
-  else if(S.activeTab==='bystanders'&&S.activeBystander){if(!S.msgs.bystanders[S.activeBystander])S.msgs.bystanders[S.activeBystander]=[];arr=S.msgs.bystanders[S.activeBystander];}
-  else{addSysMsg(txt);return;}
+  else if(S.activeTab==='bystanders'&&S.activeBystander){
+    if(!S.msgs.bystanders[S.activeBystander])S.msgs.bystanders[S.activeBystander]=[];
+    arr=S.msgs.bystanders[S.activeBystander];
+  } else{addSysMsg(txt);return;}
   arr.push({role,text:txt});
   const scroll=document.getElementById('chat-scroll');
   const w=document.createElement('div');w.className=`bw ${role}`;
@@ -503,9 +443,23 @@ function addSysMsg(txt){
 function showTyping(){const scroll=document.getElementById('chat-scroll');const w=document.createElement('div');w.className='bw ai';w.id='typing';w.innerHTML='<div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>';scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;}
 function hideTyping(){const el=document.getElementById('typing');if(el)el.remove();}
 
-function tick(){if(S.timerPaused)return;S.timerSec--;const abs=Math.abs(S.timerSec);const m=Math.floor(abs/60),s=abs%60;const neg=S.timerSec<0?'-':'';const txt=`${neg}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const tnum=document.getElementById('t-num');const tdot=document.getElementById('t-dot');tnum.textContent=txt;if(S.timerSec<90&&S.timerSec>0){tnum.classList.add('warn');tdot.classList.add('warn');}if(S.timerSec<=0&&!S.timerDone){S.timerDone=true;if(S.mode==='quiz'){clearInterval(S.timerInt);addSysMsg('Time limit reached. Scenario ended.');setTimeout(endSim,1200);}else{addSysMsg('Time limit passed — continuing in education mode.');}}}
-
-function deductTime(secs){S.timerSec-=secs;}
+function tick(){
+  if(S.timerPaused)return;
+  S.timerSec--;
+  const abs=Math.abs(S.timerSec);
+  const m=Math.floor(abs/60),s=abs%60;
+  const neg=S.timerSec<0?'-':'';
+  const txt=`${neg}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const tnum=document.getElementById('t-num');
+  const tdot=document.getElementById('t-dot');
+  tnum.textContent=txt;
+  if(S.timerSec<90&&S.timerSec>0){tnum.classList.add('warn');tdot.classList.add('warn');}
+  if(S.timerSec<=0&&!S.timerDone){
+    S.timerDone=true;
+    if(S.mode==='quiz'){clearInterval(S.timerInt);addSysMsg('Time limit reached. Scenario ended.');setTimeout(endSim,1200);}
+    else{addSysMsg('Time limit passed — continuing in education mode.');}
+  }
+}
 
 function showHint(){
   if(S.mode==='quiz')return;
@@ -516,17 +470,100 @@ function showHint(){
   else{bar.textContent='All steps complete — end and grade!';bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),3000);}
 }
 
-async function callAPI(messages,system){
-  const r=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,system})});
+async function callAction(text){
+  const actionHistory=S.msgs.actions.slice(-6).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+  const r=await fetch('/.netlify/functions/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      type:'action',
+      action:text,
+      checklist:S.cl,
+      scenario:S.scenario,
+      condition:S.condition,
+      scenetype:S.type,
+      mode:S.mode,
+      history:actionHistory
+    })
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error);
+  return d;
+}
+
+async function callChat(messages,system){
+  const r=await fetch('/.netlify/functions/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:'chat',messages,system})
+  });
   const d=await r.json();
   if(d.error)throw new Error(d.error);
   return d.content;
 }
 
+async function send(){
+  const input=document.getElementById('msg-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+
+  if(S.activeTab==='bystanders'&&!S.activeBystander){addSysMsg('Select a bystander above first.');return;}
+
+  addMsg('user',text);
+  S.timerPaused=true;
+  showTyping();
+
+  try{
+    if(S.activeTab==='actions'){
+      // Deduct time based on what the action is
+      const cost=getTimeCost(text);
+      S.timerSec-=cost;
+
+      // Call AI to evaluate action and get checklist completions
+      const result=await callAction(text);
+      hideTyping();
+
+      // Mark completed items
+      if(result.completed&&result.completed.length){
+        markCompleted(result.completed);
+      }
+
+      // Show examiner response
+      if(result.response){addMsg('ai',result.response);}
+
+    } else {
+      // Patient or bystander chat
+      let history=[];
+      let sys='';
+
+      if(S.activeTab==='patient'){
+        history=S.msgs.patient.slice(-10).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+        sys=S.patientSys;
+      } else {
+        const by=S.activeBystander;
+        history=(S.msgs.bystanders[by]||[]).slice(-10).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+        sys=S.bystanderSystems[by]||'You are a bystander. Answer questions about what you saw. 1-3 sentences.';
+      }
+
+      history.push({role:'user',content:text});
+      const reply=await callChat(history,sys);
+      hideTyping();
+      addMsg('ai',reply);
+    }
+  }catch(e){
+    hideTyping();
+    addSysMsg('Error: '+e.message);
+  }
+
+  S.timerPaused=false;
+}
+
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+
 async function startSim(){
   buildCL();
   S.msgs={actions:[],patient:[],bystanders:{}};
-  S.completedActions=new Set();
   S.clVisible=false;S.timerDone=false;S.activeTab='actions';S.activeBystander='';
   S.timerSec=S.type==='trauma'?600:900;
 
@@ -559,7 +596,7 @@ async function startSim(){
   document.getElementById('scen-txt').textContent='Generating scenario...';
   document.querySelectorAll('.talk-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   document.getElementById('bystander-picker').classList.remove('show');
-  document.getElementById('msg-input').placeholder='Verbalize your actions... e.g. "I am applying gloves"';
+  document.getElementById('msg-input').placeholder='Verbalize your actions...';
 
   const scenes=S.type==='medical'?MED_SCENES:TRA_SCENES;
   const conds=S.type==='medical'?MED_CONDS:TRA_CONDS;
@@ -569,47 +606,23 @@ async function startSim(){
 
   const byList=BYSTANDER_MAP[scene]||['Witness','Bystander'];
   S.bystanders=byList;
-  const picker=document.getElementById('bystander-picker');
-  picker.innerHTML=byList.map(b=>`<button class="by-btn" onclick="selectBystander('${b}')">${b}</button>`).join('');
+  document.getElementById('bystander-picker').innerHTML=byList.map(b=>`<button class="by-btn" onclick="selectBystander('${b}',this)">${b}</button>`).join('');
 
   try{
-    const scen=await callAPI([],`Generate a realistic ${S.type} EMT emergency scenario at a ${scene}. The patient has ${cond}. Write 3-4 sentences describing: the setting, what the responder sees on arrival, the patient's age and sex, and visible symptoms. Do NOT state the diagnosis. Do NOT use the word moaning — use groaning if needed. Be specific and realistic. No intro text, no labels, just the scenario.`);
+    const scen=await callChat([{role:'user',content:`Generate a realistic ${S.type} EMT emergency scenario at a ${scene}. Patient has ${cond}. Write 3-4 sentences: setting, what you see on arrival, patient age and sex, visible symptoms. Do NOT state the diagnosis. Do not use the word moaning — use groaning. Realistic and specific. No intro text.`}],
+    'You generate realistic EMT emergency scenarios. Respond with only the scenario text, nothing else.');
+
     S.scenario=scen;
     document.getElementById('scen-txt').textContent=scen;
 
-    const isEdu=S.mode==='education';
-
-    S.patientSys=`You are a patient in a ${S.type} emergency at a ${scene}. Scenario: ${scen}. Your actual condition: ${cond}.
-Rules:
-- Stay in character as the patient at all times. Never break character.
-- Respond as the patient would — scared, confused, in pain as appropriate.
-- Never reveal your diagnosis directly.
-- Use groaning not moaning.
-- Show symptoms naturally and gradually.
-- Respond to direct questions from the responder.
-- If the responder asks you to do something (look at me, squeeze my hand, follow my finger), respond as the patient would physically: use brackets for physical actions, e.g. [patient slowly turns head] or [patient squeezes hand weakly].
-- Keep responses 1-3 sentences.`;
+    S.patientSys=`You are a patient in a ${S.type} emergency at ${scene}. Scenario: ${scen}. Your actual condition: ${cond}.
+Stay in character as the patient. Never break character. Respond as the patient — scared, confused, in pain as appropriate. Never reveal diagnosis. Use groaning not moaning. Show symptoms naturally. If asked to do something physical, respond with patient action in brackets e.g. [slowly turns head] or [squeezes hand weakly]. Keep responses 1-3 sentences.`;
 
     S.bystanderSystems={};
     byList.forEach(name=>{
-      S.bystanderSystems[name]=`You are ${name} at the scene of a ${S.type} emergency at a ${scene}. Scenario: ${scen}. The patient has ${cond} but you don't know the diagnosis.
-Rules:
-- Stay in character as ${name}. Be realistic.
-- Answer questions about what you saw, how long ago it happened, the patient's history if you know it.
-- Be helpful but only know what ${name} would realistically know.
-- Keep responses 1-3 sentences.`;
+      S.bystanderSystems[name]=`You are ${name} at the scene of a ${S.type} emergency at ${scene}. Scenario: ${scen}. You do not know the diagnosis.
+Stay in character as ${name}. Only know what ${name} would realistically know. Answer questions about what you saw, how it happened, the patient's history if you'd know it. Keep responses 1-3 sentences.`;
     });
-
-    S.actionSys=`You are an experienced EMR/sports medicine examiner watching a student respond to a ${S.type} emergency at a ${scene}. Scenario: ${scen}. Patient condition: ${cond}.
-Your role:
-- Respond to the student's verbalized actions realistically.
-- ${isEdu?'In education mode: if the student states they did something but is vague (e.g. "airway is clear"), ask HOW they know. If they say "applying oxygen" ask what device and flow rate. If they say "checking circulation" ask how. Challenge them to prove their knowledge. If correct, confirm and move on. If wrong, correct them.':'In quiz mode: simply acknowledge what they did and describe what happens as a result. Do not challenge or correct.'}
-- If the student does something out of order or skips a critical step, ${isEdu?'flag it and explain why order matters.':'note it briefly without lecturing.'}
-- Never auto-complete steps for the student. They must verbalize each action.
-- Keep responses concise: 1-3 sentences.
-- Do not use the word moaning — use groaning.
-- Never say what the diagnosis is.
-- Act like a knowledgeable sports medicine and EMR instructor.`;
 
     addSysMsg('Scenario ready. You are the first responder on scene.');
     S.timerInt=setInterval(tick,1000);
@@ -617,58 +630,6 @@ Your role:
     document.getElementById('scen-txt').textContent='Error generating scenario. Check your connection and try again.';
   }
 }
-
-async function send(){
-  const input=document.getElementById('msg-input');
-  const text=input.value.trim();
-  if(!text)return;
-  input.value='';
-
-  if(S.activeTab==='bystanders'&&!S.activeBystander){
-    addSysMsg('Select a bystander above first.');
-    return;
-  }
-
-  addMsg('user',text);
-
-  // Only process actions from the Actions tab
-  if(S.activeTab==='actions'){
-    processAction(text);
-  }
-
-  // Build message history for current context
-  let history=[];
-  let sys='';
-
-  if(S.activeTab==='actions'){
-    history=S.msgs.actions.slice(-12).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
-    sys=S.actionSys;
-  } else if(S.activeTab==='patient'){
-    history=S.msgs.patient.slice(-12).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
-    sys=S.patientSys;
-  } else if(S.activeTab==='bystanders'){
-    const by=S.activeBystander;
-    history=(S.msgs.bystanders[by]||[]).slice(-12).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
-    sys=S.bystanderSystems[by]||'You are a bystander at the scene. Answer questions about what you saw. Keep it 1-3 sentences.';
-  }
-
-  history.push({role:'user',content:text});
-
-  S.timerPaused=true;
-  showTyping();
-  try{
-    const reply=await callAPI(history,sys);
-    hideTyping();
-    addMsg('ai',reply);
-    // Never auto-mark checklist from AI responses or patient/bystander conversations
-  }catch(e){
-    hideTyping();
-    addSysMsg('Error: '+e.message);
-  }
-  S.timerPaused=false;
-}
-
-function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
 
 function checkCrits(){
   const allItems=Object.values(S.cl).flat();

@@ -19,31 +19,31 @@ exports.handler = async function(event) {
 
       const isEdu = mode === 'education';
 
-      const systemPrompt = `You are an experienced EMR examiner watching a student respond to a ${scenetype} emergency.
+      const systemPrompt = `You are an EMR examiner watching a student respond to a ${scenetype} emergency.
 Scenario: ${scenario}
 Patient condition: ${condition}
 
-Your job:
-1. Understand what the student just did, even with typos or odd phrasing
-2. Respond briefly as an examiner would (1-2 sentences max)
-3. ${isEdu ? 'If vague (e.g. "airway clear" without saying how), ask ONE follow-up about technique. If they describe correctly, confirm. If wrong, correct briefly.' : 'Just acknowledge what they did in 1 sentence. No corrections.'}
-4. Return which checklist items from the list below were just completed
-
-CHECKLIST ITEMS (use exact text):
+CHECKLIST ITEMS (numbered for reference):
 ${allItems.map((item, i) => `${i + 1}. ${item}`).join('\n')}
 
-RULES:
-- Understand typos and abbreviations. "pppe" = PPE, "glovs" = gloves, "sceen sfaety" = scene safety
-- Only mark items actually done in this action
-- Do NOT use the word moaning, use groaning
-- Never reveal the diagnosis
-- You MUST respond with ONLY valid JSON, no other text before or after
+YOUR TASK:
+1. Read the student's action carefully — understand it even with typos or casual language
+2. Determine which checklist items above were just completed by this action
+3. Write a brief examiner response (1 sentence max)${isEdu ? ' — if the student was vague about HOW they did something, ask one specific follow-up question about technique' : ''}
+4. NEVER say "what is your next step" or suggest what to do next
+5. NEVER mark items the student has not actually done yet
+6. Do NOT use the word moaning, use groaning instead
 
-REQUIRED OUTPUT FORMAT (JSON only, nothing else):
-{"response":"your examiner response here","completed":["exact item label 1","exact item label 2"]}`;
+CRITICAL: You MUST respond with ONLY this exact JSON. No text before it, no text after it, no markdown:
+{"response":"examiner response here","completed":["exact checklist label","exact checklist label"]}
+
+If nothing was completed, use an empty array:
+{"response":"examiner response here","completed":[]}
+
+The completed array values MUST exactly match the checklist item labels listed above.`;
 
       const messages = [
-        ...(history || []).slice(-6),
+        ...(history || []).slice(-4).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text })),
         { role: 'user', content: action }
       ];
 
@@ -56,8 +56,8 @@ REQUIRED OUTPUT FORMAT (JSON only, nothing else):
         body: JSON.stringify({
           model: 'llama-3.3-70b-versatile',
           messages: [{ role: 'system', content: systemPrompt }, ...messages],
-          max_tokens: 400,
-          temperature: 0.2
+          max_tokens: 300,
+          temperature: 0.1
         })
       });
 
@@ -69,12 +69,12 @@ REQUIRED OUTPUT FORMAT (JSON only, nothing else):
       let parsed;
       try {
         const jsonMatch = raw.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) throw new Error('no json found');
+        if (!jsonMatch) throw new Error('no json');
         parsed = JSON.parse(jsonMatch[0]);
       } catch (e) {
         return {
           statusCode: 200,
-          body: JSON.stringify({ response: raw.replace(/\{[\s\S]*\}/g, '').trim() || 'Action noted.', completed: [] })
+          body: JSON.stringify({ response: 'Action noted.', completed: [] })
         };
       }
 

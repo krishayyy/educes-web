@@ -15,6 +15,8 @@
   --green: #1a7a4a; --red: #c0392b; --radius: 14px; --radius-lg: 20px; --radius-xl: 28px;
 }
 html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--white); color:var(--text); -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden; }
+
+/* SPLASH */
 #splash { position:fixed; inset:0; background:var(--white); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px; transition:opacity 0.9s ease,visibility 0.9s ease; }
 #splash.out { opacity:0; visibility:hidden; pointer-events:none; }
 .splash-mark { display:flex; align-items:center; gap:14px; animation:up 1s cubic-bezier(0.16,1,0.3,1) both; }
@@ -27,27 +29,32 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .splash-prog { height:100%; width:0; background:var(--text); animation:prog 1.8s 0.3s cubic-bezier(0.4,0,0.2,1) forwards; }
 @keyframes prog { to{width:100%} }
 @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+/* PAGE */
 #page { opacity:0; transition:opacity 0.7s ease; min-height:100vh; }
 #page.show { opacity:1; }
 .view { display:none; min-height:100vh; }
 .view.active { display:flex; }
+
+/* LANDING */
 #landing { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px; position:relative; overflow:hidden; }
 .bg-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(0,0,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.025) 1px,transparent 1px); background-size:48px 48px; mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black,transparent); pointer-events:none; }
-.landing-inner { position:relative; z-index:1; width:100%; max-width:500px; display:flex; flex-direction:column; align-items:center; }
-.brand-mark { display:flex; align-items:center; gap:10px; margin-bottom:52px; animation:up 0.8s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
+.landing-inner { position:relative; z-index:1; width:100%; max-width:480px; display:flex; flex-direction:column; align-items:center; }
+.brand-mark { display:flex; align-items:center; gap:10px; margin-bottom:48px; animation:up 0.8s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
 .cross-icon { width:28px; height:28px; position:relative; display:flex; align-items:center; justify-content:center; }
 .cross-icon::before,.cross-icon::after { content:''; position:absolute; background:var(--text2); border-radius:1.5px; }
 .cross-icon::before { width:2px; height:16px; }
 .cross-icon::after { width:16px; height:2px; }
 .brand-name { font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:400; letter-spacing:0.12em; color:var(--text2); text-transform:uppercase; }
-.landing-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(44px,9vw,74px); font-weight:300; line-height:1.05; letter-spacing:-0.02em; color:var(--text); text-align:center; margin-bottom:16px; animation:up 0.8s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+.landing-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(42px,9vw,70px); font-weight:300; line-height:1.05; letter-spacing:-0.02em; color:var(--text); text-align:center; margin-bottom:14px; animation:up 0.8s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
 .landing-headline em { font-style:italic; color:var(--text3); }
-.landing-sub { font-size:16px; font-weight:300; color:var(--text2); text-align:center; line-height:1.6; margin-bottom:52px; animation:up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
-.selectors { width:100%; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; animation:up 0.8s 0.25s cubic-bezier(0.16,1,0.3,1) both; }
+.landing-sub { font-size:15px; font-weight:300; color:var(--text2); text-align:center; line-height:1.6; margin-bottom:40px; animation:up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
+
+.selectors { width:100%; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; animation:up 0.8s 0.25s cubic-bezier(0.16,1,0.3,1) both; }
 .sel-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:5px; }
 .sel-head { display:flex; align-items:center; justify-content:space-between; padding:10px 13px 6px; }
 .sel-lbl { font-size:11px; font-weight:500; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; }
-.qbtn { width:20px; height:20px; border-radius:50%; border:1px solid var(--border2); background:var(--off); color:var(--text3); font-size:10px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit; position:relative; transition:all 0.15s; }
+.qbtn { width:20px; height:20px; border-radius:50%; border:1px solid var(--border2); background:var(--off); color:var(--text3); font-size:10px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit; position:relative; transition:all 0.15s; flex-shrink:0; }
 .qbtn:hover { border-color:var(--text3); color:var(--text2); }
 .tip { position:absolute; right:0; top:26px; width:230px; background:var(--text); color:rgba(255,255,255,0.88); font-size:11px; line-height:1.65; padding:13px 15px; border-radius:var(--radius); z-index:100; display:none; font-weight:300; box-shadow:0 8px 28px rgba(0,0,0,0.22); }
 .tip.show { display:block; }
@@ -55,11 +62,14 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .slider-wrap { display:flex; background:var(--off); border-radius:11px; padding:3px; gap:3px; margin:0 3px 3px; }
 .sopt { flex:1; padding:10px; border:none; border-radius:9px; font-size:14px; font-weight:400; cursor:pointer; background:transparent; color:var(--text3); transition:all 0.2s cubic-bezier(0.16,1,0.3,1); font-family:inherit; }
 .sopt.on { background:var(--white); color:var(--text); font-weight:500; box-shadow:0 1px 6px rgba(0,0,0,0.1),0 0 0 0.5px rgba(0,0,0,0.06); }
-.start-btn { width:100%; padding:16px; background:var(--text); color:white; border:none; border-radius:var(--radius-lg); font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; letter-spacing:0.01em; transition:all 0.2s; animation:up 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both; display:flex; align-items:center; justify-content:center; gap:10px; }
+
+.start-btn { width:100%; padding:16px; background:var(--text); color:white; border:none; border-radius:var(--radius-lg); font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; letter-spacing:0.01em; transition:all 0.2s; animation:up 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both; display:flex; align-items:center; justify-content:center; gap:10px; margin-top:8px; }
 .start-btn:hover { background:#222; transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.18); }
 .start-btn:active { transform:translateY(0); }
-.arrow-circle { width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; }
+.arrow-circle { width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .arrow-circle svg { width:8px; height:8px; fill:white; }
+
+/* SIM */
 #sim { flex-direction:column; height:100vh; background:var(--off); }
 .sim-top { height:52px; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0; gap:16px; }
 .top-left { display:flex; align-items:center; gap:10px; }
@@ -80,12 +90,33 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .tbtn.end { background:var(--red); color:white; border-color:var(--red); }
 .tbtn.end:hover { background:#a93226; }
 .sim-body { display:flex; flex:1; overflow:hidden; }
-.p-left { width:265px; min-width:265px; background:var(--white); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+
+/* Left panel */
+.p-left { width:260px; min-width:260px; background:var(--white); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
 .p-lbl { padding:14px 18px 10px; font-size:10px; font-weight:600; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid var(--border); flex-shrink:0; }
 .scen-txt { padding:16px 18px; font-size:13px; line-height:1.75; color:var(--text); overflow-y:auto; flex:1; }
-.hint-card { margin:0 14px 14px; background:#fffbf0; border:1px solid #f0d98a; border-radius:var(--radius); padding:11px 13px; font-size:12px; line-height:1.6; color:#7a5500; flex-shrink:0; }
+
+/* Mid panel */
 .p-mid { flex:1; display:flex; flex-direction:column; min-width:0; background:var(--off); }
-.chat-scroll { flex:1; overflow-y:auto; padding:20px 18px; display:flex; flex-direction:column; gap:10px; }
+
+/* Talk-to tabs */
+.talk-tabs { display:flex; align-items:center; gap:6px; padding:10px 14px 0; flex-shrink:0; flex-wrap:wrap; }
+.talk-tab { padding:5px 12px; border:1px solid var(--border); border-radius:100px; font-size:12px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
+.talk-tab:hover { border-color:var(--border2); color:var(--text); }
+.talk-tab.active { background:var(--text); color:white; border-color:var(--text); }
+
+/* Bystander picker */
+.bystander-picker { display:none; padding:6px 14px; flex-shrink:0; gap:6px; flex-wrap:wrap; }
+.bystander-picker.show { display:flex; }
+.by-btn { padding:4px 10px; border:1px solid var(--border); border-radius:100px; font-size:11px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
+.by-btn:hover { border-color:var(--border2); color:var(--text); }
+.by-btn.active { background:var(--off); color:var(--text); border-color:var(--border2); font-weight:500; }
+
+.chat-scroll { flex:1; overflow-y:auto; padding:14px 18px; display:flex; flex-direction:column; gap:10px; }
+
+/* Chat context label */
+.context-label { font-size:10px; font-weight:600; color:var(--text3); letter-spacing:0.08em; text-transform:uppercase; text-align:center; padding:4px 0; }
+
 .bw { display:flex; }
 .bw.user { justify-content:flex-end; }
 .bw.ai { justify-content:flex-start; }
@@ -98,14 +129,22 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .td { width:6px; height:6px; background:var(--text3); border-radius:50%; animation:ty 1.1s infinite; }
 .td:nth-child(2){animation-delay:.18s} .td:nth-child(3){animation-delay:.36s}
 @keyframes ty { 0%,60%,100%{transform:translateY(0);opacity:.3}30%{transform:translateY(-5px);opacity:1} }
+
+/* Hint bar */
+.hint-bar { margin:6px 14px; background:#fffbf0; border:1px solid #f0d98a; border-radius:var(--radius); padding:9px 13px; font-size:12px; line-height:1.5; color:#7a5500; display:none; flex-shrink:0; }
+.hint-bar.show { display:block; }
+
 .input-row { padding:11px 14px; background:var(--white); border-top:1px solid var(--border); display:flex; align-items:flex-end; gap:10px; flex-shrink:0; }
+.input-label { font-size:11px; color:var(--text3); white-space:nowrap; padding-bottom:12px; }
 .msg-input { flex:1; background:var(--off); border:1px solid var(--border); outline:none; border-radius:20px; padding:9px 15px; font-size:14px; color:var(--text); resize:none; min-height:40px; max-height:110px; font-family:inherit; line-height:1.4; transition:border-color 0.15s; }
 .msg-input:focus { border-color:var(--border2); }
 .msg-input::placeholder { color:var(--text3); }
 .send-btn { width:36px; height:36px; background:var(--text); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.15s; }
 .send-btn:hover { background:#333; transform:scale(1.05); }
 .send-btn svg { stroke:white; fill:none; stroke-width:2; width:14px; height:14px; }
-.p-right { width:250px; min-width:250px; background:var(--white); border-left:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+
+/* Right panel */
+.p-right { width:245px; min-width:245px; background:var(--white); border-left:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
 .cl-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:24px; }
 .cl-empty p { font-size:12px; color:var(--text3); text-align:center; line-height:1.6; }
 .cl-scroll { flex:1; overflow-y:auto; padding:14px; }
@@ -116,6 +155,8 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .cl-box { width:14px; height:14px; border:1px solid var(--border2); border-radius:4px; flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
 .cl-box.checked { background:var(--text); border-color:var(--text); }
 .cl-box.checked::after { content:''; display:block; width:5px; height:3px; border-left:1.5px solid white; border-bottom:1.5px solid white; transform:rotate(-45deg) translateY(-1px); }
+
+/* RESULTS */
 #results { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px; background:var(--off); min-height:100vh; }
 .results-wrap { width:100%; max-width:520px; }
 .score-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-xl); padding:40px; text-align:center; margin-bottom:12px; }
@@ -147,6 +188,7 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 
 <div id="page">
 
+  <!-- LANDING -->
   <div class="view active" id="landing">
     <div class="bg-grid"></div>
     <div class="landing-inner">
@@ -173,7 +215,7 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
           <div class="sel-head">
             <span class="sel-lbl">Mode</span>
             <button class="qbtn" onclick="toggleTip('t2')">?
-              <div class="tip" id="t2"><strong>Education</strong> — Checklist visible, hints available, timer keeps going after the limit.<br><br><strong>Quiz</strong> — No hints, checklist hidden, scenario ends when the timer runs out. Strictly graded.</div>
+              <div class="tip" id="t2"><strong>Education</strong> — Checklist visible, hint button shows your next step, timer keeps going after limit.<br><br><strong>Quiz</strong> — No checklist, no hints, scenario ends when timer runs out. Strictly graded.</div>
             </button>
           </div>
           <div class="slider-wrap">
@@ -189,6 +231,7 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
     </div>
   </div>
 
+  <!-- SIM -->
   <div class="view" id="sim">
     <div class="sim-top">
       <div class="top-left">
@@ -201,32 +244,50 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
       </div>
       <div class="top-right">
         <button class="tbtn" id="cl-btn" onclick="toggleCL()">Show checklist</button>
-        <button class="tbtn" id="hint-btn" onclick="doHint()">Hint</button>
+        <button class="tbtn" id="hint-btn" onclick="showHint()">Hint</button>
         <button class="tbtn end" onclick="endSim()">End &amp; Grade</button>
       </div>
     </div>
     <div class="sim-body">
+
+      <!-- LEFT: Scenario -->
       <div class="p-left">
         <div class="p-lbl">Scenario</div>
         <div class="scen-txt" id="scen-txt">Generating scenario...</div>
-        <div id="hint-area"></div>
       </div>
+
+      <!-- MID: Interaction -->
       <div class="p-mid">
+        <!-- Who are you talking to -->
+        <div class="talk-tabs" id="talk-tabs">
+          <button class="talk-tab active" onclick="setTab('actions')">Actions</button>
+          <button class="talk-tab" onclick="setTab('patient')">Patient</button>
+          <button class="talk-tab" onclick="setTab('bystanders')">Bystanders</button>
+        </div>
+        <!-- Bystander picker (shows when bystanders tab active) -->
+        <div class="bystander-picker" id="bystander-picker"></div>
+        <!-- Hint bar -->
+        <div class="hint-bar" id="hint-bar"></div>
+        <!-- Chat -->
         <div class="chat-scroll" id="chat-scroll"></div>
         <div class="input-row">
-          <textarea class="msg-input" id="msg-input" placeholder="Verbalize your actions or speak to the patient..." rows="1" onkeydown="onKey(event)"></textarea>
+          <textarea class="msg-input" id="msg-input" placeholder="Verbalize your actions..." rows="1" onkeydown="onKey(event)"></textarea>
           <button class="send-btn" onclick="send()">
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
       </div>
-      <div class="p-right">
+
+      <!-- RIGHT: Checklist -->
+      <div class="p-right" id="p-right">
         <div class="cl-empty" id="cl-empty"><p>Checklist hidden<br>Toggle above to reveal</p></div>
         <div class="cl-scroll" id="cl-scroll" style="display:none"></div>
       </div>
+
     </div>
   </div>
 
+  <!-- RESULTS -->
   <div class="view" id="results">
     <div class="results-wrap">
       <div class="score-card">
@@ -243,9 +304,29 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 
 <script>
 const MED_SCENES=['football practice','basketball game','track meet','soccer match','wrestling practice','cross country race','gym class','volleyball game'];
-const TRA_SCENES=['football collision','fall from bleachers','bicycle crash','gymnastics fall','wrestling injury','skateboarding accident'];
+const TRA_SCENES=['football collision','fall from bleachers','bicycle crash','gymnastics fall','wrestling injury','skateboarding accident','car accident','home accident'];
 const MED_CONDS=['cardiac arrest','stroke','seizure/epilepsy','anaphylaxis','asthma attack','diabetic emergency','overdose','fainting/syncope','concussion'];
 const TRA_CONDS=['severe head trauma','suspected spinal injury','femur fracture','open wound with major bleeding','multi-system trauma'];
+
+// Bystanders by scene type
+const BYSTANDER_MAP={
+  'football practice':['Coach','Teammate','Athletic Trainer'],
+  'basketball game':['Coach','Teammate','Referee','Parent'],
+  'track meet':['Coach','Teammate','Official'],
+  'soccer match':['Coach','Teammate','Referee','Parent'],
+  'wrestling practice':['Coach','Teammate'],
+  'cross country race':['Coach','Teammate','Race Official'],
+  'gym class':['Teacher','Classmate'],
+  'volleyball game':['Coach','Teammate','Parent'],
+  'football collision':['Coach','Teammate','Athletic Trainer'],
+  'fall from bleachers':['Witness','Security Staff','Parent'],
+  'bicycle crash':['Witness','Bystander'],
+  'gymnastics fall':['Coach','Teammate','Parent'],
+  'wrestling injury':['Coach','Teammate'],
+  'skateboarding accident':['Friend','Witness','Bystander'],
+  'car accident':['Witness','Bystander','Passenger'],
+  'home accident':['Family Member','Friend','Neighbor']
+};
 
 const MED_CL={
   'PPE':['Takes/verbalizes appropriate PPE precautions'],
@@ -259,21 +340,7 @@ const MED_CL={
   'Reassessment':['Demonstrates how and when to reassess patient','Provides accurate verbal report to arriving EMS unit']
 };
 
-const MED_CRITS=[
-  'Failure to initiate or call for transport within 15 minute time limit',
-  'Failure to take or verbalize appropriate PPE precautions',
-  'Failure to determine scene safety before approaching patient',
-  'Failure to voice and ultimately provide appropriate oxygen therapy',
-  'Failure to assess/provide adequate ventilation',
-  'Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock',
-  'Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene',
-  'Performs secondary examination before assessing/treating threats to airway, breathing and circulation',
-  'Orders a dangerous or inappropriate intervention',
-  'Failure to provide accurate report to arriving EMS unit',
-  'Failure to manage the patient as a competent EMR',
-  'Exhibits unacceptable affect with patient or other personnel',
-  'Uses or orders a dangerous or inappropriate intervention'
-];
+const MED_CRITS=['Failure to initiate or call for transport within 15 minute time limit','Failure to take or verbalize appropriate PPE precautions','Failure to determine scene safety before approaching patient','Failure to voice and ultimately provide appropriate oxygen therapy','Failure to assess/provide adequate ventilation','Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock','Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene','Performs secondary examination before assessing/treating threats to airway, breathing and circulation','Orders a dangerous or inappropriate intervention','Failure to provide accurate report to arriving EMS unit','Failure to manage the patient as a competent EMR','Exhibits unacceptable affect with patient or other personnel','Uses or orders a dangerous or inappropriate intervention'];
 
 const TRA_CL={
   'PPE':['Takes/verbalizes appropriate PPE precautions'],
@@ -288,81 +355,271 @@ const TRA_CL={
   'Reassessment':['Manages secondary injuries and wounds appropriately','Demonstrates how and when to reassess the patient']
 };
 
-const TRA_CRITS=[
-  'Failure to initiate or call for transport within 10 minute time limit',
-  'Failure to take or verbalize appropriate PPE precautions',
-  'Failure to determine scene safety',
-  'Failure to assess for and provide spinal protection when indicated',
-  'Failure to voice and ultimately provide high concentration oxygen',
-  'Failure to assess/provide adequate ventilation',
-  'Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock',
-  'Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene',
-  'Performs other assessment before assessing/treating threats to airway, breathing and circulation',
-  'Failure to manage the patient as a competent EMR',
-  'Exhibits unacceptable affect with patient or other personnel',
-  'Uses or orders a dangerous or inappropriate intervention'
-];
+const TRA_CRITS=['Failure to initiate or call for transport within 10 minute time limit','Failure to take or verbalize appropriate PPE precautions','Failure to determine scene safety','Failure to assess for and provide spinal protection when indicated','Failure to voice and ultimately provide high concentration oxygen','Failure to assess/provide adequate ventilation','Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock','Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene','Performs other assessment before assessing/treating threats to airway, breathing and circulation','Failure to manage the patient as a competent EMR','Exhibits unacceptable affect with patient or other personnel','Uses or orders a dangerous or inappropriate intervention'];
 
 const TIME_MAP={'vital':180,'blood pressure':180,'opqrst':120,'sample':90,'history':90,'secondary assess':120,'head to toe':120,'ppe':30,'gloves':20,'airway':30,'oxygen':45,'o2':45,'spinal':60,'c-spine':60,'spine':60,'bleeding':45,'tourniquet':60,'shock management':60,'gcs':45};
-const KW_MAP={
-  'ppe':['ppe','gloves','mask','gown','protective equipment'],
-  'safe':['scene safe','scene is safe','safety','size-up'],
-  'moi':['moi','noi','mechanism','nature of illness'],
-  'ems':['additional ems','call for backup','request ems'],
-  'spinal':['spine','spinal','c-spine','cervical','backboard'],
-  'avpu':['avpu','responsiveness','conscious','alert','verbal','unresponsive'],
-  'airway':['airway','head tilt','jaw thrust'],
-  'ventilation':['ventilation','bag mask'],
-  'oxygen':['oxygen','o2','nrb','nasal cannula','high flow'],
-  'bleeding':['bleeding','hemorrhage','tourniquet'],
-  'pulse':['pulse','heart rate','radial','carotid'],
-  'skin':['skin','color','temperature','diaphoretic'],
-  'transport':['transport','priority','load and go'],
-  'onset':['onset','when did','start'],
-  'quality':['quality','describe','feel like'],
-  'provocation':['provocation','makes it'],
-  'radiation':['radiation','radiate','spread'],
-  'severity':['severity','scale of','1 to 10'],
-  'time':['how long','duration','minutes ago'],
-  'allergies':['allergies','allergic'],
-  'medications':['medication','meds','taking anything'],
-  'history':['past history','medical history'],
-  'intake':['last ate','last oral','last drink'],
-  'events':['what happened','events leading','how did this start'],
-  'vitals':['vitals','vital signs','blood pressure'],
-  'impression':['field impression','appears to be','consistent with'],
-  'reassess':['reassess','reassessment','monitor','check again'],
-  'report':['report to','handoff','verbal report','arriving ems'],
-  'cardiovascular':['cardiovascular','cardiac','heart sounds'],
-  'neurological':['neurological','neuro','pupils','gcs score'],
-  'pulmonary':['pulmonary','lung sounds','breath sounds'],
-  'musculoskeletal':['musculoskeletal','msk','bones','joints'],
-  'integumentary':['integumentary','skin wounds','lacerations'],
-  'reproductive':['reproductive','obstetric','pregnancy'],
-  'psychological':['psychological','behavioral','psychiatric']
-};
+const KW_MAP={'ppe':['ppe','gloves','mask','gown','protective equipment'],'safe':['scene safe','scene is safe','safety','size-up'],'moi':['moi','noi','mechanism','nature of illness'],'ems':['additional ems','call for backup','request ems'],'spinal':['spine','spinal','c-spine','cervical','backboard'],'avpu':['avpu','responsiveness','conscious','alert','verbal','unresponsive'],'airway':['airway','head tilt','jaw thrust'],'ventilation':['ventilation','bag mask'],'oxygen':['oxygen','o2','nrb','nasal cannula','high flow'],'bleeding':['bleeding','hemorrhage','tourniquet'],'pulse':['pulse','heart rate','radial','carotid'],'skin':['skin','color','temperature','diaphoretic'],'transport':['transport','priority','load and go'],'onset':['onset','when did','start'],'quality':['quality','describe','feel like'],'provocation':['provocation','makes it'],'radiation':['radiation','radiate','spread'],'severity':['severity','scale of','1 to 10'],'time':['how long','duration','minutes ago'],'allergies':['allergies','allergic'],'medications':['medication','meds','taking anything'],'history':['past history','medical history'],'intake':['last ate','last oral','last drink'],'events':['what happened','events leading','how did this start'],'vitals':['vitals','vital signs','blood pressure'],'impression':['field impression','appears to be','consistent with'],'reassess':['reassess','reassessment','monitor','check again'],'report':['report to','handoff','verbal report','arriving ems'],'cardiovascular':['cardiovascular','cardiac','heart sounds'],'neurological':['neurological','neuro','pupils','gcs score'],'pulmonary':['pulmonary','lung sounds','breath sounds'],'musculoskeletal':['musculoskeletal','msk','bones','joints'],'integumentary':['integumentary','skin wounds','lacerations'],'reproductive':['reproductive','obstetric','pregnancy'],'psychological':['psychological','behavioral','psychiatric']};
 
-let S={type:'medical',mode:'education',scenario:'',condition:'',patientSys:'',msgs:[],cl:{},clVisible:false,timerSec:900,timerInt:null,timerPaused:false,timerDone:false};
+let S={type:'medical',mode:'education',scenario:'',scene:'',condition:'',patientSys:'',bystanders:[],activeTab:'actions',activeBystander:'',msgs:{actions:[],patient:[],bystanders:{}},cl:{},clVisible:false,timerSec:900,timerInt:null,timerPaused:false,timerDone:false};
 
 function showView(id){document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active');v.style.display='none';});const el=document.getElementById(id);el.style.display='flex';el.classList.add('active');if(id==='sim')el.style.flexDirection='column';}
 function pick(btn,group,val){btn.parentElement.querySelectorAll('.sopt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');S[group]=val;}
 function toggleTip(id){const tip=document.getElementById(id);const was=tip.classList.contains('show');document.querySelectorAll('.tip').forEach(t=>t.classList.remove('show'));if(!was)tip.classList.add('show');}
 document.addEventListener('click',e=>{if(!e.target.closest('.qbtn'))document.querySelectorAll('.tip').forEach(t=>t.classList.remove('show'));});
+
 function buildCL(){const src=S.type==='trauma'?TRA_CL:MED_CL;S.cl={};for(const[s,items]of Object.entries(src))S.cl[s]=items.map(i=>({label:i,done:false}));}
-function renderCL(){const empty=document.getElementById('cl-empty');const scroll=document.getElementById('cl-scroll');if(!S.clVisible){empty.style.display='flex';scroll.style.display='none';return;}empty.style.display='none';scroll.style.display='block';let h='';for(const[sec,items]of Object.entries(S.cl)){h+=`<div class="cl-sec"><div class="cl-sec-title">${sec}</div>`;items.forEach(i=>{h+=`<div class="cl-item ${i.done?'done':''}"><div class="cl-box ${i.done?'checked':''}"></div><span>${i.label}</span></div>`;});h+='</div>';}scroll.innerHTML=h;}
-function toggleCL(){S.clVisible=!S.clVisible;const btn=document.getElementById('cl-btn');btn.textContent=S.clVisible?'Hide checklist':'Show checklist';btn.classList.toggle('on',S.clVisible);renderCL();}
-function tick(){if(S.timerPaused)return;S.timerSec--;const abs=Math.abs(S.timerSec);const m=Math.floor(abs/60),s=abs%60;const neg=S.timerSec<0?'-':'';const txt=`${neg}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const tnum=document.getElementById('t-num');const tdot=document.getElementById('t-dot');tnum.textContent=txt;if(S.timerSec<90&&S.timerSec>0){tnum.classList.add('warn');tdot.classList.add('warn');}if(S.timerSec<=0&&!S.timerDone){S.timerDone=true;if(S.mode==='quiz'){clearInterval(S.timerInt);addMsg('sys','Time limit reached. Scenario ended.');setTimeout(endSim,1200);}else{addMsg('sys','Time limit passed — continuing in education mode.');}}}
-function deductTime(secs,label){S.timerSec-=secs;const m=Math.floor(secs/60),s=secs%60;const str=m>0?`${m}m${s>0?' '+s+'s':''}`:`${s}s`;addMsg('sys',`Performing: ${label} (−${str.trim()})`);}
-function checkTime(text){const low=text.toLowerCase();for(const[kw,cost]of Object.entries(TIME_MAP)){if(low.includes(kw)){deductTime(cost,kw);return;}}}
-function markCL(text){const low=text.toLowerCase();let changed=false;for(const[key,kws]of Object.entries(KW_MAP)){if(kws.some(k=>low.includes(k))){for(const items of Object.values(S.cl)){items.forEach(item=>{if(!item.done){const il=item.label.toLowerCase();if(kws.some(k=>il.includes(k.split(' ')[0]))||il.includes(key)){item.done=true;changed=true;}}});}}};if(changed)renderCL();}
-function addMsg(role,txt){const scroll=document.getElementById('chat-scroll');const w=document.createElement('div');w.className=`bw ${role}`;const b=document.createElement('div');b.className=`bubble ${role}`;b.textContent=txt;w.appendChild(b);scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;}
+
+function renderCL(){
+  const empty=document.getElementById('cl-empty');
+  const scroll=document.getElementById('cl-scroll');
+  if(!S.clVisible){empty.style.display='flex';scroll.style.display='none';return;}
+  empty.style.display='none';scroll.style.display='block';
+  let h='';
+  for(const[sec,items]of Object.entries(S.cl)){
+    h+=`<div class="cl-sec"><div class="cl-sec-title">${sec}</div>`;
+    items.forEach(i=>{h+=`<div class="cl-item ${i.done?'done':''}"><div class="cl-box ${i.done?'checked':''}"></div><span>${i.label}</span></div>`;});
+    h+='</div>';
+  }
+  scroll.innerHTML=h;
+}
+
+function toggleCL(){
+  if(S.mode==='quiz')return;
+  S.clVisible=!S.clVisible;
+  const btn=document.getElementById('cl-btn');
+  btn.textContent=S.clVisible?'Hide checklist':'Show checklist';
+  btn.classList.toggle('on',S.clVisible);
+  renderCL();
+}
+
+function setTab(tab){
+  S.activeTab=tab;
+  document.querySelectorAll('.talk-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.talk-tab').forEach(t=>{if(t.textContent.toLowerCase()===tab||t.getAttribute('onclick').includes(`'${tab}'`))t.classList.add('active');});
+  const picker=document.getElementById('bystander-picker');
+  if(tab==='bystanders'){
+    picker.classList.add('show');
+  } else {
+    picker.classList.remove('show');
+  }
+  const input=document.getElementById('msg-input');
+  if(tab==='actions') input.placeholder='Verbalize your actions... (e.g. "I am applying PPE and gloves")';
+  else if(tab==='patient') input.placeholder='Talk to the patient... (e.g. "What happened? Where does it hurt?")';
+  else input.placeholder=`Talk to ${S.activeBystander||'bystander'}...`;
+  renderChat();
+}
+
+function selectBystander(name){
+  S.activeBystander=name;
+  if(!S.msgs.bystanders[name])S.msgs.bystanders[name]=[];
+  document.querySelectorAll('.by-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.by-btn').forEach(b=>{if(b.textContent===name)b.classList.add('active');});
+  document.getElementById('msg-input').placeholder=`Talk to ${name}...`;
+  renderChat();
+}
+
+function renderChat(){
+  const scroll=document.getElementById('chat-scroll');
+  scroll.innerHTML='';
+  let msgs=[];
+  if(S.activeTab==='actions') msgs=S.msgs.actions;
+  else if(S.activeTab==='patient') msgs=S.msgs.patient;
+  else if(S.activeTab==='bystanders'&&S.activeBystander) msgs=S.msgs.bystanders[S.activeBystander]||[];
+  msgs.forEach(m=>{
+    const w=document.createElement('div');
+    w.className=`bw ${m.role}`;
+    const b=document.createElement('div');
+    b.className=`bubble ${m.role}`;
+    b.textContent=m.text;
+    w.appendChild(b);
+    scroll.appendChild(w);
+  });
+  scroll.scrollTop=scroll.scrollHeight;
+}
+
+function addMsg(role,txt){
+  let arr;
+  if(S.activeTab==='actions') arr=S.msgs.actions;
+  else if(S.activeTab==='patient') arr=S.msgs.patient;
+  else if(S.activeTab==='bystanders'&&S.activeBystander){ if(!S.msgs.bystanders[S.activeBystander])S.msgs.bystanders[S.activeBystander]=[]; arr=S.msgs.bystanders[S.activeBystander]; }
+  else { addSysMsg(txt); return; }
+  arr.push({role,text:txt});
+  const scroll=document.getElementById('chat-scroll');
+  const w=document.createElement('div');
+  w.className=`bw ${role}`;
+  const b=document.createElement('div');
+  b.className=`bubble ${role}`;
+  b.textContent=txt;
+  w.appendChild(b);
+  scroll.appendChild(w);
+  scroll.scrollTop=scroll.scrollHeight;
+}
+
+function addSysMsg(txt){
+  const scroll=document.getElementById('chat-scroll');
+  const w=document.createElement('div');
+  w.className='bw sys';
+  const b=document.createElement('div');
+  b.className='bubble sys';
+  b.textContent=txt;
+  w.appendChild(b);
+  scroll.appendChild(w);
+  scroll.scrollTop=scroll.scrollHeight;
+}
+
 function showTyping(){const scroll=document.getElementById('chat-scroll');const w=document.createElement('div');w.className='bw ai';w.id='typing';w.innerHTML='<div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>';scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;}
 function hideTyping(){const el=document.getElementById('typing');if(el)el.remove();}
-async function callAPI(messages,system){const r=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,system})});const d=await r.json();if(d.error)throw new Error(d.error);return d.content;}
-async function startSim(){buildCL();S.msgs=[];S.clVisible=false;S.timerDone=false;S.timerSec=S.type==='trauma'?600:900;showView('sim');const mp=document.getElementById('mode-pill');mp.textContent=S.mode==='education'?'Education':'Quiz';mp.className=`pill ${S.mode==='education'?'pill-edu':'pill-quiz'}`;document.getElementById('type-pill').textContent=S.type.charAt(0).toUpperCase()+S.type.slice(1);document.getElementById('t-num').textContent=S.type==='trauma'?'10:00':'15:00';document.getElementById('t-num').classList.remove('warn');document.getElementById('t-dot').classList.remove('warn');document.getElementById('hint-btn').style.display=S.mode==='quiz'?'none':'';document.getElementById('cl-btn').textContent='Show checklist';document.getElementById('cl-btn').classList.remove('on');document.getElementById('cl-empty').style.display='flex';document.getElementById('cl-scroll').style.display='none';document.getElementById('chat-scroll').innerHTML='';document.getElementById('hint-area').innerHTML='';document.getElementById('scen-txt').textContent='Generating scenario...';const scenes=S.type==='medical'?MED_SCENES:TRA_SCENES;const conds=S.type==='medical'?MED_CONDS:TRA_CONDS;const scene=scenes[Math.floor(Math.random()*scenes.length)];const cond=conds[Math.floor(Math.random()*conds.length)];S.condition=cond;try{const scen=await callAPI([],`Generate a realistic ${S.type} EMT emergency scenario at a ${scene}. Patient has ${cond}. Write 3-4 sentences: setting, what you see on arrival, patient age and sex, visible symptoms. Do NOT state the diagnosis. Realistic and specific. No intro text.`);S.scenario=scen;document.getElementById('scen-txt').textContent=scen;S.patientSys=`You are a patient in a ${S.type} emergency. Setting: ${scen}. Actual condition: ${cond}. Rules: Stay in character always. Respond only as the patient — scared, in pain, confused as appropriate. Never reveal your diagnosis. Show symptoms gradually. Keep responses 1-3 sentences. If responder asks good questions, give useful symptom info.`;addMsg('sys','Scenario ready. You are the first responder on scene.');S.timerInt=setInterval(tick,1000);}catch(e){document.getElementById('scen-txt').textContent='Error generating scenario. Check your connection and try again.';}}
-async function send(){const input=document.getElementById('msg-input');const text=input.value.trim();if(!text)return;input.value='';addMsg('user',text);checkTime(text);markCL(text);S.msgs.push({role:'user',content:text});S.timerPaused=true;showTyping();try{const reply=await callAPI(S.msgs,S.patientSys);hideTyping();S.msgs.push({role:'assistant',content:reply});addMsg('ai',reply);markCL(reply);}catch(e){hideTyping();addMsg('sys','Error: '+e.message);}S.timerPaused=false;}
+
+function tick(){if(S.timerPaused)return;S.timerSec--;const abs=Math.abs(S.timerSec);const m=Math.floor(abs/60),s=abs%60;const neg=S.timerSec<0?'-':'';const txt=`${neg}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const tnum=document.getElementById('t-num');const tdot=document.getElementById('t-dot');tnum.textContent=txt;if(S.timerSec<90&&S.timerSec>0){tnum.classList.add('warn');tdot.classList.add('warn');}if(S.timerSec<=0&&!S.timerDone){S.timerDone=true;if(S.mode==='quiz'){clearInterval(S.timerInt);addSysMsg('Time limit reached. Scenario ended.');setTimeout(endSim,1200);}else{addSysMsg('Time limit passed — continuing in education mode.');}}}
+function deductTime(secs,label){S.timerSec-=secs;const m=Math.floor(secs/60),s=secs%60;const str=m>0?`${m}m${s>0?' '+s+'s':''}`:`${s}s`;addSysMsg(`Performing: ${label} (−${str.trim()})`);}
+function checkTime(text){const low=text.toLowerCase();for(const[kw,cost]of Object.entries(TIME_MAP)){if(low.includes(kw)){deductTime(cost,kw);return;}}}
+function markCL(text){const low=text.toLowerCase();let changed=false;for(const[key,kws]of Object.entries(KW_MAP)){if(kws.some(k=>low.includes(k))){for(const items of Object.values(S.cl)){items.forEach(item=>{if(!item.done){const il=item.label.toLowerCase();if(kws.some(k=>il.includes(k.split(' ')[0]))||il.includes(key)){item.done=true;changed=true;}}});}}};if(changed)renderCL();}
+
+function showHint(){
+  if(S.mode==='quiz')return;
+  const bar=document.getElementById('hint-bar');
+  const allItems=Object.values(S.cl).flat();
+  const next=allItems.find(i=>!i.done);
+  if(next){
+    bar.textContent=`Next: ${next.label}`;
+    bar.classList.add('show');
+    setTimeout(()=>bar.classList.remove('show'),4000);
+  } else {
+    bar.textContent='All steps completed — end and grade!';
+    bar.classList.add('show');
+    setTimeout(()=>bar.classList.remove('show'),3000);
+  }
+}
+
+async function callAPI(messages,system){
+  const r=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,system})});
+  const d=await r.json();
+  if(d.error)throw new Error(d.error);
+  return d.content;
+}
+
+function buildBystanderSystems(){
+  const bySys={};
+  S.bystanders.forEach(name=>{
+    bySys[name]=`You are ${name} at ${S.scene}. A patient is down — ${S.scenario}. You witnessed or are aware of what happened. Rules: Stay in character. Answer questions about what you saw, how long ago, the patient's history if you know it. Be realistic. Keep responses 1-3 sentences. Never give a diagnosis.`;
+  });
+  return bySys;
+}
+
+async function startSim(){
+  buildCL();
+  S.msgs={actions:[],patient:[],bystanders:{}};
+  S.clVisible=false;S.timerDone=false;S.activeTab='actions';S.activeBystander='';
+  S.timerSec=S.type==='trauma'?600:900;
+
+  showView('sim');
+
+  const mp=document.getElementById('mode-pill');
+  mp.textContent=S.mode==='education'?'Education':'Quiz';
+  mp.className=`pill ${S.mode==='education'?'pill-edu':'pill-quiz'}`;
+  document.getElementById('type-pill').textContent=S.type.charAt(0).toUpperCase()+S.type.slice(1);
+  document.getElementById('t-num').textContent=S.type==='trauma'?'10:00':'15:00';
+  document.getElementById('t-num').classList.remove('warn');
+  document.getElementById('t-dot').classList.remove('warn');
+
+  // Quiz mode: hide checklist toggle and hint
+  if(S.mode==='quiz'){
+    document.getElementById('cl-btn').style.display='none';
+    document.getElementById('hint-btn').style.display='none';
+    document.getElementById('p-right').style.display='none';
+  } else {
+    document.getElementById('cl-btn').style.display='';
+    document.getElementById('hint-btn').style.display='';
+    document.getElementById('p-right').style.display='';
+    document.getElementById('cl-btn').textContent='Show checklist';
+    document.getElementById('cl-btn').classList.remove('on');
+  }
+
+  document.getElementById('cl-empty').style.display='flex';
+  document.getElementById('cl-scroll').style.display='none';
+  document.getElementById('chat-scroll').innerHTML='';
+  document.getElementById('hint-bar').classList.remove('show');
+  document.getElementById('scen-txt').textContent='Generating scenario...';
+
+  // Set active tab to actions
+  document.querySelectorAll('.talk-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.talk-tab').classList.add('active');
+  document.getElementById('bystander-picker').classList.remove('show');
+  document.getElementById('msg-input').placeholder='Verbalize your actions...';
+
+  const scenes=S.type==='medical'?MED_SCENES:TRA_SCENES;
+  const conds=S.type==='medical'?MED_CONDS:TRA_CONDS;
+  const scene=scenes[Math.floor(Math.random()*scenes.length)];
+  const cond=conds[Math.floor(Math.random()*conds.length)];
+  S.scene=scene;S.condition=cond;
+
+  // Set bystanders based on scene
+  const byList=BYSTANDER_MAP[scene]||['Bystander','Witness'];
+  S.bystanders=byList;
+  const picker=document.getElementById('bystander-picker');
+  picker.innerHTML=byList.map(b=>`<button class="by-btn" onclick="selectBystander('${b}')">${b}</button>`).join('');
+
+  try{
+    const scen=await callAPI([],`Generate a realistic ${S.type} EMT emergency scenario at a ${scene}. Patient has ${cond}. Write 3-4 sentences: setting, what you see on arrival, patient age and sex, visible symptoms. Do NOT state the diagnosis. Do not use the word moaning — use groaning instead if needed. Realistic and specific. No intro text.`);
+    S.scenario=scen;
+    document.getElementById('scen-txt').textContent=scen;
+    S.patientSys=`You are a patient in a ${S.type} emergency at ${scene}. Setting: ${scen}. Actual condition: ${cond}. Rules: Stay in character always. Respond only as the patient — scared, in pain, confused as appropriate. Never reveal your diagnosis. Use groaning not moaning. Show symptoms gradually. Keep responses 1-3 sentences. If responder asks good questions, give useful symptom info.`;
+    S.bystanderSystems=buildBystanderSystems();
+    addSysMsg('Scenario ready. You are the first responder on scene.');
+    S.timerInt=setInterval(tick,1000);
+  }catch(e){
+    document.getElementById('scen-txt').textContent='Error generating scenario. Check your connection and try again.';
+  }
+}
+
+async function send(){
+  const input=document.getElementById('msg-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+
+  if(S.activeTab==='bystanders'&&!S.activeBystander){
+    addSysMsg('Select a bystander above to talk to them.');
+    return;
+  }
+
+  addMsg('user',text);
+  if(S.activeTab==='actions'){checkTime(text);markCL(text);}
+  else markCL(text);
+
+  // Build message history for current context
+  let history=[];
+  let sys='';
+  if(S.activeTab==='actions'){
+    history=S.msgs.actions.slice(-10).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+    sys=`You are an EMT scenario evaluator. The student is performing actions at the scene. Acknowledge their action briefly and realistically describe what happens as a result. Keep it 1-2 sentences. If they do something wrong or out of order flag it briefly. Do not use the word moaning — use groaning.`;
+  } else if(S.activeTab==='patient'){
+    history=S.msgs.patient.slice(-10).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+    sys=S.patientSys;
+  } else if(S.activeTab==='bystanders'){
+    const by=S.activeBystander;
+    history=(S.msgs.bystanders[by]||[]).slice(-10).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+    sys=S.bystanderSystems[by]||`You are a bystander at the scene. Answer questions about what you saw. Keep it 1-3 sentences.`;
+  }
+
+  // Add current message
+  history.push({role:'user',content:text});
+
+  S.timerPaused=true;
+  showTyping();
+  try{
+    const reply=await callAPI(history,sys);
+    hideTyping();
+    addMsg('ai',reply);
+    markCL(reply);
+  }catch(e){
+    hideTyping();
+    addSysMsg('Error: '+e.message);
+  }
+  S.timerPaused=false;
+}
+
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
-async function doHint(){if(S.mode==='quiz')return;try{const hint=await callAPI(S.msgs,`You are an EMT instructor. Student is doing a ${S.type} assessment. Checklist: ${JSON.stringify(S.cl)}. Give ONE short hint about the most important next step they are missing. One sentence only.`);document.getElementById('hint-area').innerHTML=`<div class="hint-card">${hint}</div>`;}catch(e){}}
 
 function checkCrits(){
   const allItems=Object.values(S.cl).flat();

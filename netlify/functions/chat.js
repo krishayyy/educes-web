@@ -8,7 +8,7 @@ exports.handler = async function(event) {
     const { type } = body;
 
     if (type === 'action') {
-      const { action, checklist, scenario, condition, scenetype, mode, history } = body;
+      const { action, checklist, scenario, condition, scenetype, mode } = body;
 
       const allItems = [];
       for (const [section, items] of Object.entries(checklist)) {
@@ -19,32 +19,31 @@ exports.handler = async function(event) {
 
       const isEdu = mode === 'education';
 
-      const systemPrompt = `You are an EMR examiner watching a student respond to a ${scenetype} emergency.
-Scenario: ${scenario}
-Patient condition: ${condition}
+      const systemPrompt = `You are a silent EMR examiner. A student is responding to this ${scenetype} emergency: "${scenario}"
 
-CHECKLIST ITEMS (numbered for reference):
+CHECKLIST (exact labels):
 ${allItems.map((item, i) => `${i + 1}. ${item}`).join('\n')}
 
-YOUR TASK:
-1. Read the student's action carefully — understand it even with typos or casual language
-2. Determine which checklist items above were just completed by this action
-3. Write a brief examiner response (1 sentence max)${isEdu ? ' — if the student was vague about HOW they did something, ask one specific follow-up question about technique' : ''}
-4. NEVER say "what is your next step" or suggest what to do next
-5. NEVER mark items the student has not actually done yet
-6. Do NOT use the word moaning, use groaning instead
+The student just said: "${action}"
 
-CRITICAL: You MUST respond with ONLY this exact JSON. No text before it, no text after it, no markdown:
-{"response":"examiner response here","completed":["exact checklist label","exact checklist label"]}
+RULES:
+- Understand typos and casual language ("pppe" = PPE, "glovs" = gloves, "sceen safe" = scene safety)
+- Match what they said to checklist items that were completed
+- Your response must be SHORT — max 1 sentence
+- Do NOT ask what their next step is
+- Do NOT ask follow-up questions about technique${isEdu ? ' unless they said something medically incorrect' : ''}
+- Do NOT use the word moaning
+- Never reveal the diagnosis
 
-If nothing was completed, use an empty array:
-{"response":"examiner response here","completed":[]}
+YOU MUST OUTPUT ONLY THIS JSON FORMAT — NOTHING ELSE:
+{"response":"One sentence acknowledgment","completed":["Exact Label From List"]}
 
-The completed array values MUST exactly match the checklist item labels listed above.`;
-
-      const messages = [
-...(history || []).slice(-4).filter(m => m.text && m.text.trim()).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text })),        { role: 'user', content: action }
-      ];
+EXAMPLES:
+Student: "putting on gloves" → {"response":"PPE applied.","completed":["Takes/verbalizes appropriate PPE precautions"]}
+Student: "scene is safe" → {"response":"Scene assessed as safe.","completed":["Determines scene/situation is safe"]}
+Student: "checking pulse" → {"response":"Pulse checked.","completed":["Checks pulse"]}
+Student: "im taking bp" → {"response":"Blood pressure obtained.","completed":["Blood pressure"]}
+Student: "hello" → {"response":"Go ahead with your assessment.","completed":[]}`;
 
       const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -54,8 +53,11 @@ The completed array values MUST exactly match the checklist item labels listed a
         },
         body: JSON.stringify({
           model: 'llama-3.3-70b-versatile',
-          messages: [{ role: 'system', content: systemPrompt }, ...messages],
-          max_tokens: 300,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: action }
+          ],
+          max_tokens: 150,
           temperature: 0.1
         })
       });
@@ -67,7 +69,7 @@ The completed array values MUST exactly match the checklist item labels listed a
 
       let parsed;
       try {
-        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        const jsonMatch = raw.match(/\{[\s\S]*?\}/);
         if (!jsonMatch) throw new Error('no json');
         parsed = JSON.parse(jsonMatch[0]);
       } catch (e) {

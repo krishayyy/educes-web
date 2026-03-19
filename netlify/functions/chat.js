@@ -43,8 +43,7 @@ If nothing was completed, use an empty array:
 The completed array values MUST exactly match the checklist item labels listed above.`;
 
       const messages = [
-        ...(history || []).slice(-4).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text })),
-        { role: 'user', content: action }
+...(history || []).slice(-4).filter(m => m.text && m.text.trim()).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text })),        { role: 'user', content: action }
       ];
 
       const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {

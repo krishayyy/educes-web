@@ -16,7 +16,6 @@
 }
 html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--white); color:var(--text); -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden; }
 
-/* SPLASH */
 #splash { position:fixed; inset:0; background:var(--white); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px; transition:opacity 0.9s ease,visibility 0.9s ease; }
 #splash.out { opacity:0; visibility:hidden; pointer-events:none; }
 .splash-mark { display:flex; align-items:center; gap:14px; animation:up 1s cubic-bezier(0.16,1,0.3,1) both; }
@@ -30,14 +29,12 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 @keyframes prog { to{width:100%} }
 @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-/* PAGE */
 #page { opacity:0; transition:opacity 0.7s ease; min-height:100vh; }
 #page.show { opacity:1; }
 .view { display:none; min-height:100vh; }
 .view.active { display:flex; }
 
-/* LANDING */
-#landing { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px; position:relative; overflow:hidden; }
+#landing { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px 80px; position:relative; overflow:hidden; }
 .bg-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(0,0,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.025) 1px,transparent 1px); background-size:48px 48px; mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black,transparent); pointer-events:none; }
 .landing-inner { position:relative; z-index:1; width:100%; max-width:480px; display:flex; flex-direction:column; align-items:center; }
 .brand-mark { display:flex; align-items:center; gap:10px; margin-bottom:48px; animation:up 0.8s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
@@ -50,26 +47,25 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .landing-headline em { font-style:italic; color:var(--text3); }
 .landing-sub { font-size:15px; font-weight:300; color:var(--text2); text-align:center; line-height:1.6; margin-bottom:40px; animation:up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
 
-.selectors { width:100%; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; animation:up 0.8s 0.25s cubic-bezier(0.16,1,0.3,1) both; }
-.sel-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:5px; }
+.selectors { width:100%; display:flex; flex-direction:column; gap:10px; margin-bottom:20px; animation:up 0.8s 0.25s cubic-bezier(0.16,1,0.3,1) both; position:relative; z-index:1; }
+.sel-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:5px; position:relative; }
 .sel-head { display:flex; align-items:center; justify-content:space-between; padding:10px 13px 6px; }
 .sel-lbl { font-size:11px; font-weight:500; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; }
-.qbtn { width:20px; height:20px; border-radius:50%; border:1px solid var(--border2); background:var(--off); color:var(--text3); font-size:10px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit; position:relative; transition:all 0.15s; flex-shrink:0; }
+.qbtn { width:20px; height:20px; border-radius:50%; border:1px solid var(--border2); background:var(--off); color:var(--text3); font-size:10px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit; position:relative; transition:all 0.15s; flex-shrink:0; z-index:10; }
 .qbtn:hover { border-color:var(--text3); color:var(--text2); }
-.tip { position:absolute; right:0; top:26px; width:230px; background:var(--text); color:rgba(255,255,255,0.88); font-size:11px; line-height:1.65; padding:13px 15px; border-radius:var(--radius); z-index:100; display:none; font-weight:300; box-shadow:0 8px 28px rgba(0,0,0,0.22); }
+.tip { position:absolute; right:0; top:26px; width:230px; background:var(--text); color:rgba(255,255,255,0.88); font-size:11px; line-height:1.65; padding:13px 15px; border-radius:var(--radius); z-index:50; display:none; font-weight:300; box-shadow:0 8px 28px rgba(0,0,0,0.22); }
 .tip.show { display:block; }
 .tip strong { font-weight:500; color:white; }
 .slider-wrap { display:flex; background:var(--off); border-radius:11px; padding:3px; gap:3px; margin:0 3px 3px; }
 .sopt { flex:1; padding:10px; border:none; border-radius:9px; font-size:14px; font-weight:400; cursor:pointer; background:transparent; color:var(--text3); transition:all 0.2s cubic-bezier(0.16,1,0.3,1); font-family:inherit; }
 .sopt.on { background:var(--white); color:var(--text); font-weight:500; box-shadow:0 1px 6px rgba(0,0,0,0.1),0 0 0 0.5px rgba(0,0,0,0.06); }
 
-.start-btn { width:100%; padding:16px; background:var(--text); color:white; border:none; border-radius:var(--radius-lg); font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; letter-spacing:0.01em; transition:all 0.2s; animation:up 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both; display:flex; align-items:center; justify-content:center; gap:10px; margin-top:8px; }
+.start-btn { width:100%; padding:16px; background:var(--text); color:white; border:none; border-radius:var(--radius-lg); font-size:16px; font-weight:500; cursor:pointer; font-family:inherit; letter-spacing:0.01em; transition:all 0.2s; animation:up 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both; display:flex; align-items:center; justify-content:center; gap:10px; margin-top:10px; position:relative; z-index:1; }
 .start-btn:hover { background:#222; transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.18); }
 .start-btn:active { transform:translateY(0); }
 .arrow-circle { width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .arrow-circle svg { width:8px; height:8px; fill:white; }
 
-/* SIM */
 #sim { flex-direction:column; height:100vh; background:var(--off); }
 .sim-top { height:52px; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0; gap:16px; }
 .top-left { display:flex; align-items:center; gap:10px; }
@@ -91,32 +87,27 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .tbtn.end:hover { background:#a93226; }
 .sim-body { display:flex; flex:1; overflow:hidden; }
 
-/* Left panel */
 .p-left { width:260px; min-width:260px; background:var(--white); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
 .p-lbl { padding:14px 18px 10px; font-size:10px; font-weight:600; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; border-bottom:1px solid var(--border); flex-shrink:0; }
 .scen-txt { padding:16px 18px; font-size:13px; line-height:1.75; color:var(--text); overflow-y:auto; flex:1; }
 
-/* Mid panel */
 .p-mid { flex:1; display:flex; flex-direction:column; min-width:0; background:var(--off); }
 
-/* Talk-to tabs */
-.talk-tabs { display:flex; align-items:center; gap:6px; padding:10px 14px 0; flex-shrink:0; flex-wrap:wrap; }
-.talk-tab { padding:5px 12px; border:1px solid var(--border); border-radius:100px; font-size:12px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
+.talk-tabs { display:flex; align-items:center; gap:6px; padding:10px 14px 0; flex-shrink:0; }
+.talk-tab { padding:5px 14px; border:1px solid var(--border); border-radius:100px; font-size:12px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
 .talk-tab:hover { border-color:var(--border2); color:var(--text); }
 .talk-tab.active { background:var(--text); color:white; border-color:var(--text); }
 
-/* Bystander picker */
 .bystander-picker { display:none; padding:6px 14px; flex-shrink:0; gap:6px; flex-wrap:wrap; }
 .bystander-picker.show { display:flex; }
-.by-btn { padding:4px 10px; border:1px solid var(--border); border-radius:100px; font-size:11px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
+.by-btn { padding:4px 12px; border:1px solid var(--border); border-radius:100px; font-size:11px; font-weight:400; cursor:pointer; background:var(--white); color:var(--text2); transition:all 0.15s; font-family:inherit; white-space:nowrap; }
 .by-btn:hover { border-color:var(--border2); color:var(--text); }
-.by-btn.active { background:var(--off); color:var(--text); border-color:var(--border2); font-weight:500; }
+.by-btn.active { background:var(--text); color:white; border-color:var(--text); }
+
+.hint-bar { margin:8px 14px 0; background:#fffbf0; border:1px solid #f0d98a; border-radius:var(--radius); padding:9px 13px; font-size:12px; line-height:1.5; color:#7a5500; display:none; flex-shrink:0; }
+.hint-bar.show { display:block; }
 
 .chat-scroll { flex:1; overflow-y:auto; padding:14px 18px; display:flex; flex-direction:column; gap:10px; }
-
-/* Chat context label */
-.context-label { font-size:10px; font-weight:600; color:var(--text3); letter-spacing:0.08em; text-transform:uppercase; text-align:center; padding:4px 0; }
-
 .bw { display:flex; }
 .bw.user { justify-content:flex-end; }
 .bw.ai { justify-content:flex-start; }
@@ -129,13 +120,7 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .td { width:6px; height:6px; background:var(--text3); border-radius:50%; animation:ty 1.1s infinite; }
 .td:nth-child(2){animation-delay:.18s} .td:nth-child(3){animation-delay:.36s}
 @keyframes ty { 0%,60%,100%{transform:translateY(0);opacity:.3}30%{transform:translateY(-5px);opacity:1} }
-
-/* Hint bar */
-.hint-bar { margin:6px 14px; background:#fffbf0; border:1px solid #f0d98a; border-radius:var(--radius); padding:9px 13px; font-size:12px; line-height:1.5; color:#7a5500; display:none; flex-shrink:0; }
-.hint-bar.show { display:block; }
-
 .input-row { padding:11px 14px; background:var(--white); border-top:1px solid var(--border); display:flex; align-items:flex-end; gap:10px; flex-shrink:0; }
-.input-label { font-size:11px; color:var(--text3); white-space:nowrap; padding-bottom:12px; }
 .msg-input { flex:1; background:var(--off); border:1px solid var(--border); outline:none; border-radius:20px; padding:9px 15px; font-size:14px; color:var(--text); resize:none; min-height:40px; max-height:110px; font-family:inherit; line-height:1.4; transition:border-color 0.15s; }
 .msg-input:focus { border-color:var(--border2); }
 .msg-input::placeholder { color:var(--text3); }
@@ -143,7 +128,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .send-btn:hover { background:#333; transform:scale(1.05); }
 .send-btn svg { stroke:white; fill:none; stroke-width:2; width:14px; height:14px; }
 
-/* Right panel */
 .p-right { width:245px; min-width:245px; background:var(--white); border-left:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
 .cl-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:24px; }
 .cl-empty p { font-size:12px; color:var(--text3); text-align:center; line-height:1.6; }
@@ -156,7 +140,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 .cl-box.checked { background:var(--text); border-color:var(--text); }
 .cl-box.checked::after { content:''; display:block; width:5px; height:3px; border-left:1.5px solid white; border-bottom:1.5px solid white; transform:rotate(-45deg) translateY(-1px); }
 
-/* RESULTS */
 #results { flex-direction:column; align-items:center; justify-content:center; padding:60px 24px; background:var(--off); min-height:100vh; }
 .results-wrap { width:100%; max-width:520px; }
 .score-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-xl); padding:40px; text-align:center; margin-bottom:12px; }
@@ -188,7 +171,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
 
 <div id="page">
 
-  <!-- LANDING -->
   <div class="view active" id="landing">
     <div class="bg-grid"></div>
     <div class="landing-inner">
@@ -215,7 +197,7 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
           <div class="sel-head">
             <span class="sel-lbl">Mode</span>
             <button class="qbtn" onclick="toggleTip('t2')">?
-              <div class="tip" id="t2"><strong>Education</strong> — Checklist visible, hint button shows your next step, timer keeps going after limit.<br><br><strong>Quiz</strong> — No checklist, no hints, scenario ends when timer runs out. Strictly graded.</div>
+              <div class="tip" id="t2"><strong>Education</strong> — Checklist visible, hints available, AI challenges you on technique.<br><br><strong>Quiz</strong> — No checklist, no hints, AI plays it straight. Graded at the end.</div>
             </button>
           </div>
           <div class="slider-wrap">
@@ -231,7 +213,6 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
     </div>
   </div>
 
-  <!-- SIM -->
   <div class="view" id="sim">
     <div class="sim-top">
       <div class="top-left">
@@ -249,45 +230,33 @@ html,body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--whi
       </div>
     </div>
     <div class="sim-body">
-
-      <!-- LEFT: Scenario -->
       <div class="p-left">
         <div class="p-lbl">Scenario</div>
         <div class="scen-txt" id="scen-txt">Generating scenario...</div>
       </div>
-
-      <!-- MID: Interaction -->
       <div class="p-mid">
-        <!-- Who are you talking to -->
         <div class="talk-tabs" id="talk-tabs">
           <button class="talk-tab active" onclick="setTab('actions')">Actions</button>
           <button class="talk-tab" onclick="setTab('patient')">Patient</button>
           <button class="talk-tab" onclick="setTab('bystanders')">Bystanders</button>
         </div>
-        <!-- Bystander picker (shows when bystanders tab active) -->
         <div class="bystander-picker" id="bystander-picker"></div>
-        <!-- Hint bar -->
         <div class="hint-bar" id="hint-bar"></div>
-        <!-- Chat -->
         <div class="chat-scroll" id="chat-scroll"></div>
         <div class="input-row">
-          <textarea class="msg-input" id="msg-input" placeholder="Verbalize your actions..." rows="1" onkeydown="onKey(event)"></textarea>
+          <textarea class="msg-input" id="msg-input" placeholder='Verbalize your actions... e.g. "I am applying gloves"' rows="1" onkeydown="onKey(event)"></textarea>
           <button class="send-btn" onclick="send()">
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
       </div>
-
-      <!-- RIGHT: Checklist -->
       <div class="p-right" id="p-right">
         <div class="cl-empty" id="cl-empty"><p>Checklist hidden<br>Toggle above to reveal</p></div>
         <div class="cl-scroll" id="cl-scroll" style="display:none"></div>
       </div>
-
     </div>
   </div>
 
-  <!-- RESULTS -->
   <div class="view" id="results">
     <div class="results-wrap">
       <div class="score-card">
@@ -308,11 +277,10 @@ const TRA_SCENES=['football collision','fall from bleachers','bicycle crash','gy
 const MED_CONDS=['cardiac arrest','stroke','seizure/epilepsy','anaphylaxis','asthma attack','diabetic emergency','overdose','fainting/syncope','concussion'];
 const TRA_CONDS=['severe head trauma','suspected spinal injury','femur fracture','open wound with major bleeding','multi-system trauma'];
 
-// Bystanders by scene type
 const BYSTANDER_MAP={
   'football practice':['Coach','Teammate','Athletic Trainer'],
   'basketball game':['Coach','Teammate','Referee','Parent'],
-  'track meet':['Coach','Teammate','Official'],
+  'track meet':['Coach','Teammate','Race Official'],
   'soccer match':['Coach','Teammate','Referee','Parent'],
   'wrestling practice':['Coach','Teammate'],
   'cross country race':['Coach','Teammate','Race Official'],
@@ -323,8 +291,8 @@ const BYSTANDER_MAP={
   'bicycle crash':['Witness','Bystander'],
   'gymnastics fall':['Coach','Teammate','Parent'],
   'wrestling injury':['Coach','Teammate'],
-  'skateboarding accident':['Friend','Witness','Bystander'],
-  'car accident':['Witness','Bystander','Passenger'],
+  'skateboarding accident':['Friend','Witness'],
+  'car accident':['Witness','Passenger','Bystander'],
   'home accident':['Family Member','Friend','Neighbor']
 };
 
@@ -357,10 +325,73 @@ const TRA_CL={
 
 const TRA_CRITS=['Failure to initiate or call for transport within 10 minute time limit','Failure to take or verbalize appropriate PPE precautions','Failure to determine scene safety','Failure to assess for and provide spinal protection when indicated','Failure to voice and ultimately provide high concentration oxygen','Failure to assess/provide adequate ventilation','Failure to find or appropriately manage problems associated with airway, breathing, hemorrhage or shock','Failure to differentiate patient need for immediate transportation versus continued assessment/treatment at scene','Performs other assessment before assessing/treating threats to airway, breathing and circulation','Failure to manage the patient as a competent EMR','Exhibits unacceptable affect with patient or other personnel','Uses or orders a dangerous or inappropriate intervention'];
 
-const TIME_MAP={'vital':180,'blood pressure':180,'opqrst':120,'sample':90,'history':90,'secondary assess':120,'head to toe':120,'ppe':30,'gloves':20,'airway':30,'oxygen':45,'o2':45,'spinal':60,'c-spine':60,'spine':60,'bleeding':45,'tourniquet':60,'shock management':60,'gcs':45};
-const KW_MAP={'ppe':['ppe','gloves','mask','gown','protective equipment'],'safe':['scene safe','scene is safe','safety','size-up'],'moi':['moi','noi','mechanism','nature of illness'],'ems':['additional ems','call for backup','request ems'],'spinal':['spine','spinal','c-spine','cervical','backboard'],'avpu':['avpu','responsiveness','conscious','alert','verbal','unresponsive'],'airway':['airway','head tilt','jaw thrust'],'ventilation':['ventilation','bag mask'],'oxygen':['oxygen','o2','nrb','nasal cannula','high flow'],'bleeding':['bleeding','hemorrhage','tourniquet'],'pulse':['pulse','heart rate','radial','carotid'],'skin':['skin','color','temperature','diaphoretic'],'transport':['transport','priority','load and go'],'onset':['onset','when did','start'],'quality':['quality','describe','feel like'],'provocation':['provocation','makes it'],'radiation':['radiation','radiate','spread'],'severity':['severity','scale of','1 to 10'],'time':['how long','duration','minutes ago'],'allergies':['allergies','allergic'],'medications':['medication','meds','taking anything'],'history':['past history','medical history'],'intake':['last ate','last oral','last drink'],'events':['what happened','events leading','how did this start'],'vitals':['vitals','vital signs','blood pressure'],'impression':['field impression','appears to be','consistent with'],'reassess':['reassess','reassessment','monitor','check again'],'report':['report to','handoff','verbal report','arriving ems'],'cardiovascular':['cardiovascular','cardiac','heart sounds'],'neurological':['neurological','neuro','pupils','gcs score'],'pulmonary':['pulmonary','lung sounds','breath sounds'],'musculoskeletal':['musculoskeletal','msk','bones','joints'],'integumentary':['integumentary','skin wounds','lacerations'],'reproductive':['reproductive','obstetric','pregnancy'],'psychological':['psychological','behavioral','psychiatric']};
+// Explicit action → {checklist keyword, time in seconds}
+const ACTION_MAP=[
+  {kws:['applying gloves','put on gloves','gloves on','applying ppe','putting on ppe','ppe on','applying personal protective'],cl:'ppe',secs:30},
+  {kws:['scene is safe','scene safe','checking scene safety','scene safety','sizing up the scene','scene size-up','scene size up'],cl:'safe',secs:20},
+  {kws:['determining moi','determining noi','mechanism of injury','nature of illness','moi is','noi is','mechanism is'],cl:'moi',secs:15},
+  {kws:['calling for additional ems','requesting additional ems','calling ems','called 911','requesting backup','calling for backup'],cl:'ems',secs:10},
+  {kws:['considering spinal','spinal stabilization','c-spine stabilization','manual c-spine','stabilizing the spine','spine consideration'],cl:'spinal',secs:60},
+  {kws:['checking responsiveness','checking level of consciousness','avpu','determining responsiveness','checking if responsive','checking consciousness'],cl:'avpu',secs:20},
+  {kws:['determining chief complaint','chief complaint is','apparent life threat','life threat'],cl:'chief',secs:15},
+  {kws:['opening airway','assessing airway','checking airway','airway is clear','head tilt chin lift','jaw thrust','airway open'],cl:'airway',secs:30},
+  {kws:['assessing breathing','checking breathing','breathing is','respiratory effort','breathing adequate','checking for breathing'],cl:'ventilation',secs:30},
+  {kws:['applying oxygen','applying o2','applying nrb','applying nasal cannula','oxygen therapy','starting oxygen','o2 via','administering oxygen'],cl:'oxygen',secs:45},
+  {kws:['checking for bleeding','assessing bleeding','controlling bleeding','applying tourniquet','applying pressure','wound packing','no major bleeding'],cl:'bleeding',secs:45},
+  {kws:['checking pulse','assessing pulse','radial pulse','carotid pulse','pulse is','feeling for pulse'],cl:'pulse',secs:30},
+  {kws:['checking skin','assessing skin','skin color','skin temp','skin condition','capillary refill','cap refill','skin is'],cl:'skin',secs:20},
+  {kws:['priority is','transport decision','load and go','stay and play','patient priority','treatment decision'],cl:'transport',secs:15},
+  {kws:['taking blood pressure','checking bp','blood pressure is','bp is'],cl:'bp',secs:60},
+  {kws:['checking respiratory rate','respiratory rate is','counting respirations','resp rate'],cl:'resprate',secs:30},
+  {kws:['respiratory quality','quality of breathing','breath sounds','lung sounds','auscultating'],cl:'respquality',secs:30},
+  {kws:['field impression','my impression is','patient appears to have','i believe this is','impression is'],cl:'impression',secs:15},
+  {kws:['verbalizing interventions','interventions include','treatment includes','administering','applying treatment','treating with'],cl:'interventions',secs:20},
+  {kws:['reassessing patient','reassessment','reassessing vitals','monitoring patient','checking again','trending'],cl:'reassess',secs:60},
+  {kws:['verbal report','report to ems','handing off','handoff report','reporting to arriving'],cl:'report',secs:30},
+  {kws:['shock management','positioning patient','keeping patient warm','conserving body heat','treating for shock'],cl:'shock',secs:60},
+  {kws:['gcs is','glasgow coma','gcs score','calculating gcs','gcs of'],cl:'gcs',secs:45},
+  {kws:['inserting airway adjunct','oropharyngeal','nasopharyngeal','opa','npa','inserting adjunct'],cl:'adjunct',secs:45},
+  {kws:['inspecting head','palpating head','checking scalp','palpating scalp','checking ears','inspecting scalp'],cl:'head',secs:45},
+  {kws:['assessing eyes','checking eyes','pupils are','penlight to eyes','pupil response'],cl:'eyes',secs:30},
+  {kws:['checking mouth','inspecting mouth','checking nose','facial assessment','checking face'],cl:'face',secs:30},
+  {kws:['checking trachea','trachea position','tracheal deviation'],cl:'trachea',secs:20},
+  {kws:['checking jugular','jugular veins','jvd'],cl:'jvd',secs:20},
+  {kws:['palpating cervical','cervical spine','c-spine palpation'],cl:'cspine',secs:30},
+  {kws:['inspecting chest','chest rise','chest symmetry','looking at chest'],cl:'chestinspect',secs:20},
+  {kws:['palpating chest','feeling chest','chest palpation'],cl:'chestpalp',secs:30},
+  {kws:['auscultating chest','listening to chest','stethoscope on chest','breath sounds bilateral'],cl:'auscultate',secs:45},
+  {kws:['inspecting abdomen','palpating abdomen','abdominal assessment','checking abdomen','belly soft'],cl:'abdomen',secs:45},
+  {kws:['assessing pelvis','pelvic rock','checking pelvis','pelvis stable'],cl:'pelvis',secs:30},
+  {kws:['lower extremity','checking legs','assessing legs','motor sensory legs','leg movement','leg circulation'],cl:'lowerext',secs:60},
+  {kws:['upper extremity','checking arms','assessing arms','motor sensory arms','arm movement','arm circulation'],cl:'upperext',secs:60},
+  {kws:['posterior thorax','checking back','rolling patient','log roll','inspecting back','palpating back'],cl:'posterior',secs:60},
+  {kws:['managing wounds','bandaging wound','wound management','secondary injuries'],cl:'wounds',secs:60},
+  {kws:['cardiovascular assessment','heart sounds','cardiac assessment'],cl:'cardiovascular',secs:45},
+  {kws:['neurological assessment','neuro check','checking neuro','nerve assessment'],cl:'neurological',secs:45},
+  {kws:['pulmonary assessment','respiratory assessment'],cl:'pulmonary',secs:30},
+  {kws:['musculoskeletal assessment','msk assessment','checking muscles','checking bones'],cl:'musculoskeletal',secs:45},
+  {kws:['integumentary','skin assessment','skin exam','checking integumentary'],cl:'integumentary',secs:30},
+];
 
-let S={type:'medical',mode:'education',scenario:'',scene:'',condition:'',patientSys:'',bystanders:[],activeTab:'actions',activeBystander:'',msgs:{actions:[],patient:[],bystanders:{}},cl:{},clVisible:false,timerSec:900,timerInt:null,timerPaused:false,timerDone:false};
+// Map checklist label keywords to action map cl keys
+const CL_KEY_MAP={
+  'ppe':'ppe','safe':'safe','moi':'moi','noi':'moi','ems':'ems','spinal':'spinal','spine':'spinal',
+  'avpu':'avpu','responsiveness':'avpu','chief complaint':'chief','life-threat':'chief',
+  'airway':'airway','ventilation':'ventilation','oxygen':'oxygen','bleeding':'bleeding',
+  'pulse':'pulse','skin':'skin','priority':'transport','transport':'transport',
+  'blood pressure':'bp','respiratory rate':'resprate','respiratory quality':'respquality',
+  'impression':'impression','interventions':'interventions','reassess':'reassess','report':'report',
+  'shock':'shock','gcs':'gcs','adjunct':'adjunct',
+  'scalp':'head','ears':'head','eyes':'eyes','mouth':'face','nose':'face','facial':'face',
+  'trachea':'trachea','jugular':'jvd','cervical spine':'cspine',
+  'inspects chest':'chestinspect','palpates chest':'chestpalp','auscultates':'auscultate',
+  'abdomen':'abdomen','pelvis':'pelvis',
+  'lower extremity':'lowerext','upper extremity':'upperext','posterior':'posterior',
+  'secondary injuries':'wounds','cardiovascular':'cardiovascular','neurological':'neurological',
+  'pulmonary':'pulmonary','musculoskeletal':'musculoskeletal','integumentary':'integumentary'
+};
+
+let S={type:'medical',mode:'education',scenario:'',scene:'',condition:'',patientSys:'',bystanderSystems:{},bystanders:[],activeTab:'actions',activeBystander:'',msgs:{actions:[],patient:[],bystanders:{}},cl:{},clVisible:false,timerSec:900,timerInt:null,timerPaused:false,timerDone:false,completedActions:new Set()};
 
 function showView(id){document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active');v.style.display='none';});const el=document.getElementById(id);el.style.display='flex';el.classList.add('active');if(id==='sim')el.style.flexDirection='column';}
 function pick(btn,group,val){btn.parentElement.querySelectorAll('.sopt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');S[group]=val;}
@@ -369,43 +400,55 @@ document.addEventListener('click',e=>{if(!e.target.closest('.qbtn'))document.que
 
 function buildCL(){const src=S.type==='trauma'?TRA_CL:MED_CL;S.cl={};for(const[s,items]of Object.entries(src))S.cl[s]=items.map(i=>({label:i,done:false}));}
 
-function renderCL(){
-  const empty=document.getElementById('cl-empty');
-  const scroll=document.getElementById('cl-scroll');
-  if(!S.clVisible){empty.style.display='flex';scroll.style.display='none';return;}
-  empty.style.display='none';scroll.style.display='block';
-  let h='';
-  for(const[sec,items]of Object.entries(S.cl)){
-    h+=`<div class="cl-sec"><div class="cl-sec-title">${sec}</div>`;
-    items.forEach(i=>{h+=`<div class="cl-item ${i.done?'done':''}"><div class="cl-box ${i.done?'checked':''}"></div><span>${i.label}</span></div>`;});
-    h+='</div>';
+function markItemByClKey(clKey){
+  let changed=false;
+  for(const items of Object.values(S.cl)){
+    items.forEach(item=>{
+      if(!item.done){
+        const il=item.label.toLowerCase();
+        // Check if this checklist item matches the clKey
+        for(const[labelKw,mapKey] of Object.entries(CL_KEY_MAP)){
+          if(mapKey===clKey&&il.includes(labelKw)){item.done=true;changed=true;}
+        }
+      }
+    });
   }
-  scroll.innerHTML=h;
+  if(changed)renderCL();
 }
 
-function toggleCL(){
-  if(S.mode==='quiz')return;
-  S.clVisible=!S.clVisible;
-  const btn=document.getElementById('cl-btn');
-  btn.textContent=S.clVisible?'Hide checklist':'Show checklist';
-  btn.classList.toggle('on',S.clVisible);
-  renderCL();
+function processAction(text){
+  const low=text.toLowerCase();
+  let matched=false;
+  for(const action of ACTION_MAP){
+    if(action.kws.some(kw=>low.includes(kw))){
+      // Deduct time
+      const m=Math.floor(action.secs/60),s=action.secs%60;
+      const str=m>0?`${m}m ${s>0?s+'s':''}`:`${s}s`;
+      addSysMsg(`⏱ ${str.trim()} elapsed`);
+      // Mark checklist
+      markItemByClKey(action.cl);
+      S.completedActions.add(action.cl);
+      matched=true;
+      break;
+    }
+  }
+  return matched;
 }
+
+function renderCL(){const empty=document.getElementById('cl-empty');const scroll=document.getElementById('cl-scroll');if(!S.clVisible){empty.style.display='flex';scroll.style.display='none';return;}empty.style.display='none';scroll.style.display='block';let h='';for(const[sec,items]of Object.entries(S.cl)){h+=`<div class="cl-sec"><div class="cl-sec-title">${sec}</div>`;items.forEach(i=>{h+=`<div class="cl-item ${i.done?'done':''}"><div class="cl-box ${i.done?'checked':''}"></div><span>${i.label}</span></div>`;});h+='</div>';}scroll.innerHTML=h;}
+
+function toggleCL(){if(S.mode==='quiz')return;S.clVisible=!S.clVisible;const btn=document.getElementById('cl-btn');btn.textContent=S.clVisible?'Hide checklist':'Show checklist';btn.classList.toggle('on',S.clVisible);renderCL();}
 
 function setTab(tab){
   S.activeTab=tab;
   document.querySelectorAll('.talk-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.talk-tab').forEach(t=>{if(t.textContent.toLowerCase()===tab||t.getAttribute('onclick').includes(`'${tab}'`))t.classList.add('active');});
+  event.target.classList.add('active');
   const picker=document.getElementById('bystander-picker');
-  if(tab==='bystanders'){
-    picker.classList.add('show');
-  } else {
-    picker.classList.remove('show');
-  }
+  picker.classList.toggle('show',tab==='bystanders');
   const input=document.getElementById('msg-input');
-  if(tab==='actions') input.placeholder='Verbalize your actions... (e.g. "I am applying PPE and gloves")';
-  else if(tab==='patient') input.placeholder='Talk to the patient... (e.g. "What happened? Where does it hurt?")';
-  else input.placeholder=`Talk to ${S.activeBystander||'bystander'}...`;
+  if(tab==='actions')input.placeholder='Verbalize your actions... e.g. "I am applying gloves"';
+  else if(tab==='patient')input.placeholder='Talk to the patient...';
+  else input.placeholder=S.activeBystander?`Talk to ${S.activeBystander}...`:'Select a bystander above';
   renderChat();
 }
 
@@ -413,7 +456,7 @@ function selectBystander(name){
   S.activeBystander=name;
   if(!S.msgs.bystanders[name])S.msgs.bystanders[name]=[];
   document.querySelectorAll('.by-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.by-btn').forEach(b=>{if(b.textContent===name)b.classList.add('active');});
+  event.target.classList.add('active');
   document.getElementById('msg-input').placeholder=`Talk to ${name}...`;
   renderChat();
 }
@@ -422,9 +465,9 @@ function renderChat(){
   const scroll=document.getElementById('chat-scroll');
   scroll.innerHTML='';
   let msgs=[];
-  if(S.activeTab==='actions') msgs=S.msgs.actions;
-  else if(S.activeTab==='patient') msgs=S.msgs.patient;
-  else if(S.activeTab==='bystanders'&&S.activeBystander) msgs=S.msgs.bystanders[S.activeBystander]||[];
+  if(S.activeTab==='actions')msgs=S.msgs.actions;
+  else if(S.activeTab==='patient')msgs=S.msgs.patient;
+  else if(S.activeTab==='bystanders'&&S.activeBystander)msgs=S.msgs.bystanders[S.activeBystander]||[];
   msgs.forEach(m=>{
     const w=document.createElement('div');
     w.className=`bw ${m.role}`;
@@ -439,56 +482,38 @@ function renderChat(){
 
 function addMsg(role,txt){
   let arr;
-  if(S.activeTab==='actions') arr=S.msgs.actions;
-  else if(S.activeTab==='patient') arr=S.msgs.patient;
-  else if(S.activeTab==='bystanders'&&S.activeBystander){ if(!S.msgs.bystanders[S.activeBystander])S.msgs.bystanders[S.activeBystander]=[]; arr=S.msgs.bystanders[S.activeBystander]; }
-  else { addSysMsg(txt); return; }
+  if(S.activeTab==='actions')arr=S.msgs.actions;
+  else if(S.activeTab==='patient')arr=S.msgs.patient;
+  else if(S.activeTab==='bystanders'&&S.activeBystander){if(!S.msgs.bystanders[S.activeBystander])S.msgs.bystanders[S.activeBystander]=[];arr=S.msgs.bystanders[S.activeBystander];}
+  else{addSysMsg(txt);return;}
   arr.push({role,text:txt});
   const scroll=document.getElementById('chat-scroll');
-  const w=document.createElement('div');
-  w.className=`bw ${role}`;
-  const b=document.createElement('div');
-  b.className=`bubble ${role}`;
-  b.textContent=txt;
-  w.appendChild(b);
-  scroll.appendChild(w);
-  scroll.scrollTop=scroll.scrollHeight;
+  const w=document.createElement('div');w.className=`bw ${role}`;
+  const b=document.createElement('div');b.className=`bubble ${role}`;b.textContent=txt;
+  w.appendChild(b);scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;
 }
 
 function addSysMsg(txt){
   const scroll=document.getElementById('chat-scroll');
-  const w=document.createElement('div');
-  w.className='bw sys';
-  const b=document.createElement('div');
-  b.className='bubble sys';
-  b.textContent=txt;
-  w.appendChild(b);
-  scroll.appendChild(w);
-  scroll.scrollTop=scroll.scrollHeight;
+  const w=document.createElement('div');w.className='bw sys';
+  const b=document.createElement('div');b.className='bubble sys';b.textContent=txt;
+  w.appendChild(b);scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;
 }
 
 function showTyping(){const scroll=document.getElementById('chat-scroll');const w=document.createElement('div');w.className='bw ai';w.id='typing';w.innerHTML='<div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>';scroll.appendChild(w);scroll.scrollTop=scroll.scrollHeight;}
 function hideTyping(){const el=document.getElementById('typing');if(el)el.remove();}
 
 function tick(){if(S.timerPaused)return;S.timerSec--;const abs=Math.abs(S.timerSec);const m=Math.floor(abs/60),s=abs%60;const neg=S.timerSec<0?'-':'';const txt=`${neg}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const tnum=document.getElementById('t-num');const tdot=document.getElementById('t-dot');tnum.textContent=txt;if(S.timerSec<90&&S.timerSec>0){tnum.classList.add('warn');tdot.classList.add('warn');}if(S.timerSec<=0&&!S.timerDone){S.timerDone=true;if(S.mode==='quiz'){clearInterval(S.timerInt);addSysMsg('Time limit reached. Scenario ended.');setTimeout(endSim,1200);}else{addSysMsg('Time limit passed — continuing in education mode.');}}}
-function deductTime(secs,label){S.timerSec-=secs;const m=Math.floor(secs/60),s=secs%60;const str=m>0?`${m}m${s>0?' '+s+'s':''}`:`${s}s`;addSysMsg(`Performing: ${label} (−${str.trim()})`);}
-function checkTime(text){const low=text.toLowerCase();for(const[kw,cost]of Object.entries(TIME_MAP)){if(low.includes(kw)){deductTime(cost,kw);return;}}}
-function markCL(text){const low=text.toLowerCase();let changed=false;for(const[key,kws]of Object.entries(KW_MAP)){if(kws.some(k=>low.includes(k))){for(const items of Object.values(S.cl)){items.forEach(item=>{if(!item.done){const il=item.label.toLowerCase();if(kws.some(k=>il.includes(k.split(' ')[0]))||il.includes(key)){item.done=true;changed=true;}}});}}};if(changed)renderCL();}
+
+function deductTime(secs){S.timerSec-=secs;}
 
 function showHint(){
   if(S.mode==='quiz')return;
   const bar=document.getElementById('hint-bar');
   const allItems=Object.values(S.cl).flat();
   const next=allItems.find(i=>!i.done);
-  if(next){
-    bar.textContent=`Next: ${next.label}`;
-    bar.classList.add('show');
-    setTimeout(()=>bar.classList.remove('show'),4000);
-  } else {
-    bar.textContent='All steps completed — end and grade!';
-    bar.classList.add('show');
-    setTimeout(()=>bar.classList.remove('show'),3000);
-  }
+  if(next){bar.textContent=`Next: ${next.label}`;bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),5000);}
+  else{bar.textContent='All steps complete — end and grade!';bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),3000);}
 }
 
 async function callAPI(messages,system){
@@ -498,17 +523,10 @@ async function callAPI(messages,system){
   return d.content;
 }
 
-function buildBystanderSystems(){
-  const bySys={};
-  S.bystanders.forEach(name=>{
-    bySys[name]=`You are ${name} at ${S.scene}. A patient is down — ${S.scenario}. You witnessed or are aware of what happened. Rules: Stay in character. Answer questions about what you saw, how long ago, the patient's history if you know it. Be realistic. Keep responses 1-3 sentences. Never give a diagnosis.`;
-  });
-  return bySys;
-}
-
 async function startSim(){
   buildCL();
   S.msgs={actions:[],patient:[],bystanders:{}};
+  S.completedActions=new Set();
   S.clVisible=false;S.timerDone=false;S.activeTab='actions';S.activeBystander='';
   S.timerSec=S.type==='trauma'?600:900;
 
@@ -522,7 +540,6 @@ async function startSim(){
   document.getElementById('t-num').classList.remove('warn');
   document.getElementById('t-dot').classList.remove('warn');
 
-  // Quiz mode: hide checklist toggle and hint
   if(S.mode==='quiz'){
     document.getElementById('cl-btn').style.display='none';
     document.getElementById('hint-btn').style.display='none';
@@ -540,12 +557,9 @@ async function startSim(){
   document.getElementById('chat-scroll').innerHTML='';
   document.getElementById('hint-bar').classList.remove('show');
   document.getElementById('scen-txt').textContent='Generating scenario...';
-
-  // Set active tab to actions
-  document.querySelectorAll('.talk-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelector('.talk-tab').classList.add('active');
+  document.querySelectorAll('.talk-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   document.getElementById('bystander-picker').classList.remove('show');
-  document.getElementById('msg-input').placeholder='Verbalize your actions...';
+  document.getElementById('msg-input').placeholder='Verbalize your actions... e.g. "I am applying gloves"';
 
   const scenes=S.type==='medical'?MED_SCENES:TRA_SCENES;
   const conds=S.type==='medical'?MED_CONDS:TRA_CONDS;
@@ -553,18 +567,50 @@ async function startSim(){
   const cond=conds[Math.floor(Math.random()*conds.length)];
   S.scene=scene;S.condition=cond;
 
-  // Set bystanders based on scene
-  const byList=BYSTANDER_MAP[scene]||['Bystander','Witness'];
+  const byList=BYSTANDER_MAP[scene]||['Witness','Bystander'];
   S.bystanders=byList;
   const picker=document.getElementById('bystander-picker');
   picker.innerHTML=byList.map(b=>`<button class="by-btn" onclick="selectBystander('${b}')">${b}</button>`).join('');
 
   try{
-    const scen=await callAPI([],`Generate a realistic ${S.type} EMT emergency scenario at a ${scene}. Patient has ${cond}. Write 3-4 sentences: setting, what you see on arrival, patient age and sex, visible symptoms. Do NOT state the diagnosis. Do not use the word moaning — use groaning instead if needed. Realistic and specific. No intro text.`);
+    const scen=await callAPI([],`Generate a realistic ${S.type} EMT emergency scenario at a ${scene}. The patient has ${cond}. Write 3-4 sentences describing: the setting, what the responder sees on arrival, the patient's age and sex, and visible symptoms. Do NOT state the diagnosis. Do NOT use the word moaning — use groaning if needed. Be specific and realistic. No intro text, no labels, just the scenario.`);
     S.scenario=scen;
     document.getElementById('scen-txt').textContent=scen;
-    S.patientSys=`You are a patient in a ${S.type} emergency at ${scene}. Setting: ${scen}. Actual condition: ${cond}. Rules: Stay in character always. Respond only as the patient — scared, in pain, confused as appropriate. Never reveal your diagnosis. Use groaning not moaning. Show symptoms gradually. Keep responses 1-3 sentences. If responder asks good questions, give useful symptom info.`;
-    S.bystanderSystems=buildBystanderSystems();
+
+    const isEdu=S.mode==='education';
+
+    S.patientSys=`You are a patient in a ${S.type} emergency at a ${scene}. Scenario: ${scen}. Your actual condition: ${cond}.
+Rules:
+- Stay in character as the patient at all times. Never break character.
+- Respond as the patient would — scared, confused, in pain as appropriate.
+- Never reveal your diagnosis directly.
+- Use groaning not moaning.
+- Show symptoms naturally and gradually.
+- Respond to direct questions from the responder.
+- If the responder asks you to do something (look at me, squeeze my hand, follow my finger), respond as the patient would physically: use brackets for physical actions, e.g. [patient slowly turns head] or [patient squeezes hand weakly].
+- Keep responses 1-3 sentences.`;
+
+    S.bystanderSystems={};
+    byList.forEach(name=>{
+      S.bystanderSystems[name]=`You are ${name} at the scene of a ${S.type} emergency at a ${scene}. Scenario: ${scen}. The patient has ${cond} but you don't know the diagnosis.
+Rules:
+- Stay in character as ${name}. Be realistic.
+- Answer questions about what you saw, how long ago it happened, the patient's history if you know it.
+- Be helpful but only know what ${name} would realistically know.
+- Keep responses 1-3 sentences.`;
+    });
+
+    S.actionSys=`You are an experienced EMR/sports medicine examiner watching a student respond to a ${S.type} emergency at a ${scene}. Scenario: ${scen}. Patient condition: ${cond}.
+Your role:
+- Respond to the student's verbalized actions realistically.
+- ${isEdu?'In education mode: if the student states they did something but is vague (e.g. "airway is clear"), ask HOW they know. If they say "applying oxygen" ask what device and flow rate. If they say "checking circulation" ask how. Challenge them to prove their knowledge. If correct, confirm and move on. If wrong, correct them.':'In quiz mode: simply acknowledge what they did and describe what happens as a result. Do not challenge or correct.'}
+- If the student does something out of order or skips a critical step, ${isEdu?'flag it and explain why order matters.':'note it briefly without lecturing.'}
+- Never auto-complete steps for the student. They must verbalize each action.
+- Keep responses concise: 1-3 sentences.
+- Do not use the word moaning — use groaning.
+- Never say what the diagnosis is.
+- Act like a knowledgeable sports medicine and EMR instructor.`;
+
     addSysMsg('Scenario ready. You are the first responder on scene.');
     S.timerInt=setInterval(tick,1000);
   }catch(e){
@@ -579,30 +625,33 @@ async function send(){
   input.value='';
 
   if(S.activeTab==='bystanders'&&!S.activeBystander){
-    addSysMsg('Select a bystander above to talk to them.');
+    addSysMsg('Select a bystander above first.');
     return;
   }
 
   addMsg('user',text);
-  if(S.activeTab==='actions'){checkTime(text);markCL(text);}
-  else markCL(text);
+
+  // Only process actions from the Actions tab
+  if(S.activeTab==='actions'){
+    processAction(text);
+  }
 
   // Build message history for current context
   let history=[];
   let sys='';
+
   if(S.activeTab==='actions'){
-    history=S.msgs.actions.slice(-10).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
-    sys=`You are an EMT scenario evaluator. The student is performing actions at the scene. Acknowledge their action briefly and realistically describe what happens as a result. Keep it 1-2 sentences. If they do something wrong or out of order flag it briefly. Do not use the word moaning — use groaning.`;
+    history=S.msgs.actions.slice(-12).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+    sys=S.actionSys;
   } else if(S.activeTab==='patient'){
-    history=S.msgs.patient.slice(-10).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+    history=S.msgs.patient.slice(-12).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
     sys=S.patientSys;
   } else if(S.activeTab==='bystanders'){
     const by=S.activeBystander;
-    history=(S.msgs.bystanders[by]||[]).slice(-10).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
-    sys=S.bystanderSystems[by]||`You are a bystander at the scene. Answer questions about what you saw. Keep it 1-3 sentences.`;
+    history=(S.msgs.bystanders[by]||[]).slice(-12).filter(m=>m.role!=='sys').map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}));
+    sys=S.bystanderSystems[by]||'You are a bystander at the scene. Answer questions about what you saw. Keep it 1-3 sentences.';
   }
 
-  // Add current message
   history.push({role:'user',content:text});
 
   S.timerPaused=true;
@@ -611,7 +660,7 @@ async function send(){
     const reply=await callAPI(history,sys);
     hideTyping();
     addMsg('ai',reply);
-    markCL(reply);
+    // Never auto-mark checklist from AI responses or patient/bystander conversations
   }catch(e){
     hideTyping();
     addSysMsg('Error: '+e.message);
